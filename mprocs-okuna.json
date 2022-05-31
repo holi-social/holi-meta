@@ -1,0 +1,28 @@
+{
+  "procs": {
+    "mock-api": {
+      "shell": "cd holi-frontends; yarn mock-api:dev"
+    },
+    "web": {
+      "shell": "cd holi-frontends; yarn web:dev"
+    },
+    "mobile": {
+      "shell": "cd holi-frontends; yarn mobile:dev"
+    },
+    "ory-proxy": {
+      "shell": "ory proxy --sdk-url=https://mystifying-carver-akajr6v4t8.projects.oryapis.com http://localhost:300"
+    },
+    "continuous-tests": {
+      "shell": "while true; do sleep 1; done # needs work, we don't have unit test yet cd holi-frontends; jest -w",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
+    "okuna-services": {
+      "shell": "cd holi-okuna; python okuna-cli.py up-services-only"
+    },
+    "okuna-server": {
+      "shell": "cd holi-okuna; python manage.py runserver localhost:8000 || echo 'maybe you need to execute \"python manage.py migrate\" again?'"
+    }
+  }
+}
