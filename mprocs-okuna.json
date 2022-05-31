@@ -19,7 +19,7 @@
       }
     },
     "okuna-services": {
-      "shell": "cd holi-okuna; python okuna-cli.py up-services-only"
+      "shell": "pip install -r requirements-cli-only.txt; cd holi-okuna; python okuna-cli.py up-services-only"
     },
     "okuna-server": {
       "comment": "Before starting the server process, the services need to be up. Therefore, we wait until the services are up via a small until loop.",

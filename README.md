@@ -26,6 +26,10 @@ We're using Ory for authentication. For local development, we need a proxy. You 
 
 For installing the Android Emulator needed for running the mobile dev environment, please read the [`readme`](https://gitlab.com/holisticfoundation/holi-frontends/-/blob/main/README.md) in `holi-frontends`.
 
+#### Docker-Compose
+
+Some projects (e.g. okuna) are using Docker or Docker-Compose to run their dev environment. Please [`install Docker-Compose`](https://docs.docker.com/compose/install/).
+
 ### Initialization
 
 Once you have installed all prerequisites (or after anything changed in the setup), you can execute

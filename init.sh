@@ -20,6 +20,7 @@ ensureInstalled direnv
 isInstalled nvm || isInstalled nodenv || { echo >&2 "Neither nvm nor nodenv are installed. Please install one of them according to README.md and run $0 again afterwards"; exit 1; }
 ensureInstalled ory
 ensureInstalled emulator
+ensureInstalled docker-compose
 
 # dependencies we can auto-install
 # jest for running tests, unsure whether needed
