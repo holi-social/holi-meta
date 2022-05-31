@@ -24,7 +24,7 @@ We're using Ory for authentication. For local development, we need a proxy. You 
 
 #### Emulator
 
-For installing the Android Emulator needed for running the mobile dev environment, please read the [`readme`](holi-frontends/README.md) in `holi-frontends`.
+For installing the Android Emulator needed for running the mobile dev environment, please read the [`readme`](https://gitlab.com/holisticfoundation/holi-frontends/-/blob/main/README.md) in `holi-frontends`.
 
 ### Initialization
 
