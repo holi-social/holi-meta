@@ -40,5 +40,21 @@ pushd holi-okuna
 direnv allow .
 popd
 
-echo "All set up. You can now set up the projects in your IDE and start a development environment."
-echo "For starting it, execute \`mprocs\`"
+git clone git@gitlab.com:holisticfoundation/holi-unified-api.git holi-unified-api >/dev/null 2>&1 || true
+pushd holi-unified-api
+#direnv allow .
+popd
+
+cat << EOF
+
+██████╗  ██████╗ ███╗   ██╗███████╗
+██╔══██╗██╔═══██╗████╗  ██║██╔════╝
+██║  ██║██║   ██║██╔██╗ ██║█████╗
+██║  ██║██║   ██║██║╚██╗██║██╔══╝
+██████╔╝╚██████╔╝██║ ╚████║███████╗
+╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+
+All set up. You can now set up the projects in your IDE and start a development environment.
+
+For starting it, execute \`mprocs\`.
+EOF
