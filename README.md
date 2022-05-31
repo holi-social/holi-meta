@@ -26,6 +26,18 @@ We're using Ory for authentication. For local development, we need a proxy. You 
 
 For installing the Android Emulator needed for running the mobile dev environment, please read the [`readme`](holi-frontends/README.md) in `holi-frontends`.
 
+### Initialization
+
+Once you have installed all prerequisites (or after anything changed in the setup), you can execute
+
+`./init.sh`
+
+and the script will set up everything for you.
+
+### IDE setup
+
+Now you can open the projects in your favourite IDE. It's up to you whether you open the holi-meta folder or the checked out project subfolders.
+
 ## running dev environments
 
 In this repository, there are `mprocs*.json` files. Each one creates a unique dev environment by starting multiple cli processes. The default one, `mprocs.json`, can be started by just executing `mprocs`. It starts up everything you need for frontend development.
