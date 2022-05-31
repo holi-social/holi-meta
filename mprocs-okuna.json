@@ -22,7 +22,7 @@
       "shell": "cd holi-okuna; python okuna-cli.py up-services-only"
     },
     "okuna-server": {
-      "shell": "cd holi-okuna; python manage.py runserver localhost:8000 || echo 'maybe you need to execute \"python manage.py migrate\" again?'"
+      "shell": "cd holi-okuna; until docker ps|grep okuna-worker; do sleep 1; done; python manage.py runserver localhost:8000 || echo 'maybe you need to execute \"python manage.py migrate\" again?'"
     }
   }
 }

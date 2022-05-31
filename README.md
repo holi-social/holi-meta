@@ -26,3 +26,8 @@ We're using Ory for authentication. For local development, we need a proxy. You 
 
 For installing the Android Emulator needed for running the mobile dev environment, please read the [`readme`](holi-frontends/README.md) in `holi-frontends`.
 
+## running dev environments
+
+In this repository, there are `mprocs*.json` files. Each one creates a unique dev environment by starting multiple cli processes. The default one, `mprocs.json`, can be started by just executing `mprocs`. It starts up everything you need for frontend development.
+
+If you need to work on okuna, you can execute `mprocs -c mprocs-okuna.json` instead, which will spin up okuna next to the frontends.
