@@ -3,30 +3,35 @@
 # https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 set -euxo pipefail
 
-isInstalled() {
-    command -v "$1" >/dev/null 2>&1
+isAvailable() {
+    type -t "$1" >/dev/null 2>&1
 }
 
-ensureInstalled() {
-    isInstalled "$1" || { echo >&2 "$1 is not installed. Please install it according to README.md and run $0 again afterwards"; exit 1; }
+ensureAvailable() {
+    isAvailable "$1" || { echo >&2 "$1 is not installed. Please install it according to README.md and run $0 again afterwards"; exit 1; }
 }
 
 # This script should be idempotent. Any step performed should also work after it has been performed before.
 # That way we can re-init at any time and all be on the same spot.
 
 # we need a couple of prerequisites installed, but can't universally install it for everyone because of differing installation methods on different platforms/distros
-ensureInstalled yarn
-ensureInstalled direnv
-isInstalled nvm || isInstalled nodenv || { echo >&2 "Neither nvm nor nodenv are installed. Please install one of them according to README.md and run $0 again afterwards"; exit 1; }
-ensureInstalled ory
-ensureInstalled emulator
-ensureInstalled docker-compose
+ensureAvailable yarn
+ensureAvailable direnv
+# nvm is oftentimes installed as a function sourced in the shell environment and might not be available in the script subshell
+# therefore we try sourcing it here before
+# (ignore shellcheck warning:)
+# shellcheck source=/dev/null
+[ -f ~/.nvm/nvm.sh ] && . ~/.nvm/nvm.sh
+isAvailable nvm || isAvailable nodenv || { echo >&2 "Neither nvm nor nodenv are installed. Please install one of them according to README.md and run $0 again afterwards"; exit 1; }
+ensureAvailable ory
+ensureAvailable emulator
+ensureAvailable docker-compose
 
 # dependencies we can auto-install
 # jest for running tests, unsure whether needed
-# isInstalled jest || yarn global add jest-cli
+# isAvailable jest || yarn global add jest-cli
 # we want to use mprocs for running the development environments
-isInstalled mprocs || yarn global add mprocs
+isAvailable mprocs || yarn global add mprocs
 
 # check out and initialize the repositories
 git clone git@gitlab.com:holisticfoundation/holi-frontends.git holi-frontends >/dev/null 2>&1 || true
