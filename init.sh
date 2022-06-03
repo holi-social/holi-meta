@@ -17,11 +17,11 @@ ensureAvailable() {
 # we need a couple of prerequisites installed, but can't universally install it for everyone because of differing installation methods on different platforms/distros
 ensureAvailable yarn
 ensureAvailable direnv
+
 # nvm is oftentimes installed as a function sourced in the shell environment and might not be available in the script subshell
 # therefore we try sourcing it here before
 # (ignore shellcheck warning:)
-#shellcheck source=/dev/null
-
+# shellcheck source=/dev/null
 if [ -f ~/.nvm/nvm.sh ]; then
   echo 'sourcing nvm from ~/.nvm'
   . ~/.nvm/nvm.sh || true
@@ -30,11 +30,11 @@ elif type -t brew; then
   BREW_PREFIX=$(brew --prefix nvm)
   if [ -f "$BREW_PREFIX/nvm.sh" ]; then
     echo "sourcing nvm from brew ($BREW_PREFIX)"
-    . $BREW_PREFIX/nvm.sh || true
+    . "$BREW_PREFIX/nvm.sh" || true
   fi
 fi
-
 isAvailable nvm || isAvailable nodenv || { echo >&2 "Neither nvm nor nodenv are installed. Please install one of them according to README.md and run $0 again afterwards"; exit 1; }
+
 ensureAvailable ory
 ensureAvailable emulator
 ensureAvailable docker-compose
