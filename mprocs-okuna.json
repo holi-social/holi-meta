@@ -1,7 +1,7 @@
 {
   "procs": {
-    "mock-api": {
-      "shell": "cd holi-frontends; yarn mock-api:dev"
+    "unified-api": {
+      "shell": "cd holi-unified-api; yarn dev"
     },
     "web": {
       "shell": "cd holi-frontends; yarn web:dev"
