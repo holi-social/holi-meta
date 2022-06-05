@@ -1,0 +1,22 @@
+{
+  "procs": {
+    "unified-api": {
+      "shell": "cd holi-unified-api; yarn dev"
+    },
+    "web": {
+      "shell": "cd holi-frontends; yarn web:dev"
+    },
+    "mobile": {
+      "shell": "cd holi-frontends; yarn mobile:dev"
+    },
+    "ory-proxy": {
+      "shell": "ory proxy --sdk-url=https://mystifying-carver-akajr6v4t8.projects.oryapis.com http://localhost:3000"
+    },
+    "continuous-tests": {
+      "shell": "while true; do sleep 1; done # needs work, we don't have unit test yet cd holi-frontends; jest -w",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    }
+  }
+}
