@@ -4,7 +4,7 @@
       "shell": "cd holi-frontends; HOLI_API_URL=https://staging.unified.apis.project-holi.org/graphql yarn web:dev"
     },
     "mobile": {
-      "shell": "cd holi-frontends; yarn mobile:dev"
+      "shell": "cd holi-frontends; HOLI_API_URL=https://staging.unified.apis.project-holi.org/graphql yarn mobile:dev"
     },
     "ory-proxy": {
       "shell": "ory tunnel http://localhost:3000 --dev --project mystifying-carver-akajr6v4t8"
