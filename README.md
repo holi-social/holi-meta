@@ -42,8 +42,8 @@ and the script will set up everything for you.
 
 Now you can open the projects in your favourite IDE. It's up to you whether you open the holi-meta folder or the checked out project subfolders.
 
-## running dev environments
+## running dev environments via mprocs
 
-In this repository, there are `mprocs*.json` files. Each one creates a unique dev environment by starting multiple cli processes. The default one, `mprocs.json`, can be started by just executing `mprocs`. It starts up everything you need for frontend development.
+In this repository, there are `mprocs*.json` files. Each one creates a unique dev environment by starting multiple cli processes. The default one, `mprocs.json`, can be started by just executing `mprocs`. It starts up everything you need for frontend development, connecting to APIs in the cloud based staging environments. When `mprocs` is running, you can simply switch panes using `Ctrl+a`.
 
-If you need to work on okuna, you can execute `mprocs -c mprocs-okuna.json` instead, which will spin up okuna next to the frontends.
+If you need to work on APIs as well, you can execute different mprocs configurations. For example, in order to work on the unified api, run `mprocs -c mprocs-unified-api.json` instead, which will spin up the unified API locally next to the frontends.
