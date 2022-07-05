@@ -57,5 +57,5 @@ for frontend development, connecting to APIs in the cloud based staging environm
 simply switch panes using `Ctrl+a`.
 
 If you need to work on APIs as well, you can execute different mprocs configurations. For example, in order to work on
-the unified api, run `mprocs -c mprocs-unified-api.json` instead, which will spin up the unified API locally next to the
-frontends.
+the okuna backend, run `mprocs -c mprocs-local-backend.json` instead, which will spin up Oathkeeper, the unified API and
+Okuna locally next to the frontends.
