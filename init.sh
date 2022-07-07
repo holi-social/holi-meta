@@ -50,6 +50,8 @@ git clone git@gitlab.com:holisticfoundation/holi-frontends.git holi-frontends >/
 pushd holi-frontends
 direnv allow .
 yarn install
+# install pre-commit hook via husky
+yarn prepare
 popd
 
 git clone git@gitlab.com:holisticfoundation/holi-okuna.git holi-okuna >/dev/null 2>&1 || true
