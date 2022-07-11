@@ -36,7 +36,7 @@ fi
 isAvailable nvm || isAvailable nodenv || { echo >&2 "Neither nvm nor nodenv are installed. Please install one of them according to README.md and run $0 again afterwards"; exit 1; }
 
 ensureAvailable ory
-ensureAvailable emulator
+#ensureAvailable emulator
 ensureAvailable docker-compose
 
 # dependencies we can auto-install
@@ -57,6 +57,9 @@ popd
 git clone git@gitlab.com:holisticfoundation/holi-okuna.git holi-okuna >/dev/null 2>&1 || true
 pushd holi-okuna
 direnv allow .
+source .venv/bin/activate
+pip install -r requirements-cli-only.txt
+pip install -r requirements.txt
 popd
 
 git clone git@gitlab.com:holisticfoundation/holi-unified-api.git holi-unified-api >/dev/null 2>&1 || true
@@ -75,5 +78,13 @@ cat << EOF
 
 All set up. You can now set up the projects in your IDE and start a development environment.
 
-For starting it, execute \`mprocs\`.
+For starting it, execute
+
+\`mprocs\`
+
+  or
+
+\`mprocs -c mprocs-local-backend.json\`
+
+if you also want to run the locally.
 EOF
