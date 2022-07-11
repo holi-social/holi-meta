@@ -1,10 +1,12 @@
 {
   "procs": {
     "web": {
-      "shell": "cd holi-frontends; HOLI_API_URL=http://localhost:4455/graphql yarn web:dev"
+      "shell": "HOLI_API_URL=http://localhost:4455/graphql yarn web:dev",
+      "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "mobile": {
-      "shell": "cd holi-frontends; HOLI_API_URL=http://localhost:4455/graphql yarn mobile:dev"
+      "shell": "HOLI_API_URL=http://localhost:4455/graphql yarn mobile:dev",
+      "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "continuous-tests": {
       "shell": "while true; do sleep 1; done # needs work, we don't have unit test yet cd holi-frontends; jest -w",
@@ -13,17 +15,20 @@
       }
     },
     "oathkeeper": {
-      "shell": "cd holi-unified-api/oathkeeper; docker run --rm --name ory-oathkeeper-unified-api -p 4455:4455 -p 4456:4456 --env-file=.env.local --mount type=bind,source=$PWD,target=/opt/oathkeeper/ oryd/oathkeeper --config /opt/oathkeeper/config.yaml serve"
+      "shell": "docker run --rm --name ory-oathkeeper-unified-api -p 4455:4455 -p 4456:4456 --env-file=.env.local --mount type=bind,source=$PWD,target=/opt/oathkeeper/ --add-host=host.docker.internal:host-gateway --network=host oryd/oathkeeper --config /opt/oathkeeper/config.yaml serve",
+      "cwd": "<CONFIG_DIR>/holi-unified-api/oathkeeper"
     },
     "unified-api": {
       "shell": "./wait-for-port.sh 8000; cd holi-unified-api; yarn dev"
     },
     "okuna-services": {
-      "shell": "cd holi-okuna; pip3 install -r requirements-cli-only.txt; python3 okuna-cli.py up-services-only"
+      "shell": "pip3 install -r requirements-cli-only.txt; python3 okuna-cli.py up-services-only",
+      "cwd": "<CONFIG_DIR>/holi-okuna"
     },
     "okuna-server": {
       "comment": "Before starting the server process, the services need to be up. Therefore, we wait until the services are up via a small until loop.",
-      "shell": "cd holi-okuna; until docker ps|grep okuna-worker; do sleep 1; done; source .venv/bin/activate; pip3 install -r requirements.txt; python3 manage.py runserver localhost:8000 || echo 'maybe you need to execute \"python manage.py migrate\" again?'"
+      "shell": "until docker ps|grep okuna-worker; do sleep 1; done; source .venv/bin/activate; pip3 install -r requirements.txt; python3 manage.py runserver localhost:8000 || echo 'maybe you need to execute \"python manage.py migrate\" again?'",
+      "cwd": "<CONFIG_DIR>/holi-okuna"
     }
   }
 }
