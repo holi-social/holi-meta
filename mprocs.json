@@ -6,6 +6,9 @@
     "mobile": {
       "shell": "cd holi-frontends; HOLI_API_URL=https://staging.unified.apis.project-holi.org/graphql yarn mobile:dev"
     },
+    "storybook": {
+      "shell": "cd holi-frontends; yarn storybook:dev"
+    },
     "continuous-tests": {
       "shell": "while true; do sleep 1; done # needs work, we don't have unit test yet cd holi-frontends; jest -w",
       "env": {
