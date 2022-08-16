@@ -21,6 +21,10 @@ Follow the instructions in the corresponding READMEs for setup.
 It is kept in sync with `.nvmrc` (used by `nvm`) by a symbolic link, so please make sure to use a format that is
 understood by both tools (e.g. a fixed version).
 
+#### Yarn
+
+Install yarn: npm install --global yarn
+
 #### Ory
 
 We're using Ory for authentication. For local development, we need a proxy. You can install the proxy
