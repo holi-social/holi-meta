@@ -25,10 +25,6 @@ understood by both tools (e.g. a fixed version).
 
 Install yarn: npm install --global yarn
 
-#### Docker-Compose
-
-Make sure that docker and docker-compose is installed and works properly with the current user.
-
 #### Ory
 
 We're using Ory for authentication. For local development, we need a proxy. You can install the proxy
