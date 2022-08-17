@@ -1,21 +1,21 @@
 {
   "procs": {
     "web": {
-      "shell": "set -x; direnv reload; node --version; yarn web:dev",
+      "shell": "yarn web:dev",
       "env": {
         "HOLI_API_URL" : "https://staging.unified.apis.project-holi.org/graphql"
       },
       "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "mobile": {
-      "shell": "set -x; direnv reload; node --version; yarn mobile:dev",
+      "shell": "yarn mobile:dev",
       "env": {
         "HOLI_API_URL" : "https://staging.unified.apis.project-holi.org/graphql"
       },
       "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "storybook": {
-      "shell": "set -x; direnv reload; node --version; yarn storybook:dev --no-open",
+      "shell": "yarn storybook:dev --no-open",
       "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "continuous-tests": {
