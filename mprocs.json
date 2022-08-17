@@ -1,13 +1,16 @@
 {
   "procs": {
     "web": {
-      "shell": "cd holi-frontends; HOLI_API_URL=https://staging.unified.apis.project-holi.org/graphql yarn web:dev"
+      "shell": "node --version; HOLI_API_URL=https://staging.unified.apis.project-holi.org/graphql yarn web:dev",
+      "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "mobile": {
-      "shell": "cd holi-frontends; HOLI_API_URL=https://staging.unified.apis.project-holi.org/graphql yarn mobile:dev"
+      "shell": "node --version; HOLI_API_URL=https://staging.unified.apis.project-holi.org/graphql yarn mobile:dev",
+      "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "storybook": {
-      "shell": "cd holi-frontends; yarn storybook:dev --no-open"
+      "shell": "yarn storybook:dev --no-open",
+      "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "continuous-tests": {
       "shell": "while true; do sleep 1; done # needs work, we don't have unit test yet cd holi-frontends; jest -w",
