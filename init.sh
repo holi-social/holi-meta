@@ -61,7 +61,8 @@ popd
 
 git clone git@gitlab.com:holisticfoundation/holi-unified-api.git holi-unified-api >/dev/null 2>&1 || true
 pushd holi-unified-api
-#direnv allow .
+direnv allow .
+yarn install
 popd
 
 cat << EOF
