@@ -9,7 +9,8 @@
       "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "continuous-tests": {
-      "shell": "while true; do sleep 1; done # needs work, we don't have unit test yet cd holi-frontends; jest -w",
+      "shell": "yarn test:watch",
+      "cwd": "<CONFIG_DIR>/holi-frontends",
       "env": {
         "NODE_ENV": "test"
       }
