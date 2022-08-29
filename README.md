@@ -53,7 +53,7 @@ and the script will set up everything for you.
 Now you can open the projects in your favourite IDE. It's up to you whether you open the holi-meta folder or the checked
 out project subfolders.
 
-## running dev environments via mprocs
+## Running dev environments via mprocs
 
 In this repository, there are `mprocs*.json` files. Each one creates a unique dev environment by starting multiple cli
 processes. The default one, `mprocs.json`, can be started by just executing `mprocs`. It starts up everything you need
@@ -63,3 +63,17 @@ simply switch panes using `Ctrl+a`.
 If you need to work on APIs as well, you can execute different mprocs configurations. For example, in order to work on
 the okuna backend, run `mprocs -c mprocs-local-backend.json` instead, which will spin up Oathkeeper, the unified API and
 Okuna locally next to the frontends.
+
+## Helper scripts
+
+This repository includes some nice helper scripts to help with working with holi-meta. These are added to the path via direnv.
+
+### forall-git
+
+This script executes git commands in this repository as well as in any git repository that is inside this repository (e.g. holi-frontends, holi-okuna, holi-unified-api etc.). For example, you can pull/update all repositories at once using:
+
+```
+forall-git git status # inspect if there is any changes left in any repository, and if not
+forall-git git checkout main # switch to the main branch in all repositories
+forall-git git pull # pull all repositories
+```

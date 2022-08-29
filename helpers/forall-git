@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# Helper for performing tasks over all git repositories residing in a common parent directory.
+#
+# Usage/Example: ./forall-git git status
+
+COLOR='\033[1;36m'
+NC='\033[m'
+
+if which parallel >/dev/null; then
+
+  find -L . -maxdepth 3 -name .git -type d | parallel -j 10 "cd {//}; echo -ne '$COLOR'; pwd; echo -ne '$NC'; $@"
+
+else
+
+  find -L . -maxdepth 3 -name .git -type d|while read gitdir; do
+    projectdir=$(dirname $gitdir)
+    pushd $projectdir > /dev/null
+    WD=$(basename $(pwd))
+    echo -e "${COLOR}${WD}${NC}"
+    "$@"
+    popd > /dev/null
+  done
+fi
