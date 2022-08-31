@@ -8,12 +8,6 @@
     },
     "storybook": {
       "shell": "cd holi-frontends; yarn storybook:dev --no-open"
-    },
-    "continuous-tests": {
-      "shell": "while true; do sleep 1; done # needs work, we don't have unit test yet cd holi-frontends; jest -w",
-      "env": {
-        "NODE_ENV": "test"
-      }
     }
   }
 }

@@ -8,13 +8,6 @@
       "shell": "HOLI_API_URL=http://localhost:4455/graphql yarn mobile:dev",
       "cwd": "<CONFIG_DIR>/holi-frontends"
     },
-    "continuous-tests": {
-      "shell": "yarn test:watch",
-      "cwd": "<CONFIG_DIR>/holi-frontends",
-      "env": {
-        "NODE_ENV": "test"
-      }
-    },
     "oathkeeper": {
       "shell": "docker run --rm --name ory-oathkeeper-unified-api -p 4455:4455 -p 4456:4456 --env-file=.env.local --mount type=bind,source=$PWD,target=/opt/oathkeeper/ --add-host=host.docker.internal:host-gateway oryd/oathkeeper --config /opt/oathkeeper/config.yaml serve",
       "cwd": "<CONFIG_DIR>/holi-unified-api/oathkeeper"
