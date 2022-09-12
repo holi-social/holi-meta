@@ -85,3 +85,13 @@ forall-git git status # inspect if there is any changes left in any repository, 
 forall-git git checkout main # switch to the main branch in all repositories
 forall-git git pull # pull all repositories
 ```
+
+## Port registry
+
+The following table lists all ports that are used for local execution.
+
+| Application | Port |
+|-------------|------|
+| unified-api | 4455 |
+| Okuna       | 8000 |
+| Donations   | 8001 |

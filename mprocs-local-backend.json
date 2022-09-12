@@ -19,7 +19,8 @@
       "cwd": "<CONFIG_DIR>/holi-unified-api/oathkeeper"
     },
     "unified-api": {
-      "shell": "./wait-for-port.sh 8000; cd holi-unified-api; yarn dev"
+      "shell": "../wait-for-port.sh 8000; yarn dev",
+      "cwd": "<CONFIG_DIR>/holi-unified-api"
     },
     "okuna-services": {
       "shell": "pip3 install -r requirements-cli-only.txt; python3 okuna-cli.py up-services-only",
@@ -31,7 +32,12 @@
       "cwd": "<CONFIG_DIR>/holi-okuna"
     },
     "storybook": {
-      "shell": "cd holi-frontends; yarn storybook:dev --no-open"
+      "shell": "yarn storybook:dev --no-open",
+      "cwd": "<CONFIG_DIR>/holi-frontends"
+    },
+    "donations-api": {
+      "shell": "docker build -t donations-api . && docker run -it --init -p 8001:8001 donations-api",
+      "cwd": "<CONFIG_DIR>/holi-app-donations"
     }
   }
 }
