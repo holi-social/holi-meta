@@ -17,12 +17,6 @@
     "storybook": {
       "shell": "yarn storybook:dev --no-open",
       "cwd": "<CONFIG_DIR>/holi-frontends"
-    },
-    "continuous-tests": {
-      "shell": "while true; do sleep 1; done # needs work, we don't have unit test yet cd holi-frontends; jest -w",
-      "env": {
-        "NODE_ENV": "test"
-      }
     }
   }
 }
