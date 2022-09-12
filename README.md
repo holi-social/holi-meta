@@ -21,6 +21,10 @@ Follow the instructions in the corresponding READMEs for setup.
 It is kept in sync with `.nvmrc` (used by `nvm`) by a symbolic link, so please make sure to use a format that is
 understood by both tools (e.g. a fixed version).
 
+#### Yarn
+
+Install yarn: npm install --global yarn
+
 #### Ory
 
 We're using Ory for authentication. For local development, we need a proxy. You can install the proxy
@@ -49,7 +53,7 @@ and the script will set up everything for you.
 Now you can open the projects in your favourite IDE. It's up to you whether you open the holi-meta folder or the checked
 out project subfolders.
 
-## running dev environments via mprocs
+## Running dev environments via mprocs
 
 In this repository, there are `mprocs*.json` files. Each one creates a unique dev environment by starting multiple cli
 processes. The default one, `mprocs.json`, can be started by just executing `mprocs`. It starts up everything you need
@@ -59,3 +63,35 @@ simply switch panes using `Ctrl+a`.
 If you need to work on APIs as well, you can execute different mprocs configurations. For example, in order to work on
 the okuna backend, run `mprocs -c mprocs-local-backend.json` instead, which will spin up Oathkeeper, the unified API and
 Okuna locally next to the frontends.
+
+### Local backend on Android
+
+For Android you have to explicitly forward the port for the locally running backend, e.g. using
+
+```sh
+adb reverse tcp:4455 tcp:4455
+```
+
+## Helper scripts
+
+This repository includes some nice helper scripts to help with working with holi-meta. These are added to the path via direnv.
+
+### forall-git
+
+This script executes git commands in this repository as well as in any git repository that is inside this repository (e.g. holi-frontends, holi-okuna, holi-unified-api etc.). For example, you can pull/update all repositories at once using:
+
+```sh
+forall-git git status # inspect if there is any changes left in any repository, and if not
+forall-git git checkout main # switch to the main branch in all repositories
+forall-git git pull # pull all repositories
+```
+
+## Port registry
+
+The following table lists all ports that are used for local execution.
+
+| Application | Port |
+|-------------|------|
+| unified-api | 4455 |
+| Okuna       | 8000 |
+| Donations   | 8001 |

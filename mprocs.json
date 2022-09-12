@@ -1,13 +1,22 @@
 {
   "procs": {
     "web": {
-      "shell": "cd holi-frontends; HOLI_API_URL=https://staging.unified.apis.project-holi.org/graphql yarn web:dev"
+      "shell": "yarn web:dev",
+      "env": {
+        "HOLI_API_URL" : "https://staging.unified.apis.project-holi.org/graphql"
+      },
+      "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "mobile": {
-      "shell": "cd holi-frontends; HOLI_API_URL=https://staging.unified.apis.project-holi.org/graphql yarn mobile:dev"
+      "shell": "yarn mobile:dev",
+      "env": {
+        "HOLI_API_URL" : "https://staging.unified.apis.project-holi.org/graphql"
+      },
+      "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "storybook": {
-      "shell": "cd holi-frontends; yarn storybook:dev --no-open"
+      "shell": "yarn storybook:dev --no-open",
+      "cwd": "<CONFIG_DIR>/holi-frontends"
     }
   }
 }
