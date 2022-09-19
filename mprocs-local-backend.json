@@ -1,15 +1,21 @@
 {
   "procs": {
     "web": {
-      "shell": "HOLI_API_URL=http://localhost:4455/graphql yarn web:dev",
-      "cwd": "<CONFIG_DIR>/holi-frontends"
+      "shell": "yarn web:dev",
+      "cwd": "<CONFIG_DIR>/holi-frontends",
+      "env": {
+        "HOLI_API_URL": "http://localhost:4455/graphql"
+      }
     },
     "mobile": {
-      "shell": "HOLI_API_URL=http://localhost:4455/graphql yarn mobile:dev",
-      "cwd": "<CONFIG_DIR>/holi-frontends"
+      "shell": "yarn mobile:dev",
+      "cwd": "<CONFIG_DIR>/holi-frontends",
+      "env": {
+        "HOLI_API_URL": "http://localhost:4455/graphql"
+      }
     },
     "oathkeeper": {
-      "shell": "docker run --rm --name ory-oathkeeper-unified-api -p 4455:4455 -p 4456:4456 --env-file=.env.local --mount type=bind,source=$PWD,target=/opt/oathkeeper/ --add-host=host.docker.internal:host-gateway oryd/oathkeeper --config /opt/oathkeeper/config.yaml serve",
+      "shell": "docker run --rm --name ory-oathkeeper-unified-api -p 4455:4455 -p 4456:4456 --env-file=.env.local --mount type=bind,source=$PWD,target=/opt/oathkeeper/ --add-host=host.docker.internal:host-gateway oryd/oathkeeper:v0.39.4 --config /opt/oathkeeper/config.yaml serve",
       "cwd": "<CONFIG_DIR>/holi-unified-api/oathkeeper"
     },
     "unified-api": {
