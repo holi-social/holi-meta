@@ -92,6 +92,7 @@ The following table lists all ports that are used for local execution.
 
 | Application | Port |
 |-------------|------|
-| unified-api | 4455 |
-| Okuna       | 8000 |
-| Donations   | 8001 |
+| oathkeeper  | 4455 |
+| unified-api | 4000 |
+| okuna       | 8000 |
+| donations   | 8001 |

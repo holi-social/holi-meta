@@ -36,7 +36,7 @@
       "cwd": "<CONFIG_DIR>/holi-frontends"
     },
     "donations-api": {
-      "shell": "docker build -t donations-api . && docker run -it --init -p 8001:8001 donations-api",
+      "shell": "vr dev",
       "cwd": "<CONFIG_DIR>/holi-app-donations"
     }
   }
