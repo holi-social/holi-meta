@@ -19,7 +19,7 @@
       "cwd": "<CONFIG_DIR>/holi-unified-api/oathkeeper"
     },
     "unified-api": {
-      "shell": "../wait-for-port.sh 8000; ../wait-for-port.sh 8001; yarn dev",
+      "shell": "../wait-for-port.sh 8000; ../wait-for-port.sh 8001; ../wait-for-port.sh 8002; yarn dev",
       "cwd": "<CONFIG_DIR>/holi-unified-api"
     },
     "okuna-services": {
