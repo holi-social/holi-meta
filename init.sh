@@ -65,11 +65,17 @@ direnv allow .
 yarn install
 popd
 
-git clone git@gitlab.com:holisticfoundation/holi-app-donations.git holi-app-donations >/dev/null 2>&1 || true
-pushd holi-app-donations
-# direnv allow .
 curl -fsSL https://deno.land/install.sh | sh -f
 deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
+
+git clone git@gitlab.com:holisticfoundation/holi-app-donations.git holi-app-donations >/dev/null 2>&1 || true
+pushd holi-app-donations
+direnv allow .
+popd
+
+git clone git@gitlab.com:holisticfoundation/holi-app-goodnews.git holi-app-goodnews >/dev/null 2>&1 || true
+pushd holi-app-goodnews
+direnv allow ..
 popd
 
 cat << EOF

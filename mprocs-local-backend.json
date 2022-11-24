@@ -38,6 +38,10 @@
     "donations-api": {
       "shell": "vr install && vr dev",
       "cwd": "<CONFIG_DIR>/holi-app-donations"
+    },
+    "goodnews-api": {
+      "shell": "vr install && vr dev",
+      "cwd": "<CONFIG_DIR>/holi-app-goodnews"
     }
   }
 }
