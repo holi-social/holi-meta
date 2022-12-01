@@ -75,7 +75,7 @@ popd
 
 git clone git@gitlab.com:holisticfoundation/holi-app-goodnews.git holi-app-goodnews >/dev/null 2>&1 || true
 pushd holi-app-goodnews
-direnv allow ..
+direnv allow .
 popd
 
 cat << EOF
