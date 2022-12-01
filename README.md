@@ -96,3 +96,4 @@ The following table lists all ports that are used for local execution.
 | unified-api | 4000 |
 | okuna       | 8000 |
 | donations   | 8001 |
+| goodnews    | 8002 |
