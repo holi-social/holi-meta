@@ -19,7 +19,7 @@
       "cwd": "<CONFIG_DIR>/holi-unified-api/oathkeeper"
     },
     "unified-api": {
-      "shell": "../wait-for-port.sh 8000; ../wait-for-port.sh 8001; ../wait-for-port.sh 8002; yarn dev",
+      "shell": "../wait-for-port.sh 8000; ../wait-for-port.sh 8001; ../wait-for-port.sh 8002; ../wait-for-port.sh 8003; yarn dev",
       "cwd": "<CONFIG_DIR>/holi-unified-api"
     },
     "okuna-services": {
@@ -42,6 +42,10 @@
     "goodnews-api": {
       "shell": "source .envrc.local && vr install && vr dev",
       "cwd": "<CONFIG_DIR>/holi-app-goodnews"
+    },
+    "geo-api": {
+      "shell": "source .envrc.local && vr install && vr dev",
+      "cwd": "<CONFIG_DIR>/holi-geo-api"
     }
   }
 }
