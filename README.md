@@ -97,3 +97,4 @@ The following table lists all ports that are used for local execution.
 | okuna       | 8000 |
 | donations   | 8001 |
 | goodnews    | 8002 |
+| geo         | 8003 |
