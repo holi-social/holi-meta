@@ -40,11 +40,11 @@
       "cwd": "<CONFIG_DIR>/holi-app-donations"
     },
     "goodnews-api": {
-      "shell": "source .envrc.local && vr install && vr dev",
+      "shell": ". ./.envrc.local && vr install && vr dev",
       "cwd": "<CONFIG_DIR>/holi-app-goodnews"
     },
     "geo-api": {
-      "shell": "source .envrc.local && vr install && vr dev",
+      "shell": ". ./.envrc.local && vr install && vr dev",
       "cwd": "<CONFIG_DIR>/holi-geo-api"
     }
   }
