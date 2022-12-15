@@ -90,11 +90,17 @@ forall-git git pull # pull all repositories
 
 The following table lists all ports that are used for local execution.
 
-| Application | Port |
-|-------------|------|
-| oathkeeper  | 4455 |
-| unified-api | 4000 |
-| okuna       | 8000 |
-| donations   | 8001 |
-| goodnews    | 8002 |
-| geo         | 8003 |
+| Application     | Port |
+|-----------------|------|
+| oathkeeper      | 4455 |
+| unified-api     | 4000 |
+| okuna           | 8000 |
+| donations       | 8001 |
+| goodnews        | 8002 |
+| geo             | 8003 |
+| voltastics mock | 8004 |
+
+### Voltastics Mock
+
+The voltastics mock is a temporary mock service implementation that we'll only have until the
+Voltastics API is ready and implemented by our partner Voltastics. It will then be removed again.
