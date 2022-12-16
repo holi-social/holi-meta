@@ -86,6 +86,7 @@ popd
 git clone git@gitlab.com:holisticfoundation/holi-app-voltastics-mock.git holi-app-voltastics-mock >/dev/null 2>&1 || true
 pushd holi-app-voltastics-mock
 direnv allow .
+yarn install
 popd
 
 cat << EOF
