@@ -20,11 +20,7 @@
     },
     "unified-api": {
       "shell": "../wait-for-port.sh 8000; ../wait-for-port.sh 8001; ../wait-for-port.sh 8002; ../wait-for-port.sh 8003; ../wait-for-port.sh 8004; yarn dev",
-      "cwd": "<CONFIG_DIR>/holi-unified-api",
-      "env": {
-        "VOLUNTEERING_API_URL": "http://localhost:8004/graphql",
-        "VOLTASTICS_API_TOKEN": "abc"
-      }
+      "cwd": "<CONFIG_DIR>/holi-unified-api"
     },
     "okuna-services": {
       "shell": "pip3 install -r requirements-cli-only.txt; python3 okuna-cli.py up-services-only",
@@ -47,13 +43,13 @@
       "shell": ". ./.envrc.local && vr install && vr dev",
       "cwd": "<CONFIG_DIR>/holi-app-goodnews"
     },
+    "volunteering-api": {
+      "shell": ". ./.envrc.local && vr install && vr dev",
+      "cwd": "<CONFIG_DIR>/holi-app-volunteering"
+    },
     "geo-api": {
       "shell": ". ./.envrc.local && vr install && vr dev",
       "cwd": "<CONFIG_DIR>/holi-geo-api"
-    },
-    "voltastics-mock": {
-      "shell": "yarn start",
-      "cwd": "<CONFIG_DIR>/holi-app-voltastics-mock"
     },
     "adb reverse": {
       "shell": "adb reverse tcp:4455 tcp:4455 && echo 'Android should not be able to communicate with oathkeeper / unified api'"
