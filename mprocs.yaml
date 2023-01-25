@@ -5,14 +5,14 @@ procs:
       HOLI_API_URL: https://staging.unified.apis.project-holi.org/graphql
     shell: >
       yarn mobile:dev
-  storybook:
-    cwd: <CONFIG_DIR>/holi-frontends
-    shell: >
-      yarn storybook:dev --no-open
   web:
     cwd: <CONFIG_DIR>/holi-frontends
     env:
       HOLI_API_URL: https://staging.unified.apis.project-holi.org/graphql
     shell: >
       yarn web:dev
+  storybook:
+    cwd: <CONFIG_DIR>/holi-frontends
+    shell: >
+      yarn storybook:dev --no-open
 
