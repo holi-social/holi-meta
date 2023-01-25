@@ -1,14 +1,18 @@
-procs: 
-  web:
-    shell: "yarn web:dev"
-    env: 
-      HOLI_API_URL: "https://staging.unified.apis.project-holi.org/graphql"
-    cwd: "<CONFIG_DIR>/holi-frontends"
+procs:
   mobile:
-    shell: "yarn mobile:dev"
+    cwd: <CONFIG_DIR>/holi-frontends
     env:
-      HOLI_API_URL : "https://staging.unified.apis.project-holi.org/graphql"
-    cwd: "<CONFIG_DIR>/holi-frontends"
+      HOLI_API_URL: https://staging.unified.apis.project-holi.org/graphql
+    shell: >
+      yarn mobile:dev
   storybook:
-    shell: "yarn storybook:dev --no-open"
-    cwd: "<CONFIG_DIR>/holi-frontends"
+    cwd: <CONFIG_DIR>/holi-frontends
+    shell: >
+      yarn storybook:dev --no-open
+  web:
+    cwd: <CONFIG_DIR>/holi-frontends
+    env:
+      HOLI_API_URL: https://staging.unified.apis.project-holi.org/graphql
+    shell: >
+      yarn web:dev
+
