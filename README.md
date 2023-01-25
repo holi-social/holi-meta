@@ -55,13 +55,13 @@ out project subfolders.
 
 ## Running dev environments via mprocs
 
-In this repository, there are `mprocs*.json` files. Each one creates a unique dev environment by starting multiple cli
-processes. The default one, `mprocs.json`, can be started by just executing `mprocs`. It starts up everything you need
+In this repository, there are `mprocs*.yaml` files. Each one creates a unique dev environment by starting multiple cli
+processes. The default one, `mprocs.yaml`, can be started by just executing `mprocs`. It starts up everything you need
 for frontend development, connecting to APIs in the cloud based staging environments. When `mprocs` is running, you can
 simply switch panes using `Ctrl+a`.
 
 If you need to work on APIs as well, you can execute different mprocs configurations. For example, in order to work on
-the okuna backend, run `mprocs -c mprocs-local-backend.json` instead, which will spin up Oathkeeper, the unified API and
+the okuna backend, run `mprocs -c mprocs-local-backend.yaml` instead, which will spin up Oathkeeper, the unified API and
 Okuna locally next to the frontends.
 
 ### Local backend on Android
