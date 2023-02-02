@@ -10,7 +10,7 @@ The meta repository which helps you check out the other repositories and run a d
 
 Before we can get started building, please ensure that
 both [`direnv`](https://github.com/direnv/direnv/blob/master/docs/installation.md) and one of the following node version
-managers are installed and properly set up on your system:
+managers are installed and properly set up on your system (if in doubt, use nodenv, it is the default):
 
 - [`nodenv`](https://github.com/nodenv/nodenv) or
 - [`nvm`](https://github.com/nvm-sh/nvm)
@@ -20,6 +20,14 @@ Follow the instructions in the corresponding READMEs for setup.
 `.node-version` (used by `nodenv`) ensures that all developers are using the same `node`/`npm` versions.
 It is kept in sync with `.nvmrc` (used by `nvm`) by a symbolic link, so please make sure to use a format that is
 understood by both tools (e.g. a fixed version).
+
+Once you installed these tools, please leave and re-enter the project directory. direnv will ask you for permission to execute:
+
+```
+direnv: error /home/osboxes/holi-meta/.envrc is blocked. Run `direnv allow` to approve its content
+```
+
+Run `direnv allow` to load the environment for the `holi-meta` project. 
 
 #### Yarn
 
