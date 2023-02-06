@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # template file, copy it to '.envrc.local' and adjust for your personal configuration
 # the '.envrc.local' file is to be included by .envrc and can contain personal secrets or configuration so it is NOT TO BE CHECKED IN
@@ -12,3 +12,5 @@ else
   . ~/.nvm/nvm.sh
   nvm install "$(cat .node-version)"
 fi
+
+#export PATH="$PATH:$(yarn global bin)"
