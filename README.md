@@ -10,7 +10,7 @@ The meta repository which helps you check out the other repositories and run a d
 
 Before we can get started building, please ensure that
 both [`direnv`](https://github.com/direnv/direnv/blob/master/docs/installation.md) and one of the following node version
-managers are installed and properly set up on your system (if in doubt, use nodenv, it is the default):
+managers are installed and properly set up on your system (if in doubt, use nodenv):
 
 - [`nodenv`](https://github.com/nodenv/nodenv) or
 - [`nvm`](https://github.com/nvm-sh/nvm)
