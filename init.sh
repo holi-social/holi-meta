@@ -38,10 +38,9 @@ isAvailable nvm || isAvailable nodenv || { echo >&2 "Neither nvm nor nodenv are 
 ensureAvailable ory
 ensureAvailable emulator
 ensureAvailable docker-compose
+ensureAvailable deno
 
 # dependencies we can auto-install
-# jest for running tests, unsure whether needed
-# isAvailable jest || yarn global add jest-cli
 # we want to use mprocs for running the development environments
 isAvailable mprocs || yarn global add mprocs
 
@@ -65,7 +64,6 @@ direnv allow .
 yarn install
 popd
 
-isAvailable deno || curl -fsSL https://deno.land/install.sh | sh -f
 isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
 
 git clone git@gitlab.com:holisticfoundation/holi-app-donations.git holi-app-donations >/dev/null 2>&1 || true
