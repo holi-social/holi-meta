@@ -10,7 +10,7 @@ The meta repository which helps you check out the other repositories and run a d
 
 Before we can get started building, please ensure that
 both [`direnv`](https://github.com/direnv/direnv/blob/master/docs/installation.md) and one of the following node version
-managers are installed and properly set up on your system:
+managers are installed and properly set up on your system (if in doubt, use nodenv):
 
 - [`nodenv`](https://github.com/nodenv/nodenv) or
 - [`nvm`](https://github.com/nvm-sh/nvm)
@@ -21,9 +21,19 @@ Follow the instructions in the corresponding READMEs for setup.
 It is kept in sync with `.nvmrc` (used by `nvm`) by a symbolic link, so please make sure to use a format that is
 understood by both tools (e.g. a fixed version).
 
+Once you installed these tools, please leave and re-enter the project directory. direnv will ask you for permission to execute:
+
+```
+direnv: error /home/exampleuser/holi-meta/.envrc is blocked. Run `direnv allow` to approve its content
+```
+
+Run `direnv allow` to load the environment for the `holi-meta` project. This will install your first node environment.
+Afterwards, `which npm` should point to a node environment managed by either `nodenv` or `nvm`.
+
 #### Yarn
 
-Install yarn: npm install --global yarn
+Install yarn using `npm install --global yarn` and add yarn commands to you path by commenting out the line
+`export PATH="$PATH:$(yarn global bin)"` in your .envrc.local for being able to run `mprocs` later.
 
 #### Ory
 
@@ -39,6 +49,11 @@ the [`readme`](https://gitlab.com/holisticfoundation/holi-frontends/-/blob/main/
 
 Some projects (e.g. okuna) are using Docker or Docker-Compose to run their dev environment.
 Please [`install Docker-Compose`](https://docs.docker.com/compose/install/).
+
+#### Deno
+
+Some projects are using deno. [`Install it`](https://deno.land/manual@v1.30.1/getting_started/installation) and follow
+the instructions to add it to your environment.
 
 ### Initialization
 
