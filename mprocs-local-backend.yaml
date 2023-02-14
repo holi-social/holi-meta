@@ -39,7 +39,7 @@ procs:
     shell: >
       echo "waiting for services"; until docker ps|grep okuna-redis; 
       do sleep 1; echo -n .; done; . .venv/bin/activate; pip3 install -r requirements.txt;
-      python3 manage.py migrate; python3 start_server.py 
+      python3 manage.py migrate; python3 start_server.py --reload
       || echo 'maybe you need to execute "python manage.py migrate" again?'
   donations-api:
     cwd: <CONFIG_DIR>/holi-app-donations
