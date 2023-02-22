@@ -11,6 +11,16 @@ ensureAvailable() {
     isAvailable "$1" || { echo >&2 "$1 is not installed. Please install it according to README.md and run $0 again afterwards"; exit 1; }
 }
 
+brewInstall() {
+    echo "Installing $1"
+    if brew list $1 &>/dev/null; then
+        echo "${1} is already installed"
+    else
+        brew install $1 && echo "$1 is installed"
+    fi
+}
+
+
 # This script should be idempotent. Any step performed should also work after it has been performed before.
 # That way we can re-init at any time and all be on the same spot.
 
@@ -39,6 +49,13 @@ ensureAvailable ory
 ensureAvailable emulator
 ensureAvailable docker-compose
 ensureAvailable deno
+
+# Install geospatial libraries on macOS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  brewInstall gdal
+  brewInstall proj 
+  brewInstall geos
+fi
 
 # dependencies we can auto-install
 # we want to use mprocs for running the development environments
