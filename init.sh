@@ -3,23 +3,30 @@
 # https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
 set -euxo pipefail
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+
+message() {
+  echo -e >&2 "${GREEN}${1}${NOCOLOR}"
+}
+
+fail() {
+  echo -e >&2 "${RED}${1}${NOCOLOR}"
+  exit 1
+}
+
 isAvailable() {
-    type -t "$1" >/dev/null 2>&1
+  type -t "$1" >/dev/null 2>&1
 }
 
 ensureAvailable() {
-    isAvailable "$1" || { echo >&2 "$1 is not installed. Please install it according to README.md and run $0 again afterwards"; exit 1; }
+  isAvailable "$1" || fail "$1 is not installed. Please install it according to README.md and run $0 again afterwards"
 }
 
 brewInstall() {
-    echo "Installing $1"
-    if brew list $1 &>/dev/null; then
-        echo "${1} is already installed"
-    else
-        brew install $1 && echo "$1 is installed"
-    fi
+  brew list $1 &>/dev/null || brew install $1
 }
-
 
 # This script should be idempotent. Any step performed should also work after it has been performed before.
 # That way we can re-init at any time and all be on the same spot.
@@ -33,29 +40,23 @@ ensureAvailable direnv
 # (ignore shellcheck warning:)
 # shellcheck source=/dev/null
 if [ -f ~/.nvm/nvm.sh ]; then
-  echo 'sourcing nvm from ~/.nvm'
+  message 'sourcing nvm from ~/.nvm'
   . ~/.nvm/nvm.sh || true
-elif type -t brew; then
+elif isAvailable brew; then
   # https://docs.brew.sh/Manpage#--prefix-formula
   BREW_PREFIX=$(brew --prefix nvm)
   if [ -f "$BREW_PREFIX/nvm.sh" ]; then
-    echo "sourcing nvm from brew ($BREW_PREFIX)"
+    message "sourcing nvm from brew ($BREW_PREFIX)"
     . "$BREW_PREFIX/nvm.sh" || true
   fi
 fi
-isAvailable nvm || isAvailable nodenv || { echo >&2 "Neither nvm nor nodenv are installed. Please install one of them according to README.md and run $0 again afterwards"; exit 1; }
+isAvailable nvm || isAvailable nodenv || fail "Neither nvm nor nodenv are installed. Please install one of them according to README.md and run $0 again afterwards"
 
 ensureAvailable ory
 ensureAvailable emulator
 ensureAvailable docker-compose
 ensureAvailable deno
-
-# Install geospatial libraries on macOS
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  brewInstall gdal
-  brewInstall proj 
-  brewInstall geos
-fi
+ensureAvailable brew
 
 # dependencies we can auto-install
 # we want to use mprocs for running the development environments
@@ -72,6 +73,29 @@ popd
 
 git clone git@gitlab.com:holisticfoundation/holi-okuna.git holi-okuna >/dev/null 2>&1 || true
 pushd holi-okuna
+# we need to install some postgis libs for holi-okuna
+brewInstall gdal
+brewInstall proj
+brewInstall geos
+if [[ -f /opt/homebrew/lib/libgdal.dylib && -f /opt/homebrew/lib/libgeos_c.dylib && -f /opt/homebrew/lib/libproj.dylib ]]; then
+  # MacOS
+  [[ -f .envrc.local ]] || cat <<- EOF > .envrc.local
+export GDAL_LIBRARY_PATH=/opt/homebrew/lib/libgdal.dylib
+export GEOS_LIBRARY_PATH=/opt/homebrew/lib/libgeos_c.dylib
+export PROJ_LIBRARY_PATH=/opt/homebrew/lib/libproj.dylib
+EOF
+elif [[ -f /home/linuxbrew/.linuxbrew/lib/libgdal.so && -f /home/linuxbrew/.linuxbrew/lib/libgeos_c.so && -f /home/linuxbrew/.linuxbrew/lib/libproj.so ]]; then
+  # Linux
+  [[ -f .envrc.local ]] || cat <<- EOF > .envrc.local
+export GDAL_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib/libgdal.so
+export GEOS_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib/libgeos_c.so
+export PROJ_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib/libproj.so
+# if not exported like this, system libs will be used as deps of brew libs
+export LD_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib/:\$LD_LIBRARY_PATH
+EOF
+else
+  fail "Could not determine how to include the libraries necessary for PostGIS. Please investigate in init.sh."
+fi
 direnv allow .
 popd
 
@@ -103,8 +127,10 @@ pushd holi-app-volunteering
 direnv allow .
 popd
 
-cat << EOF
+set +x
 
+message "$(cat << EOF
+${GREEN}
 ██████╗  ██████╗ ███╗   ██╗███████╗
 ██╔══██╗██╔═══██╗████╗  ██║██╔════╝
 ██║  ██║██║   ██║██╔██╗ ██║█████╗
@@ -115,4 +141,6 @@ cat << EOF
 All set up. You can now set up the projects in your IDE and start a development environment.
 
 For starting it, execute \`mprocs\`.
+${NOCOLOR}
 EOF
+)"
