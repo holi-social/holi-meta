@@ -9,7 +9,7 @@ procs:
     cwd: <CONFIG_DIR>/holi-frontends
     env:
       HOLI_API_URL: https://staging.unified.apis.project-holi.org/graphql
-      SENTRY_IGNORE_API_RESOLUTION_ERROR: 1
+      SENTRY_IGNORE_API_RESOLUTION_ERROR: "1"
     shell: >
       yarn web:dev
   storybook:
