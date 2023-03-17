@@ -19,10 +19,10 @@ procs:
     shell: >
       adb reverse tcp:4455 tcp:4455 && echo 'Android should now be able to communicate with oathkeeper / unified api'
   pubsub-init:
-    cwd: <CONFIG_DIR>/holi-pubsub
-    shell: ../wait-for-port.sh 8085; $(gcloud beta emulators pubsub env-init); python3 run.py
+    cwd: <CONFIG_DIR>/pubsub
+    shell: ../wait-for-port.sh 8085; $(gcloud beta emulators pubsub env-init); python3 init.py
   pubsub-emulator:
-    cwd: <CONFIG_DIR>/holi-pubsub
+    cwd: <CONFIG_DIR>/pubsub
     shell: gcloud beta emulators pubsub start --project=holi-dev --host-port=localhost:8085
   oathkeeper:
     cwd: <CONFIG_DIR>/holi-unified-api/oathkeeper
@@ -65,4 +65,3 @@ procs:
     cwd: <CONFIG_DIR>/holi-app-volunteering
     shell: >
       . ./.envrc.local && vr install && vr dev
-

@@ -13,4 +13,30 @@ else
   nvm install "$(cat .node-version)"
 fi
 
+cd pubsub
+
+INITIALIZED=false
+EXPECTED_PYTHON_VERSION=$(cat .python-version)
+ACTUAL_PYTHON_VERSION=$(python3 --version | cut -c 8-)
+
+if [[ "$EXPECTED_PYTHON_VERSION" != "$ACTUAL_PYTHON_VERSION" ]]
+then
+  echo "The installed python version ($ACTUAL_PYTHON_VERSION) differs from the expected version ($EXPECTED_PYTHON_VERSION)" >&2
+  echo "Please see README.md to learn how to set up your local dev environment correctly" >&2
+  exit 1
+fi
+
+if [ ! -d ".venv" ]
+then
+  python3 -m venv .venv
+  INITIALIZED=true
+fi
+
+source .venv/bin/activate
+
+if [ "$INITIALIZED" = true ]
+then
+  pip install --upgrade pip
+  pip install -r requirements.txt
+fi
 #export PATH="$PATH:$(yarn global bin)"

@@ -131,11 +131,6 @@ pushd holi-app-volunteering
 direnv allow .
 popd
 
-git clone git@gitlab.com:holisticfoundation/holi-pubsub.git holi-pubsub >/dev/null 2>&1 || true
-pushd holi-pubsub
-direnv allow .
-popd
-
 set +x
 
 message "$(cat << EOF
