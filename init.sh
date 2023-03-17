@@ -34,6 +34,10 @@ brewInstall() {
 # we need a couple of prerequisites installed, but can't universally install it for everyone because of differing installation methods on different platforms/distros
 ensureAvailable yarn
 ensureAvailable direnv
+ensureAvailable gcloud
+
+# Install Google PubSub emulator
+gcloud components list | grep pubsub-emulator > /dev/null || gcloud components install pubsub-emulator
 
 # nvm is oftentimes installed as a function sourced in the shell environment and might not be available in the script subshell
 # therefore we try sourcing it here before
@@ -124,6 +128,11 @@ popd
 
 git clone git@gitlab.com:holisticfoundation/holi-app-volunteering.git holi-app-volunteering >/dev/null 2>&1 || true
 pushd holi-app-volunteering
+direnv allow .
+popd
+
+git clone git@gitlab.com:holisticfoundation/holi-pubsub.git holi-pubsub >/dev/null 2>&1 || true
+pushd holi-pubsub
 direnv allow .
 popd
 
