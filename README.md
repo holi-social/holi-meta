@@ -45,6 +45,12 @@ via https://www.ory.sh/docs/guides/cli/installation.
 For installing the Android Emulator needed for running the mobile dev environment, please read
 the [`readme`](https://gitlab.com/holisticfoundation/holi-frontends/-/blob/main/README.md) in `holi-frontends`.
 
+#### Google Pub/Sub Emulator
+
+To develop and test our event-driven applications locally, we use the [Google Pub/Sub emulator](https://cloud.google.com/pubsub/docs/emulator), which provides local emulation of the Google Cloud Pub/Sub production service.
+
+Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
+
 #### Docker-Compose
 
 Some projects (e.g. okuna) are using Docker or Docker-Compose to run their dev environment.
