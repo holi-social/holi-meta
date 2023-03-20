@@ -4,5 +4,7 @@
 # secret GCP key file for terraform should not be committed
 .holi-terraform.key
 
+.venv
+
 # don't commit .envrc.local
 .envrc.local

@@ -18,6 +18,12 @@ procs:
   adb reverse:
     shell: >
       adb reverse tcp:4455 tcp:4455 && echo 'Android should now be able to communicate with oathkeeper / unified api'
+  pubsub-init:
+    cwd: <CONFIG_DIR>/pubsub
+    shell: ../wait-for-port.sh 8085; $(gcloud beta emulators pubsub env-init); python3 init.py
+  pubsub-emulator:
+    cwd: <CONFIG_DIR>/pubsub
+    shell: gcloud beta emulators pubsub start --project=holi-dev --host-port=localhost:8085
   oathkeeper:
     cwd: <CONFIG_DIR>/holi-unified-api/oathkeeper
     shell: >
@@ -41,7 +47,7 @@ procs:
       echo "waiting for services"; until docker ps|grep okuna-redis; 
       do sleep 1; echo -n .; done; . .venv/bin/activate; pip3 install -r requirements.txt;
       . ./.envrc.local;
-      python3 manage.py migrate; python3 start_server.py --reload
+      ../wait-for-port.sh 8085; $(gcloud beta emulators pubsub env-init); python3 manage.py migrate; python3 start_server.py --reload
       || echo 'maybe you need to execute "python manage.py migrate" again?'
   donations-api:
     cwd: <CONFIG_DIR>/holi-app-donations
@@ -59,4 +65,3 @@ procs:
     cwd: <CONFIG_DIR>/holi-app-volunteering
     shell: >
       . ./.envrc.local && vr install && vr dev
-

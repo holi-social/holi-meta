@@ -34,6 +34,11 @@ brewInstall() {
 # we need a couple of prerequisites installed, but can't universally install it for everyone because of differing installation methods on different platforms/distros
 ensureAvailable yarn
 ensureAvailable direnv
+ensureAvailable gcloud
+
+# Install Google PubSub emulator
+gcloud components list | grep beta > /dev/null || gcloud components install beta
+gcloud components list | grep pubsub-emulator > /dev/null || gcloud components install pubsub-emulator
 
 # nvm is oftentimes installed as a function sourced in the shell environment and might not be available in the script subshell
 # therefore we try sourcing it here before
@@ -126,6 +131,34 @@ git clone git@gitlab.com:holisticfoundation/holi-app-volunteering.git holi-app-v
 pushd holi-app-volunteering
 direnv allow .
 popd
+
+# Install dependencies to run Google Pub/Sub locally
+cd pubsub
+
+INITIALIZED=false
+EXPECTED_PYTHON_VERSION=$(cat .python-version)
+ACTUAL_PYTHON_VERSION=$(python3 --version | cut -c 8-)
+
+if [[ "$EXPECTED_PYTHON_VERSION" != "$ACTUAL_PYTHON_VERSION" ]]
+then
+  echo "The installed python version ($ACTUAL_PYTHON_VERSION) differs from the expected version ($EXPECTED_PYTHON_VERSION)" >&2
+  echo "Please see README.md to learn how to set up your local dev environment correctly" >&2
+  exit 1
+fi
+
+if [ ! -d ".venv" ]
+then
+  python3 -m venv .venv
+  INITIALIZED=true
+fi
+
+source .venv/bin/activate
+
+if [ "$INITIALIZED" = true ]
+then
+  pip install --upgrade pip
+  pip install -r requirements.txt
+fi
 
 set +x
 
