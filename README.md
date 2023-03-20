@@ -60,6 +60,8 @@ the instructions to add it to your environment.
 Some tools are installed via [brew](https://docs.brew.sh/Installation). Please follow the instructions for installing it
 (on MacOS AND also on Linux).
 
+Make sure to integrate the brew shell-hook before nodenv,nvm and pyenv to avoid brew installed versions to take precedence.
+
 ### Initialization
 
 Once you have installed all prerequisites (or after anything changed in the setup), you can execute
