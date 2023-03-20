@@ -3,7 +3,7 @@ from google.cloud import pubsub_v1
 PUBSUB_PROJECT_ID = 'holi-dev'
 PUBSUB_SUBSCRIBER_ENDPOINT = 'http://localhost:8086'
 
-topic_names = ['okuna_development']
+topic_names = ['okuna_local']
 
 publisher = pubsub_v1.PublisherClient()
 
