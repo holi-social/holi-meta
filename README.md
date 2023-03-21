@@ -45,6 +45,14 @@ via https://www.ory.sh/docs/guides/cli/installation.
 For installing the Android Emulator needed for running the mobile dev environment, please read
 the [`readme`](https://gitlab.com/holisticfoundation/holi-frontends/-/blob/main/README.md) in `holi-frontends`.
 
+#### Google Pub/Sub Emulator
+
+To develop and test our event-driven applications locally, we use the [Google Pub/Sub emulator](https://cloud.google.com/pubsub/docs/emulator), which provides local emulation of the Google Cloud Pub/Sub production service.
+
+To install and run the emulator, please make sure you are authenticated with `gcloud` CLI.
+
+Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
+
 #### Docker-Compose
 
 Some projects (e.g. okuna) are using Docker or Docker-Compose to run their dev environment.
@@ -112,12 +120,14 @@ forall-git git pull # pull all repositories
 
 The following table lists all ports that are used for local execution.
 
-| Application  | Port |
-| ------------ | ---- |
-| oathkeeper   | 4455 |
-| unified-api  | 4000 |
-| okuna        | 8000 |
-| donations    | 8001 |
-| goodnews     | 8002 |
-| geo          | 8003 |
-| volunteering | 8004 |
+| Application       | Port |
+| ----------------- | ---- |
+| oathkeeper        | 4455 |
+| unified-api       | 4000 |
+| okuna             | 8000 |
+| donations         | 8001 |
+| goodnews          | 8002 |
+| geo               | 8003 |
+| volunteering      | 8004 |
+| pubsub-emulator   | 8085 |
+| pubsub-subscriber | 8086 |
