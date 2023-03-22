@@ -2,6 +2,27 @@
 
 The meta repository which helps you check out the other repositories and run a development environment locally.
 
+<!-- TOC -->
+- [Getting started](#getting-started)
+  - [Requirements](#requirements)
+    - [direnv && nodenv/nvm](#direnv--nodenvnvm)
+    - [Yarn](#yarn)
+    - [Ory](#ory)
+    - [Emulator](#emulator)
+    - [Google Pub/Sub Emulator](#google-pubsub-emulator)
+    - [OCIS](#ocis)
+    - [Docker-Compose](#docker-compose)
+    - [Deno](#deno)
+    - [brew](#brew)
+  - [Initialization](#initialization)
+  - [IDE setup](#ide-setup)
+- [Running dev environments via mprocs](#running-dev-environments-via-mprocs)
+  - [Local backend on Android](#local-backend-on-android)
+- [Helper scripts](#helper-scripts)
+  - [forall-git](#forall-git)
+- [Port registry](#port-registry)
+<!-- /TOC -->
+
 ## Getting started
 
 ### Requirements
@@ -38,7 +59,7 @@ Install yarn using `npm install --global yarn` and add yarn commands to you path
 #### Ory
 
 We're using Ory for authentication. For local development, we need a proxy. You can install the proxy
-via https://www.ory.sh/docs/guides/cli/installation.
+via <https://www.ory.sh/docs/guides/cli/installation>.
 
 #### Emulator
 
@@ -52,6 +73,10 @@ To develop and test our event-driven applications locally, we use the [Google Pu
 To install and run the emulator, please make sure you are authenticated with `gcloud` CLI.
 
 Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
+
+#### OCIS
+
+To run OCIS locally there are additional steps required, please read the [`readme`](https://gitlab.com/holisticfoundation/holi-ocis/-/blob/main/README.md) in `holi-ocis`.
 
 #### Docker-Compose
 
@@ -131,3 +156,4 @@ The following table lists all ports that are used for local execution.
 | volunteering      | 8004 |
 | pubsub-emulator   | 8085 |
 | pubsub-subscriber | 8086 |
+| ocis              | 9200 |

@@ -132,6 +132,8 @@ pushd holi-app-volunteering
 direnv allow .
 popd
 
+git clone git@gitlab.com:holisticfoundation/holi-app-ocis.git holi-app-ocis >/dev/null 2>&1 || true
+
 # Install dependencies to run Google Pub/Sub locally
 cd pubsub
 
