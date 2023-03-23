@@ -74,7 +74,7 @@ To install and run the emulator, please make sure you are authenticated with `gc
 
 Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
 
-#### OCIS
+#### OwnCloud Infinite Storage (OCIS)
 
 To run OCIS locally there are additional steps required, please read the [`readme`](https://gitlab.com/holisticfoundation/holi-ocis/-/blob/main/README.md) in `holi-ocis`.
 
