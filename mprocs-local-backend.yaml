@@ -9,6 +9,7 @@ procs:
     cwd: <CONFIG_DIR>/holi-frontends
     env:
       HOLI_API_URL: http://localhost:4455/graphql
+      NEXT_PUBLIC_OWNCLOUD_BASE_URL: "https://local.cloud.project-holi.org"
       SENTRY_IGNORE_API_RESOLUTION_ERROR: "1"
     shell: >
       yarn web:dev
@@ -65,3 +66,11 @@ procs:
     cwd: <CONFIG_DIR>/holi-app-volunteering
     shell: >
       . ./.envrc.local && vr install && vr dev
+  ocis:
+    cwd: <CONFIG_DIR>/holi-ocis
+    shell: >
+      docker compose rm -f && docker compose up
+    stop:
+      send-keys:
+        - <C-c>
+        - <C-c>
