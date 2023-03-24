@@ -16,7 +16,7 @@ for topic_name in topic_names:
     subscriber = pubsub_v1.SubscriberClient()
     subscription_path = subscriber.subscription_path(PUBSUB_PROJECT_ID, f"{topic_name}-sub")
 
-    push_config = pubsub_v1.types.PushConfig(push_endpoint=PUBSUB_SUBSCRIBER_ENDPOINT)
+    push_config = pubsub_v1.types.PushConfig(push_endpoint=f"{PUBSUB_SUBSCRIBER_ENDPOINT}/{topic_path}")
 
     with subscriber:
         subscription = subscriber.create_subscription(
