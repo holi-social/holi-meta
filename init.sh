@@ -37,8 +37,10 @@ ensureAvailable direnv
 ensureAvailable gcloud
 
 # Install Google PubSub emulator
-gcloud components list | grep beta > /dev/null || gcloud components install beta
-gcloud components list | grep pubsub-emulator > /dev/null || gcloud components install pubsub-emulator
+# first, update all components for easy filtering later
+yes | gcloud components update || true
+gcloud components list --filter=Status=Installed| grep beta > /dev/null || yes | gcloud components install beta
+gcloud components list --filter=Status=Installed| grep pubsub-emulator > /dev/null || yes | gcloud components install pubsub-emulator
 
 # nvm is oftentimes installed as a function sourced in the shell environment and might not be available in the script subshell
 # therefore we try sourcing it here before
@@ -132,35 +134,12 @@ pushd holi-app-volunteering
 direnv allow .
 popd
 
-git clone git@gitlab.com:holisticfoundation/holi-app-ocis.git holi-app-ocis >/dev/null 2>&1 || true
+git clone git@gitlab.com:holisticfoundation/holi-ocis.git holi-ocis >/dev/null 2>&1 || true
 
 # Install dependencies to run Google Pub/Sub locally
-cd pubsub
-
-INITIALIZED=false
-EXPECTED_PYTHON_VERSION=$(cat .python-version)
-ACTUAL_PYTHON_VERSION=$(python3 --version | cut -c 8-)
-
-if [[ "$EXPECTED_PYTHON_VERSION" != "$ACTUAL_PYTHON_VERSION" ]]
-then
-  echo "The installed python version ($ACTUAL_PYTHON_VERSION) differs from the expected version ($EXPECTED_PYTHON_VERSION)" >&2
-  echo "Please see README.md to learn how to set up your local dev environment correctly" >&2
-  exit 1
-fi
-
-if [ ! -d ".venv" ]
-then
-  python3 -m venv .venv
-  INITIALIZED=true
-fi
-
-source .venv/bin/activate
-
-if [ "$INITIALIZED" = true ]
-then
-  pip install --upgrade pip
-  pip install -r requirements.txt
-fi
+pushd pubsub
+direnv allow .
+popd
 
 set +x
 
