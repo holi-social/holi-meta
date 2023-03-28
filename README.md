@@ -3,6 +3,7 @@
 The meta repository which helps you check out the other repositories and run a development environment locally.
 
 <!-- TOC -->
+
 - [Getting started](#getting-started)
   - [Requirements](#requirements)
     - [direnv && nodenv/nvm](#direnv--nodenvnvm)
@@ -145,15 +146,15 @@ forall-git git pull # pull all repositories
 
 The following table lists all ports that are used for local execution.
 
-| Application       | Port |
-| ----------------- | ---- |
-| oathkeeper        | 4455 |
-| unified-api       | 4000 |
-| okuna             | 8000 |
-| donations         | 8001 |
-| goodnews          | 8002 |
-| geo               | 8003 |
-| volunteering      | 8004 |
-| pubsub-emulator   | 8085 |
-| pubsub-subscriber | 8086 |
-| ocis              | 9200 |
+| Application     | Port |
+| --------------- | ---- |
+| oathkeeper      | 4455 |
+| unified-api     | 4000 |
+| okuna           | 8000 |
+| donations       | 8001 |
+| goodnews        | 8002 |
+| geo             | 8003 |
+| volunteering    | 8004 |
+| pubsub-emulator | 8085 |
+| ocis-subscriber | 8086 |
+| ocis            | 9200 |
