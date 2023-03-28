@@ -141,6 +141,12 @@ pushd pubsub
 direnv allow .
 popd
 
+git clone git@gitlab.com:holisticfoundation/holi-ocis-integration.git >/dev/null 2>&1 || true
+pushd holi-ocis-integration
+direnv allow .
+yarn install
+popd
+
 set +x
 
 message "$(cat << EOF
