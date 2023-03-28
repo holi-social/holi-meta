@@ -28,6 +28,10 @@ procs:
       . .venv/bin/activate; pip3 install -r requirements.txt;
       python3 init.py;
       fg;
+  ocis-subscriber:
+    cwd: <CONFIG_DIR>/holi-ocis-integration
+    shell: >
+      yarn build; yarn start:dev
   oathkeeper:
     cwd: <CONFIG_DIR>/holi-unified-api/oathkeeper
     shell: >
