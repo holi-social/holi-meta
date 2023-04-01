@@ -31,7 +31,7 @@ procs:
   ocis-subscriber:
     cwd: <CONFIG_DIR>/holi-ocis-integration
     shell: >
-      yarn build; yarn start:dev
+      . ./.envrc.local; ./start-ocis-integration-db-container.sh; yarn build; yarn start:dev
   oathkeeper:
     cwd: <CONFIG_DIR>/holi-unified-api/oathkeeper
     shell: >
