@@ -161,5 +161,5 @@ The following table lists all ports that are used for local execution.
 | volunteering           | 8004 |
 | pubsub-emulator        | 8085 |
 | ocis-subscriber        | 8086 |
-| ocis-integration-local | 8087 |
+| ocis-postgres          | 8087 |
 | ocis                   | 9200 |
