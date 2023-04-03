@@ -75,6 +75,10 @@ To install and run the emulator, please make sure you are authenticated with `gc
 
 Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
 
+Currently, `okuna` stands as the sole `publisher` of Google Pub/Sub. Similarly, `holi-ocis-integration`, which is referred to as `ocis-subscriber` in `mprocs-local-backend.yaml`, is the only `subscriber` of this service. This means that `okuna` is responsible for pushing messages to the Pub/Sub topic, and `ocis-subscriber` is the only client that receives and consumes those messages.
+
+To obtain further information on the `holi-ocis-integration` project, please refer to the accompanying [`README.md`](https://gitlab.com/holisticfoundation/holi-ocis-integration/-/blob/a876e59b1985685827f937243f9d0b286060efc9/README.md).
+
 #### OwnCloud Infinite Storage (OCIS)
 
 To run OCIS locally there are additional steps required, please read the [`readme`](https://gitlab.com/holisticfoundation/holi-ocis/-/blob/main/README.md) in `holi-ocis`.
@@ -146,15 +150,16 @@ forall-git git pull # pull all repositories
 
 The following table lists all ports that are used for local execution.
 
-| Application     | Port |
-| --------------- | ---- |
-| oathkeeper      | 4455 |
-| unified-api     | 4000 |
-| okuna           | 8000 |
-| donations       | 8001 |
-| goodnews        | 8002 |
-| geo             | 8003 |
-| volunteering    | 8004 |
-| pubsub-emulator | 8085 |
-| ocis-subscriber | 8086 |
-| ocis            | 9200 |
+| Application            | Port |
+| ---------------------- | ---- |
+| oathkeeper             | 4455 |
+| unified-api            | 4000 |
+| okuna                  | 8000 |
+| donations              | 8001 |
+| goodnews               | 8002 |
+| geo                    | 8003 |
+| volunteering           | 8004 |
+| pubsub-emulator        | 8085 |
+| ocis-subscriber        | 8086 |
+| ocis-integration-local | 8087 |
+| ocis                   | 9200 |
