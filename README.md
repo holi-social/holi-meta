@@ -71,7 +71,7 @@ the [`readme`](https://gitlab.com/holisticfoundation/holi-frontends/-/blob/main/
 
 To develop and test our event-driven applications locally, we use the [Google Pub/Sub emulator](https://cloud.google.com/pubsub/docs/emulator), which provides local emulation of the Google Cloud Pub/Sub production service.
 
-To install and run the emulator, please make sure you are authenticated with `gcloud` CLI.
+Please make sure you installed and are authenticated with [`gcloud` CLI](https://cloud.google.com/sdk/docs/install?hl=de). Later steps will then ensure correct installation of the emulator.
 
 Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
 
@@ -165,3 +165,7 @@ The following table lists all ports that are used for local execution.
 | ocis            | 9200 |
 | onlyoffice      | 9201 |
 | wopiserver      | 8880 |
+
+## Terraform authentication (optional)
+
+All projects checked out below holi-meta are set up to authenticate to terraform/google via a keyfile that is expected to be found in holi-meta/.holi-terraform.key. If you need to run terraform locally, please ask any oldie to provide you with the necessary key file.
