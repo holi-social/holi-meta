@@ -70,7 +70,7 @@ ensureAvailable brew
 isAvailable mprocs || yarn global add mprocs
 
 # check out and initialize the repositories
-git clone git@gitlab.com:holisticfoundation/holi-frontends.git holi-frontends >/dev/null 2>&1 || true
+git clone git@gitlab.holi.team:app/holi-frontends.git holi-frontends >/dev/null 2>&1 || true
 pushd holi-frontends
 direnv allow .
 yarn install
@@ -78,7 +78,7 @@ yarn install
 yarn prepare
 popd
 
-git clone git@gitlab.com:holisticfoundation/holi-okuna.git holi-okuna >/dev/null 2>&1 || true
+git clone git@gitlab.holi.team:app/holi-okuna.git holi-okuna >/dev/null 2>&1 || true
 pushd holi-okuna
 # we need to install some postgis libs for holi-okuna
 brewInstall gdal
@@ -106,7 +106,7 @@ fi
 direnv allow .
 popd
 
-git clone git@gitlab.com:holisticfoundation/holi-unified-api.git holi-unified-api >/dev/null 2>&1 || true
+git clone git@gitlab.holi.team:app/holi-unified-api.git holi-unified-api >/dev/null 2>&1 || true
 pushd holi-unified-api
 direnv allow .
 yarn install
@@ -114,34 +114,34 @@ popd
 
 isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
 
-git clone git@gitlab.com:holisticfoundation/holi-app-donations.git holi-app-donations >/dev/null 2>&1 || true
+git clone git@gitlab.holi.team:app/holi-app-donations.git holi-app-donations >/dev/null 2>&1 || true
 pushd holi-app-donations
 direnv allow .
 popd
 
-git clone git@gitlab.com:holisticfoundation/holi-app-goodnews.git holi-app-goodnews >/dev/null 2>&1 || true
+git clone git@gitlab.holi.team:app/holi-app-goodnews.git holi-app-goodnews >/dev/null 2>&1 || true
 pushd holi-app-goodnews
 direnv allow .
 popd
 
-git clone git@gitlab.com:holisticfoundation/holi-geo-api.git holi-geo-api >/dev/null 2>&1 || true
+git clone git@gitlab.holi.team:app/holi-geo-api.git holi-geo-api >/dev/null 2>&1 || true
 pushd holi-geo-api
 direnv allow .
 popd
 
-git clone git@gitlab.com:holisticfoundation/holi-app-volunteering.git holi-app-volunteering >/dev/null 2>&1 || true
+git clone git@gitlab.holi.team:app/holi-app-volunteering.git holi-app-volunteering >/dev/null 2>&1 || true
 pushd holi-app-volunteering
 direnv allow .
 popd
 
-git clone git@gitlab.com:holisticfoundation/holi-ocis.git holi-ocis >/dev/null 2>&1 || true
+git clone git@gitlab.holi.team:app/holi-ocis.git holi-ocis >/dev/null 2>&1 || true
 
 # Install dependencies to run Google Pub/Sub locally
 pushd pubsub
 direnv allow .
 popd
 
-git clone git@gitlab.com:holisticfoundation/holi-ocis-integration.git >/dev/null 2>&1 || true
+git clone git@gitlab.holi.team:app/holi-ocis-integration.git >/dev/null 2>&1 || true
 pushd holi-ocis-integration
 direnv allow .
 yarn install
