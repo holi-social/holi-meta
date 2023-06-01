@@ -65,7 +65,7 @@ via <https://www.ory.sh/docs/guides/cli/installation>.
 #### Emulator
 
 For installing the Android Emulator needed for running the mobile dev environment, please read
-the [`readme`](https://gitlab.com/holisticfoundation/holi-frontends/-/blob/main/README.md) in `holi-frontends`.
+the [`readme`](https://gitlab.holi.team/app/holi-frontends/-/blob/main/README.md) in `holi-frontends`.
 
 #### Google Pub/Sub Emulator
 
@@ -77,11 +77,11 @@ Please note that all topics, subscriptions, and messages published to the emulat
 
 Currently, `okuna` stands as the sole `publisher` of Google Pub/Sub. Similarly, `holi-ocis-integration`, which is referred to as `ocis-subscriber` in `mprocs-local-backend.yaml`, is the only `subscriber` of this service. This means that `okuna` is responsible for pushing messages to the Pub/Sub topic, and `ocis-subscriber` is the only client that receives and consumes those messages.
 
-To obtain further information on the `holi-ocis-integration` project, please refer to the accompanying [`README.md`](https://gitlab.com/holisticfoundation/holi-ocis-integration/-/blob/a876e59b1985685827f937243f9d0b286060efc9/README.md).
+To obtain further information on the `holi-ocis-integration` project, please refer to the accompanying [`README.md`](https://gitlab.holi.team/app/holi-ocis-integration/-/blob/a876e59b1985685827f937243f9d0b286060efc9/README.md).
 
 #### OwnCloud Infinite Storage (OCIS)
 
-To run OCIS locally there are additional steps required, please read the [`readme`](https://gitlab.com/holisticfoundation/holi-ocis/-/blob/main/README.md) in `holi-ocis`.
+To run OCIS locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-ocis/-/blob/main/README.md) in `holi-ocis`.
 
 #### Docker-Compose
 
