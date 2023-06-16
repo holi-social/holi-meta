@@ -147,6 +147,11 @@ direnv allow .
 yarn install
 popd
 
+git clone git@gitlab.holi.team:app/holi-meet.git holi-meet >/dev/null 2>&1 || true
+pushd holi-meet
+direnv allow .
+popd
+
 set +x
 
 message "$(cat << EOF
