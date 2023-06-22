@@ -16,6 +16,4 @@ procs:
     cwd: <CONFIG_DIR>/holi-frontends
     shell: >
       yarn storybook:dev --no-open
-  adb reverse:
-    shell: >
-      adb reverse tcp:4455 tcp:4455 && echo 'Android should now be able to communicate with oathkeeper / unified api'
+
