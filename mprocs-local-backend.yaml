@@ -42,8 +42,15 @@ procs:
   unified-api:
     cwd: <CONFIG_DIR>/holi-unified-api
     shell: >
-      ../wait-for-port.sh 8000; ../wait-for-port.sh 8001; ../wait-for-port.sh 8002;
-      ../wait-for-port.sh 8003; ../wait-for-port.sh 8004; yarn dev
+      source .envrc;
+      ../wait-for-port.sh 8000;
+      ../wait-for-port.sh 8001;
+      ../wait-for-port.sh 8002;
+      ../wait-for-port.sh 8003;
+      ../wait-for-port.sh 8004;
+      yarn mesh build;
+      cp logger.ts .mesh/;
+      yarn serve
   okuna-services:
     cwd: <CONFIG_DIR>/holi-okuna
     shell: >
