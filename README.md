@@ -159,6 +159,7 @@ The following table lists all ports that are used for local execution.
 | goodnews        | 8002 |
 | geo             | 8003 |
 | volunteering    | 8004 |
+| matrix          | 8008 |
 | pubsub-emulator | 8085 |
 | ocis-subscriber | 8086 |
 | ocis-postgres   | 8087 |
