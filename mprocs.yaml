@@ -3,12 +3,14 @@ procs:
     cwd: <CONFIG_DIR>/holi-frontends
     env:
       HOLI_API_URL: https://staging.unified.apis.holi.social/graphql
+      HOLI_API_GATEWAY: https://staging.unified.apis.holi.social
     shell: >
       yarn mobile:dev
   web:
     cwd: <CONFIG_DIR>/holi-frontends
     env:
       HOLI_API_URL: https://staging.unified.apis.holi.social/graphql
+      HOLI_API_GATEWAY: https://staging.unified.apis.holi.social
       SENTRY_IGNORE_API_RESOLUTION_ERROR: "1"
     shell: >
       yarn web:dev
