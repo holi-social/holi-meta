@@ -5,6 +5,7 @@ procs:
       yarn mobile:dev
     env:
       HOLI_API_URL: "https://production.unified.apis.holi.social/graphql"
+      HOLI_API_GATEWAY: "https://production.unified.apis.holi.social"
       KRATOS_BASE_URL: "https://auth.holi.social"
     cwd: "<CONFIG_DIR>/holi-frontends"
   web:
@@ -12,6 +13,7 @@ procs:
       yarn web:dev
     env:
       HOLI_API_URL: "https://production.unified.apis.holi.social/graphql"
+      HOLI_API_GATEWAY: "https://production.unified.apis.holi.social"
       SENTRY_IGNORE_API_RESOLUTION_ERROR: "1"
     cwd: "<CONFIG_DIR>/holi-frontends"
   storybook:
