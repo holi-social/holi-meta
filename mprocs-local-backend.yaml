@@ -50,9 +50,7 @@ procs:
       ../wait-for-port.sh 8002;
       ../wait-for-port.sh 8003;
       ../wait-for-port.sh 8004;
-      yarn mesh build;
-      cp logger.ts .mesh/;
-      yarn serve
+      yarn dev;
   okuna-services:
     cwd: <CONFIG_DIR>/holi-okuna
     shell: >
