@@ -3,7 +3,6 @@
 The meta repository which helps you check out the other repositories and run a development environment locally.
 
 <!-- TOC -->
-
 - [Getting started](#getting-started)
   - [Requirements](#requirements)
     - [direnv && nodenv/nvm](#direnv--nodenvnvm)
@@ -11,7 +10,8 @@ The meta repository which helps you check out the other repositories and run a d
     - [Ory](#ory)
     - [Emulator](#emulator)
     - [Google Pub/Sub Emulator](#google-pubsub-emulator)
-    - [OCIS](#ocis)
+    - [OwnCloud Infinite Storage (OCIS)](#owncloud-infinite-storage-ocis)
+    - [Jitsi Meet](#jitsi-meet)
     - [Docker-Compose](#docker-compose)
     - [Deno](#deno)
     - [brew](#brew)
@@ -22,6 +22,7 @@ The meta repository which helps you check out the other repositories and run a d
 - [Helper scripts](#helper-scripts)
   - [forall-git](#forall-git)
 - [Port registry](#port-registry)
+- [Terraform authentication (optional)](#terraform-authentication-optional)
 <!-- /TOC -->
 
 ## Getting started
@@ -82,6 +83,10 @@ To obtain further information on the `holi-ocis-integration` project, please ref
 #### OwnCloud Infinite Storage (OCIS)
 
 To run OCIS locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-ocis/-/blob/main/README.md) in `holi-ocis`.
+
+#### Jitsi Meet
+
+To run jitsi locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-meet/-/blob/main/README.md) in `holi-meet`.
 
 #### Docker-Compose
 
@@ -166,6 +171,9 @@ The following table lists all ports that are used for local execution.
 | ocis            | 9200 |
 | onlyoffice      | 9201 |
 | wopiserver      | 8880 |
+| meet            | 9300 |
+| meet (ssl)      | 9343 |
+| meet (auth)     | 9301 |
 
 ## Terraform authentication (optional)
 
