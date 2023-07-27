@@ -25,7 +25,16 @@ ensureAvailable() {
 }
 
 brewInstall() {
-  brew list $1 &>/dev/null || brew install $1
+  brew list "$1" &>/dev/null || brew install "$1"
+}
+
+checkoutAndPrepare() {
+  git clone "$1" "$2" >/dev/null 2>&1 || true
+  pushd "$2"
+  direnv allow .
+  # install git hooks via husky
+  husky install
+  popd
 }
 
 # This script should be idempotent. Any step performed should also work after it has been performed before.
@@ -64,21 +73,25 @@ ensureAvailable emulator
 ensureAvailable docker-compose
 ensureAvailable deno
 ensureAvailable brew
+# install velociraptor
+isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
 
 # dependencies we can auto-install
 # we want to use mprocs for running the development environments
 isAvailable mprocs || yarn global add mprocs
+# we want to use husky for pre-commit hooks
+isAvailable husky || yarn global add husky
+# in husky pre-commit hooks, we're using gitleaks for secret detection
+brewInstall gitleaks
+
 
 # check out and initialize the repositories
-git clone git@gitlab.holi.team:app/holi-frontends.git holi-frontends >/dev/null 2>&1 || true
+checkoutAndPrepare git@gitlab.holi.team:app/holi-frontends.git holi-frontends
 pushd holi-frontends
-direnv allow .
 yarn install
-# install pre-commit hook via husky
-yarn prepare
 popd
 
-git clone git@gitlab.holi.team:app/holi-okuna.git holi-okuna >/dev/null 2>&1 || true
+checkoutAndPrepare git@gitlab.holi.team:app/holi-okuna.git holi-okuna
 pushd holi-okuna
 # we need to install some postgis libs for holi-okuna
 brewInstall gdal
@@ -103,57 +116,34 @@ EOF
 else
   fail "Could not determine how to include the libraries necessary for PostGIS. Please investigate in init.sh."
 fi
-direnv allow .
 popd
 
-git clone git@gitlab.holi.team:app/holi-unified-api.git holi-unified-api >/dev/null 2>&1 || true
+checkoutAndPrepare git@gitlab.holi.team:app/holi-unified-api.git holi-unified-api
 pushd holi-unified-api
-direnv allow .
 yarn install
 popd
 
-isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
+checkoutAndPrepare git@gitlab.holi.team:app/holi-app-donations.git holi-app-donations
 
-git clone git@gitlab.holi.team:app/holi-app-donations.git holi-app-donations >/dev/null 2>&1 || true
-pushd holi-app-donations
-direnv allow .
+checkoutAndPrepare git@gitlab.holi.team:app/holi-app-goodnews.git holi-app-goodnews
+
+checkoutAndPrepare git@gitlab.holi.team:app/holi-geo-api.git holi-geo-api
+
+checkoutAndPrepare git@gitlab.holi.team:app/holi-app-volunteering.git holi-app-volunteering
+
+checkoutAndPrepare git@gitlab.holi.team:app/holi-chat-server.git holi-chat-server
+
+checkoutAndPrepare git@gitlab.holi.team:app/holi-ocis.git holi-ocis
+
+checkoutAndPrepare git@gitlab.holi.team:app/holi-meet.git holi-meet
+
+checkoutAndPrepare git@gitlab.holi.team:app/holi-ocis-integration.git holi-ocis-integration
+pushd holi-ocis-integration
+yarn install
 popd
-
-git clone git@gitlab.holi.team:app/holi-app-goodnews.git holi-app-goodnews >/dev/null 2>&1 || true
-pushd holi-app-goodnews
-direnv allow .
-popd
-
-git clone git@gitlab.holi.team:app/holi-geo-api.git holi-geo-api >/dev/null 2>&1 || true
-pushd holi-geo-api
-direnv allow .
-popd
-
-git clone git@gitlab.holi.team:app/holi-app-volunteering.git holi-app-volunteering >/dev/null 2>&1 || true
-pushd holi-app-volunteering
-direnv allow .
-popd
-
-git clone git@gitlab.holi.team:app/holi-chat-server.git holi-chat-server >/dev/null 2>&1 || true
-pushd holi-chat-server
-direnv allow .
-popd
-
-git clone git@gitlab.holi.team:app/holi-ocis.git holi-ocis >/dev/null 2>&1 || true
 
 # Install dependencies to run Google Pub/Sub locally
 pushd pubsub
-direnv allow .
-popd
-
-git clone git@gitlab.holi.team:app/holi-ocis-integration.git >/dev/null 2>&1 || true
-pushd holi-ocis-integration
-direnv allow .
-yarn install
-popd
-
-git clone git@gitlab.holi.team:app/holi-meet.git holi-meet >/dev/null 2>&1 || true
-pushd holi-meet
 direnv allow .
 popd
 
