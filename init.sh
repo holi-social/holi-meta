@@ -134,6 +134,11 @@ pushd holi-app-volunteering
 direnv allow .
 popd
 
+git clone git@gitlab.holi.team:app/holi-chat-server.git holi-chat-server >/dev/null 2>&1 || true
+pushd holi-chat-server
+direnv allow .
+popd
+
 git clone git@gitlab.holi.team:app/holi-ocis.git holi-ocis >/dev/null 2>&1 || true
 
 # Install dependencies to run Google Pub/Sub locally

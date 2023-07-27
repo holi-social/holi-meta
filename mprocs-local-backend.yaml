@@ -86,5 +86,15 @@ procs:
       docker-compose rm -f && docker-compose up
     stop:
       send-keys:
+        - <C-c>å
+        - <C-c>
+  chat-server:
+    cwd: <CONFIG_DIR>/holi-chat-server
+    shell: >
+      . ./.envrc.local;
+      ./generate-homeserver-config.sh;
+      docker-compose rm -f && docker-compose up
+    stop:
+      send-keys:
         - <C-c>
         - <C-c>
