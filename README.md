@@ -113,10 +113,16 @@ Once you have installed all prerequisites (or after anything changed in the setu
 
 and the script will set up everything for you.
 
+If you also want to work on any optional, private repositories, then please execute
+
+`./init.sh full`
+
+for doing a full checkout.
+
 ### IDE setup
 
 Now you can open the projects in your favourite IDE. It's up to you whether you open the holi-meta folder or the checked
-out project subfolders.
+out project subfolders in several IDEs .
 
 ## Running dev environments via mprocs
 

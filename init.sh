@@ -84,7 +84,6 @@ isAvailable husky || yarn global add husky
 # in husky pre-commit hooks, we're using gitleaks for secret detection
 brewInstall gitleaks
 
-
 # check out and initialize the repositories
 checkoutAndPrepare git@gitlab.holi.team:app/holi-frontends.git holi-frontends
 pushd holi-frontends
@@ -124,23 +123,25 @@ yarn install
 popd
 
 checkoutAndPrepare git@gitlab.holi.team:app/holi-app-donations.git holi-app-donations
-
 checkoutAndPrepare git@gitlab.holi.team:app/holi-app-goodnews.git holi-app-goodnews
-
 checkoutAndPrepare git@gitlab.holi.team:app/holi-geo-api.git holi-geo-api
-
 checkoutAndPrepare git@gitlab.holi.team:app/holi-app-volunteering.git holi-app-volunteering
-
 checkoutAndPrepare git@gitlab.holi.team:app/holi-chat-server.git holi-chat-server
-
 checkoutAndPrepare git@gitlab.holi.team:app/holi-ocis.git holi-ocis
-
 checkoutAndPrepare git@gitlab.holi.team:app/holi-meet.git holi-meet
 
 checkoutAndPrepare git@gitlab.holi.team:app/holi-ocis-integration.git holi-ocis-integration
 pushd holi-ocis-integration
 yarn install
 popd
+
+# these are technically not used in a local development environment, but they
+# make use of common definitions from holi-meta. If you want to check them out,
+# then use `./init.sh full`
+if [ "${1-default}" = "full" ]; then
+  checkoutAndPrepare git@gitlab.holi.team:app/holi-infra.git holi-infra
+  checkoutAndPrepare git@gitlab.holi.team:app/holi-docker.git holi-docker
+fi
 
 # Install dependencies to run Google Pub/Sub locally
 pushd pubsub
