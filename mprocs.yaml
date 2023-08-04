@@ -11,6 +11,8 @@ procs:
     env:
       HOLI_API_URL: https://staging.unified.apis.holi.social/graphql
       HOLI_API_GATEWAY: https://staging.unified.apis.holi.social
+      NEXT_PUBLIC_HOLI_API_URL: http://localhost:3000/graphql
+      NEXT_PUBLIC_HOLI_API_GATEWAY: http://localhost:3000
       SENTRY_IGNORE_API_RESOLUTION_ERROR: "1"
     shell: >
       yarn web:dev

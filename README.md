@@ -3,26 +3,27 @@
 The meta repository which helps you check out the other repositories and run a development environment locally.
 
 <!-- TOC -->
-- [Getting started](#getting-started)
-  - [Requirements](#requirements)
-    - [direnv && nodenv/nvm](#direnv--nodenvnvm)
-    - [Yarn](#yarn)
-    - [Ory](#ory)
-    - [Emulator](#emulator)
-    - [Google Pub/Sub Emulator](#google-pubsub-emulator)
-    - [OwnCloud Infinite Storage (OCIS)](#owncloud-infinite-storage-ocis)
-    - [Jitsi Meet](#jitsi-meet)
-    - [Docker-Compose](#docker-compose)
-    - [Deno](#deno)
-    - [brew](#brew)
-  - [Initialization](#initialization)
-  - [IDE setup](#ide-setup)
-- [Running dev environments via mprocs](#running-dev-environments-via-mprocs)
-  - [Local backend on Android](#local-backend-on-android)
-- [Helper scripts](#helper-scripts)
-  - [forall-git](#forall-git)
-- [Port registry](#port-registry)
-- [Terraform authentication (optional)](#terraform-authentication-optional)
+- [holi-meta](#holi-meta)
+  - [Getting started](#getting-started)
+    - [Requirements](#requirements)
+      - [direnv \&\& nodenv/nvm](#direnv--nodenvnvm)
+      - [Yarn](#yarn)
+      - [Ory](#ory)
+      - [Emulator](#emulator)
+      - [Google Pub/Sub Emulator](#google-pubsub-emulator)
+      - [OwnCloud Infinite Storage (OCIS)](#owncloud-infinite-storage-ocis)
+      - [Jitsi Meet](#jitsi-meet)
+      - [Docker-Compose](#docker-compose)
+      - [Deno](#deno)
+      - [brew](#brew)
+    - [Initialization](#initialization)
+    - [IDE setup](#ide-setup)
+  - [Running dev environments via mprocs](#running-dev-environments-via-mprocs)
+    - [Local backend on Android](#local-backend-on-android)
+  - [Helper scripts](#helper-scripts)
+    - [forall-git](#forall-git)
+  - [Port registry](#port-registry)
+  - [Terraform authentication (optional)](#terraform-authentication-optional)
 <!-- /TOC -->
 
 ## Getting started
@@ -161,25 +162,28 @@ forall-git git pull # pull all repositories
 
 The following table lists all ports that are used for local execution.
 
-| Application     | Port |
-| --------------- | ---- |
-| oathkeeper      | 4455 |
-| unified-api     | 4000 |
-| okuna           | 8000 |
-| donations       | 8001 |
-| goodnews        | 8002 |
-| geo             | 8003 |
-| volunteering    | 8004 |
-| matrix          | 8008 |
-| pubsub-emulator | 8085 |
-| ocis-subscriber | 8086 |
-| ocis-postgres   | 8087 |
-| ocis            | 9200 |
-| onlyoffice      | 9201 |
-| wopiserver      | 8880 |
-| meet            | 9300 |
-| meet (ssl)      | 9343 |
-| meet (auth)     | 9301 |
+| Application                     | Port |
+|---------------------------------|------|
+| oathkeeper                      | 4455 |
+| unified-api                     | 4000 |
+| chat-server (matrix client)     | 8008 | 
+| chat-server (matrix federation) | 8448 | 
+| chat-server (traefik proxy)     | 8010 | 
+| chat-server (traefik proxy)     | 8011 |
+| okuna                           | 8000 |
+| donations                       | 8001 |
+| goodnews                        | 8002 |
+| geo                             | 8003 |
+| volunteering                    | 8004 |
+| pubsub-emulator                 | 8085 |
+| ocis-subscriber                 | 8086 |
+| ocis-postgres                   | 8087 |
+| ocis                            | 9200 |
+| onlyoffice                      | 9201 |
+| wopiserver                      | 8880 |
+| meet                            | 9300 |
+| meet (ssl)                      | 9343 |
+| meet (auth)                     | 9301 |
 
 ## Terraform authentication (optional)
 
