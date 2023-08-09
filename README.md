@@ -30,6 +30,13 @@ The meta repository which helps you check out the other repositories and run a d
 
 ### Requirements
 
+#### brew
+
+Some tools are installed via [brew](https://docs.brew.sh/Installation). Please follow the instructions for installing it
+(on MacOS AND also on Linux (using the installation script, no local installation) in order to keep cross-platform complexity low).
+
+Make sure to integrate the brew shell-hook before nodenv,nvm and pyenv to avoid brew installed versions to take precedence.
+
 #### direnv && nodenv/nvm
 
 Before we can get started building, please ensure that
@@ -56,8 +63,13 @@ Afterwards, `which npm` should point to a node environment managed by either `no
 
 #### Yarn
 
-Install yarn using `npm install --global yarn` and add yarn commands to you path by commenting out the line
+Install yarn using `npm install --global yarn` and add yarn commands to your path by commenting out the line
 `export PATH="$PATH:$(yarn global bin)"` in your .envrc.local for being able to run `mprocs` later.
+
+#### pyenv
+
+Some components (e.g. holi-okuna and pubsub) require Python. They are using [pyenv](https://github.com/pyenv/pyenv) in order to install the specific versions of Python they need into virtualenvs. You can [install](https://github.com/pyenv/pyenv#installation) it via
+brew.
 
 #### Ory
 
@@ -96,15 +108,8 @@ Please [`install Docker-Compose`](https://docs.docker.com/compose/install/).
 
 #### Deno
 
-Some projects are using deno. [`Install it`](https://deno.land/manual@v1.30.1/getting_started/installation) and follow
+Some projects are using deno. [`Install it`](https://deno.land/manual@v1.36.0/getting_started/installation) and follow
 the instructions to add it to your environment.
-
-#### brew
-
-Some tools are installed via [brew](https://docs.brew.sh/Installation). Please follow the instructions for installing it
-(on MacOS AND also on Linux).
-
-Make sure to integrate the brew shell-hook before nodenv,nvm and pyenv to avoid brew installed versions to take precedence.
 
 ### Initialization
 
@@ -112,7 +117,8 @@ Once you have installed all prerequisites (or after anything changed in the setu
 
 `./init.sh`
 
-and the script will set up everything for you.
+and the script will set up everything for you. At the end, it will display a big `DONE` banner. If it does not,
+then either it ran into an error, giving a message, or stopped due to a bug. Either fix the error or re-run the script.
 
 If you also want to work on any optional, private repositories, then please execute
 
@@ -134,7 +140,7 @@ simply switch panes using `Ctrl+a`.
 
 If you need to work on APIs as well, you can execute different mprocs configurations. For example, in order to work on
 the okuna backend, run `mprocs -c mprocs-local-backend.yaml` instead, which will spin up Oathkeeper, the unified API and
-Okuna locally next to the frontends.
+Okuna locally next to the frontends. This is currently not possible for Open Source contributors, see [TODO for Open Source contributions](#todo-for-open-source-contributions)
 
 ### Local backend on Android
 
@@ -143,6 +149,15 @@ For Android you have to explicitly forward the port for the locally running back
 ```sh
 adb reverse tcp:4455 tcp:4455
 ```
+
+## TODO for Open Source contributions
+
+The following issues currently do not allow Open Source contributors to have a full development environment including backends:
+
+* running a completely local emulator without a dependency on an existing gcloud project
+* not depending on an ory cloud account for local identity management
+
+
 
 ## Helper scripts
 

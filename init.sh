@@ -41,16 +41,7 @@ checkoutAndPrepare() {
 # That way we can re-init at any time and all be on the same spot.
 
 # we need a couple of prerequisites installed, but can't universally install it for everyone because of differing installation methods on different platforms/distros
-ensureAvailable yarn
-ensureAvailable direnv
-ensureAvailable gcloud
-
-# Install Google PubSub emulator
-# first, update all components for easy filtering later
-yes | gcloud components update || true
-gcloud components list --filter=Status=Installed| grep beta > /dev/null || yes | gcloud components install beta
-gcloud components list --filter=Status=Installed| grep pubsub-emulator > /dev/null || yes | gcloud components install pubsub-emulator
-
+#
 # nvm is oftentimes installed as a function sourced in the shell environment and might not be available in the script subshell
 # therefore we try sourcing it here before
 # (ignore shellcheck warning:)
@@ -67,16 +58,30 @@ elif isAvailable brew; then
   fi
 fi
 isAvailable nvm || isAvailable nodenv || fail "Neither nvm nor nodenv are installed. Please install one of them according to README.md and run $0 again afterwards"
+ensureAvailable yarn
+ensureAvailable direnv
+ensureAvailable gcloud
+
+# Install Google PubSub emulator
+# some commands in the following chain of commands are supposed to fail, therefore we suspend the pipefail option temporarily
+set +o pipefail
+# first, update all components for easy filtering later
+yes | gcloud components update || true
+gcloud components list --filter=Status=Installed| grep beta > /dev/null || yes | gcloud components install beta
+gcloud components list --filter=Status=Installed| grep pubsub-emulator > /dev/null || yes | gcloud components install pubsub-emulator
+set -o pipefail
+
 
 ensureAvailable ory
 ensureAvailable emulator
 ensureAvailable docker-compose
 ensureAvailable deno
 ensureAvailable brew
-# install velociraptor
-isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
+ensureAvailable pyenv
 
 # dependencies we can auto-install
+# install velociraptor for deno projects
+isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
 # we want to use mprocs for running the development environments
 isAvailable mprocs || yarn global add mprocs
 # we want to use husky for pre-commit hooks
@@ -92,6 +97,11 @@ popd
 
 checkoutAndPrepare git@gitlab.holi.team:app/holi-okuna.git holi-okuna
 pushd holi-okuna
+# install the Python virtualenv
+pyenv install -s "$(cat .python-version)"
+pyenv local "$(cat .python-version)"
+# now, reinitialize via direnv (first run in checkoutAndPrepare did not succeed due to missing python interpreter)
+direnv reload
 # we need to install some postgis libs for holi-okuna
 brewInstall gdal
 brewInstall proj
@@ -145,6 +155,9 @@ fi
 
 # Install dependencies to run Google Pub/Sub locally
 pushd pubsub
+# install the Python virtualenv
+pyenv install -s "$(cat .python-version)"
+pyenv local "$(cat .python-version)"
 direnv allow .
 popd
 
