@@ -5,6 +5,7 @@ procs:
       HOLI_API_URL: http://localhost:4455/graphql
       HOLI_API_GATEWAY: http://localhost:4455
       OWNCLOUD_BASE_URL: https://local.cloud.holi.social
+      HOLI_CHAT_SERVER_NAME: local.chat.holi.social
       HOLI_CHAT_SERVER_URL: http://local.chat.holi.social:8008
       HOLI_CHAT_IDENTITY_SERVER_URL: https://vector.im
     shell: >
@@ -20,6 +21,7 @@ procs:
       NEXT_PUBLIC_HOLI_API_URL: http://localhost:3000/graphql
       NEXT_PUBLIC_HOLI_API_GATEWAY: http://localhost:3000
       NEXT_PUBLIC_OWNCLOUD_BASE_URL: https://local.cloud.holi.social:9200
+      NEXT_PUBLIC_HOLI_CHAT_SERVER_NAME: local.chat.holi.social
       NEXT_PUBLIC_HOLI_CHAT_SERVER_URL: http://local.chat.holi.social:8008
       NEXT_PUBLIC_HOLI_CHAT_IDENTITY_SERVER_URL: https://vector.im
       SENTRY_IGNORE_API_RESOLUTION_ERROR: "1"
