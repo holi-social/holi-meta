@@ -115,6 +115,7 @@ the instructions to add it to your environment.
 
 Once you have installed all prerequisites (or after anything changed in the setup), you can execute
 
+`direnv allow`
 `./init.sh`
 
 and the script will set up everything for you. At the end, it will display a big `DONE` banner. If it does not,
@@ -125,6 +126,16 @@ If you also want to work on any optional, private repositories, then please exec
 `./init.sh full`
 
 for doing a full checkout.
+
+Afterwards, you need to manually go into some directories (the ones using direnv for environment setup). Once you're in those directories, direnv will execute some setup code for the directories. You can determine a list of directories that need to be visited via the command:
+
+`find . -mindepth 2 -maxdepth 2 -name .envrc|xargs dirname`
+
+You can try to do this programmatically, but this is more error prone than visiting the directories manually:
+
+`for path in $(find . -mindepth 2 -maxdepth 2 -name .envrc); do pushd $(dirname $path); bash  ; popd; done`
+
+Every time the above command stops, you can check that the working directory is from the list of directories and that there was no error when running the setup. Afterwards, you can exit the shell and the command will work on the next directory. Do that until you're back in `holi-meta`.
 
 ### IDE setup
 

@@ -43,7 +43,7 @@ procs:
   ocis-subscriber:
     cwd: <CONFIG_DIR>/holi-ocis-integration
     shell: >
-      direnv reload;
+      . ./.envrc.local;
       ./start-ocis-integration-local.sh;
       yarn build;
       yarn start:dev
@@ -57,7 +57,7 @@ procs:
   unified-api:
     cwd: <CONFIG_DIR>/holi-unified-api
     shell: >
-      direnv reload;
+      . ./.envrc.local;
       ../wait-for-port.sh 8000;
       ../wait-for-port.sh 8001;
       ../wait-for-port.sh 8002;
@@ -76,7 +76,7 @@ procs:
     shell: >
       echo "waiting for services"; until docker ps|grep okuna-redis; 
       do sleep 1; echo -n .; done; . .venv/bin/activate; pip3 install -r requirements.txt;
-      direnv reload;
+      . ./.envrc.local;
       ../wait-for-port.sh 8085; $(gcloud beta emulators pubsub env-init); python3 manage.py migrate; python3 manage.py collectstatic --no-input; python3 start_server.py --reload
       || echo 'maybe you need to execute "python manage.py migrate" again?'
   donations-api:
@@ -86,19 +86,19 @@ procs:
   geo-api:
     cwd: <CONFIG_DIR>/holi-geo-api
     shell: >
-      direnv reload;
+      . ./.envrc.local;
       vr install;
       vr dev
   goodnews-api:
     cwd: <CONFIG_DIR>/holi-app-goodnews
     shell: >
-      direnv reload;
+      . ./.envrc.local;
       vr install;
       vr dev
   volunteering-api:
     cwd: <CONFIG_DIR>/holi-app-volunteering
     shell: >
-      direnv reload;
+      . ./.envrc.local;
       vr install;
       vr dev
   ocis:
@@ -112,7 +112,7 @@ procs:
   chat-server:
     cwd: <CONFIG_DIR>/holi-chat-server
     shell: >
-      direnv reload;
+      . ./.envrc.local;
       ./generate-homeserver-config.sh;
       docker-compose rm -f && docker-compose up
     stop:
