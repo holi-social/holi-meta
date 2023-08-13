@@ -170,6 +170,7 @@ The following table lists all ports that are used for local execution.
 | chat-server (matrix federation) | 8448 | 
 | chat-server (traefik proxy)     | 8010 | 
 | chat-server (traefik proxy)     | 8011 |
+| chat-server (sygnal)            | 8050 |
 | okuna                           | 8000 |
 | donations                       | 8001 |
 | goodnews                        | 8002 |
