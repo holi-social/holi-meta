@@ -2,13 +2,13 @@ procs:
   mobile:
     cwd: <CONFIG_DIR>/holi-frontends
     shell: >
-      . ./.env.local;
+      export DEV_ENV=local;
       . ./.envrc.local;
       yarn mobile:dev
   web:
     cwd: <CONFIG_DIR>/holi-frontends
     shell: >
-      . ./.env.local;
+      export DEV_ENV=local;
       . ./.envrc.local;
       yarn web:dev
   storybook:
