@@ -1,18 +1,19 @@
 procs:
   mobile:
     cwd: <CONFIG_DIR>/holi-frontends
+    env:
+      DEV_ENV: staging
     shell: >
-      export DEV_ENV=staging;
       . ./.envrc.local;
       yarn mobile:dev
   web:
     cwd: <CONFIG_DIR>/holi-frontends
+    env:
+      DEV_ENV: staging
     shell: >
-      export DEV_ENV=staging;
       . ./.envrc.local;
       yarn web:dev
   storybook:
     cwd: <CONFIG_DIR>/holi-frontends
     shell: >
       yarn storybook:dev --no-open
-
