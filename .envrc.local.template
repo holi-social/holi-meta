@@ -13,4 +13,4 @@ else
   nvm install "$(cat .node-version)"
 fi
 
-#export PATH="$PATH:$(yarn global bin)"
+export LOCAL_BACKEND_CHAT=false
