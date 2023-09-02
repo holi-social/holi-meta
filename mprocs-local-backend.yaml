@@ -2,28 +2,16 @@ procs:
   mobile:
     cwd: <CONFIG_DIR>/holi-frontends
     env:
-      HOLI_API_URL: http://localhost:4455/graphql
-      HOLI_API_GATEWAY: http://localhost:4455
-      OWNCLOUD_BASE_URL: https://local.cloud.holi.social
-      HOLI_CHAT_SERVER_URL: http://local.chat.holi.social:8008
-      HOLI_CHAT_IDENTITY_SERVER_URL: https://vector.im
+      DEV_ENV: local
     shell: >
+      . ./.envrc.local;
       yarn mobile:dev
   web:
     cwd: <CONFIG_DIR>/holi-frontends
     env:
-      HOLI_API_URL: http://localhost:4455/graphql
-      HOLI_API_GATEWAY: http://localhost:4455
-      OWNCLOUD_BASE_URL: https://local.cloud.holi.social:9200
-      HOLI_CHAT_SERVER_URL: http://local.chat.holi.social:8008
-      HOLI_CHAT_IDENTITY_SERVER_URL: https://vector.im
-      NEXT_PUBLIC_HOLI_API_URL: http://localhost:3000/graphql
-      NEXT_PUBLIC_HOLI_API_GATEWAY: http://localhost:3000
-      NEXT_PUBLIC_OWNCLOUD_BASE_URL: https://local.cloud.holi.social:9200
-      NEXT_PUBLIC_HOLI_CHAT_SERVER_URL: http://local.chat.holi.social:8008
-      NEXT_PUBLIC_HOLI_CHAT_IDENTITY_SERVER_URL: https://vector.im
-      SENTRY_IGNORE_API_RESOLUTION_ERROR: "1"
+      DEV_ENV: local
     shell: >
+      . ./.envrc.local;
       yarn web:dev
   storybook:
     cwd: <CONFIG_DIR>/holi-frontends
@@ -51,10 +39,19 @@ procs:
   oathkeeper:
     cwd: <CONFIG_DIR>/holi-unified-api/oathkeeper
     shell: >
-      docker run --rm --name ory-oathkeeper-unified-api -p 4455:4455 -p 4456:4456
-      --env-file=.env.local --mount type=bind,source=$PWD,target=/opt/oathkeeper/
-      --add-host=host.docker.internal:host-gateway oryd/oathkeeper:v0.40.3 --config
-      /opt/oathkeeper/config.yaml serve
+      docker run \
+        --rm \
+        --name ory-oathkeeper-unified-api \
+        -p 0.0.0.0:4455:4455 \
+        -p 0.0.0.0:4456:4456 \
+        --env-file=.env.local \
+        --mount type=bind,source=$PWD,target=/opt/oathkeeper/ \
+        --add-host=host.docker.internal:host-gateway \
+        oryd/oathkeeper:v0.40.3 --config /opt/oathkeeper/config.yaml serve
+    stop:
+      send-keys:
+        - <C-c>
+        - <C-c>
   unified-api:
     cwd: <CONFIG_DIR>/holi-unified-api
     shell: >
@@ -80,6 +77,10 @@ procs:
         echo "Not starting local okuna because LOCAL_BACKEND_OKUNA is not set to 'true'"
         sleep infinity
       fi
+    stop:
+      send-keys:
+        - <C-c>
+        - <C-c>
   okuna-server:
     cwd: <CONFIG_DIR>/holi-okuna
     # Before starting the server process, the services need to be up. Therefore, we wait until the services are up via a small until loop.
@@ -155,7 +156,7 @@ procs:
       docker-compose rm -f && docker-compose up
     stop:
       send-keys:
-        - <C-c>å
+        - <C-c>
         - <C-c>
   chat-server:
     cwd: <CONFIG_DIR>/holi-chat-server
