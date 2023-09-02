@@ -8,5 +8,6 @@
 
 # don't commit .envrc.local
 .envrc.local
+.envrc.local.backends
 
 .idea

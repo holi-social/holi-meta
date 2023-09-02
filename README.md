@@ -86,7 +86,7 @@ the [`readme`](https://gitlab.holi.team/app/holi-frontends/-/blob/main/README.md
 
 To develop and test our event-driven applications locally, we use the [Google Pub/Sub emulator](https://cloud.google.com/pubsub/docs/emulator), which provides local emulation of the Google Cloud Pub/Sub production service.
 
-Please make sure you installed and are authenticated with [`gcloud` CLI](https://cloud.google.com/sdk/docs/install?hl=de). Later steps will then ensure correct installation of the emulator.
+Please make sure you installed and are authenticated with [`gcloud` CLI](https://cloud.google.com/sdk/docs/install). Later steps will then ensure correct installation of the emulator.
 
 Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
 
