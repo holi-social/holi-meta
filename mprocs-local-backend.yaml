@@ -66,10 +66,10 @@ procs:
       . ./.envrc.local;
       [ "$LOCAL_BACKEND_CHAT" = "true" ] && ../wait-for-port.sh 8008;
       [ "$LOCAL_BACKEND_OKUNA" = "true" ] && ../wait-for-port.sh 8000;
-      [ "$LOCAL_BACKEND_DONATIONS" = "true" ] && ../wait-for-port.sh 8001;
-      [ "$LOCAL_BACKEND_GOODNEWS" = "true" ] && ../wait-for-port.sh 8002;
+      ../wait-for-port.sh 8001;
+      ../wait-for-port.sh 8002;
       [ "$LOCAL_BACKEND_GEOAPI" = "true" ] && ../wait-for-port.sh 8003;
-      [ "$LOCAL_BACKEND_VOLUNTEERING" = "true" ] && ../wait-for-port.sh 8004;
+      ../wait-for-port.sh 8004;
       yarn mesh build;
       cp logger.ts .mesh/;
       yarn serve;
