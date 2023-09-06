@@ -127,13 +127,12 @@ procs:
     cwd: <CONFIG_DIR>/holi-geo-api
     shell: >
       . ../.envrc.local.backends;
+      . ./.envrc.local;
+      vr install;
       if [ "$LOCAL_BACKEND_GEOAPI" = "true" ]; then
-        . ./.envrc.local;
-        vr install;
         vr dev;
       else
-        echo "Not starting local geo-api because LOCAL_BACKEND_GEOAPI is not set to 'true'";
-        sleep infinity;
+        FAKE="true" vr dev;
       fi;
   goodnews-api:
     cwd: <CONFIG_DIR>/holi-app-goodnews
