@@ -73,8 +73,7 @@ set -o pipefail
 
 
 ensureAvailable ory
-ensureAvailable emulator
-ensureAvailable docker-compose
+ensureAvailable docker
 ensureAvailable deno
 ensureAvailable brew
 ensureAvailable pyenv

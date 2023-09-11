@@ -34,17 +34,20 @@ The meta repository which helps you check out the other repositories and run a d
 #### brew
 
 Some tools are installed via [brew](https://docs.brew.sh/Installation). Please follow the instructions for installing it
-(on MacOS AND also on Linux (using the installation script, no local installation) in order to keep cross-platform complexity low).
+(on MacOS AND also on Linux (using the default installation script, no "local installation") in order to keep cross-platform complexity low).
 
-Make sure to integrate the brew shell-hook before nodenv,nvm and pyenv to avoid brew installed versions to take precedence.
+Make sure to integrate the brew shell-hook before direnv, nodenv, nvm and pyenv to allow your environment to find tools
+installed via brew and to avoid brew installed versions to take precedence over ones installed via other methods. 
+You can achieve this by installing the brew shell hook to `.bashrc` (above all other hook we will install) instead
+of the recommended `.profile` file.
 
 #### direnv && nodenv/nvm
 
 Before we can get started building, please ensure that
-both [`direnv`](https://github.com/direnv/direnv/blob/master/docs/installation.md) and one of the following node version
-managers are installed and properly set up on your system (if in doubt, use nodenv):
+both [`direnv`](https://github.com/direnv/direnv/blob/master/docs/installation.md) (can be installed via `brew install direnv` & [shell hook](https://github.com/direnv/direnv/blob/master/docs/hook.md))
+and one of the following node version managers are installed and properly set up on your system (we mostly use nodenv):
 
-- [`nodenv`](https://github.com/nodenv/nodenv) or
+- [`nodenv`](https://github.com/nodenv/nodenv) (`brew install nodenv` & shell hook) or
 - [`nvm`](https://github.com/nvm-sh/nvm)
 
 Follow the instructions in the corresponding READMEs for setup.
@@ -64,7 +67,7 @@ Afterwards, `which npm` should point to a node environment managed by either `no
 
 #### Yarn
 
-Install yarn using `npm install --global yarn` and add yarn commands to your path by commenting out the line
+Install yarn using `npm install --global yarn`, log out of your shell and log back in, and add yarn commands to your path by commenting out the line
 `export PATH="$PATH:$(yarn global bin)"` in your .envrc.local for being able to run `mprocs` later.
 
 #### pyenv
@@ -75,18 +78,13 @@ brew.
 #### Ory
 
 We're using Ory for authentication. For local development, we need a proxy. You can install the proxy
-via <https://www.ory.sh/docs/guides/cli/installation>.
-
-#### Emulator
-
-For installing the Android Emulator needed for running the mobile dev environment, please read
-the [`readme`](https://gitlab.holi.team/app/holi-frontends/-/blob/main/README.md) in `holi-frontends`.
+via <https://www.ory.sh/docs/guides/cli/installation> using brew.
 
 #### Google Pub/Sub Emulator
 
 To develop and test our event-driven applications locally, we use the [Google Pub/Sub emulator](https://cloud.google.com/pubsub/docs/emulator), which provides local emulation of the Google Cloud Pub/Sub production service.
 
-Please make sure you installed and are authenticated with [`gcloud` CLI](https://cloud.google.com/sdk/docs/install). Later steps will then ensure correct installation of the emulator.
+Please install [`gcloud` CLI](https://cloud.google.com/sdk/docs/install). Later steps will then ensure correct installation of the emulator.
 
 Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
 
@@ -96,27 +94,30 @@ To obtain further information on the `holi-ocis-integration` project, please ref
 
 #### OwnCloud Infinite Storage (OCIS)
 
-To run OCIS locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-ocis/-/blob/main/README.md) in `holi-ocis`.
+OCIS is not run locally as a default. To run OCIS locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-ocis/-/blob/main/README.md) in `holi-ocis`.
 
 #### Jitsi Meet
 
-To run jitsi locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-meet/-/blob/main/README.md) in `holi-meet`.
+Jitsi Meet is not run locally as a default. To run jitsi locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-meet/-/blob/main/README.md) in `holi-meet`.
+
+#### Chat
+
+Chat is not run locally as a default. To run chat locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-chat/-/blob/main/README.md) in `holi-chat`.
 
 #### Docker-Compose
 
 Some projects (e.g. okuna) are using Docker or Docker-Compose to run their dev environment.
-Please [`install Docker-Compose`](https://docs.docker.com/compose/install/).
+Please [`install Docker-Compose`](https://docs.docker.com/compose/install/) via the plugin, not as standalone. Afterwards, you might need to log out of your console and back in again.
 
 #### Deno
 
-Some projects are using deno. [`Install it`](https://deno.land/manual@v1.36.0/getting_started/installation) and follow
+Some projects are using deno. [`Install it`](https://deno.land/manual@v1.36.0/getting_started/installation) (via brew) and follow
 the instructions to add it to your environment.
 
 ### Initialization
 
 Once you have installed all prerequisites (or after anything changed in the setup), you can execute
 
-`direnv allow`
 `./init.sh`
 
 and the script will set up everything for you. At the end, it will display a big `DONE` banner. If it does not,

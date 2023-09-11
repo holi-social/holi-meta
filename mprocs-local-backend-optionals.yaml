@@ -99,7 +99,7 @@ procs:
     cwd: <CONFIG_DIR>/holi-ocis
     autostart: false
     shell: >
-      docker-compose rm -f && docker-compose up
+      docker compose rm -f && docker compose up
     stop:
       send-keys:
         - <C-c>
@@ -111,7 +111,7 @@ procs:
       ./generate-homeserver-config.sh
       . ./.envrc-push-gateway.local
       ./generate-push-gateway-config.sh
-      docker-compose rm -f && docker-compose up
+      docker compose rm -f && docker compose up
     stop:
       send-keys:
         - <C-c>

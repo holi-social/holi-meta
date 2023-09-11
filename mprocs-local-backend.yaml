@@ -159,8 +159,13 @@ procs:
   ocis:
     cwd: <CONFIG_DIR>/holi-ocis
     shell: >
-      docker-compose rm -f;
-      docker-compose up;
+      if [ "$LOCAL_BACKEND_OCIS" = "true" ]; then
+        docker compose rm -f;
+        docker compose up;
+      else
+        echo "Not starting local ocis because LOCAL_BACKEND_OCIS is not set to 'true'";
+        sleep infinity;
+      fi;
     stop:
       send-keys:
         - <C-c>
@@ -174,8 +179,8 @@ procs:
         ./generate-homeserver-config.sh;
         . ./.envrc-push-gateway.local;
         ./generate-push-gateway-config.sh;
-        docker-compose rm -f;
-        docker-compose up;
+        docker compose rm -f;
+        docker compose up;
       else
         echo "Not starting local chat because LOCAL_BACKEND_CHAT is not set to 'true'";
         sleep infinity;
