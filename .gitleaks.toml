@@ -23,6 +23,7 @@ paths = [
     '''Database.refactorlog''',
     '''vendor''',
     '''lock.json''',
+    '''deno.lock''',
 ]
 
 [[rules]]
