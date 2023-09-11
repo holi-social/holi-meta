@@ -75,6 +75,8 @@ Install yarn using `npm install --global yarn`, log out of your shell and log ba
 Some components (e.g. holi-okuna and pubsub) require Python. They are using [pyenv](https://github.com/pyenv/pyenv) in order to install the specific versions of Python they need into virtualenvs. You can [install](https://github.com/pyenv/pyenv#installation) it via
 brew.
 
+For building python versions from source, pyenv needs some build dependencies. Please install them according to [this manual](https://devguide.python.org/getting-started/setup-building/index.html#install-dependencies).
+
 #### Ory
 
 We're using Ory for authentication. For local development, we need a proxy. You can install the proxy
@@ -84,7 +86,7 @@ via <https://www.ory.sh/docs/guides/cli/installation> using brew.
 
 To develop and test our event-driven applications locally, we use the [Google Pub/Sub emulator](https://cloud.google.com/pubsub/docs/emulator), which provides local emulation of the Google Cloud Pub/Sub production service.
 
-Please install [`gcloud` CLI](https://cloud.google.com/sdk/docs/install). Later steps will then ensure correct installation of the emulator.
+Please install [`gcloud` CLI](https://cloud.google.com/sdk/docs/install), as well as a Java Runtime (via your preferred method). Later steps will then ensure correct installation of the emulator.
 
 Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
 
@@ -113,6 +115,8 @@ Please [`install Docker-Compose`](https://docs.docker.com/compose/install/) via 
 
 Some projects are using deno. [`Install it`](https://deno.land/manual@v1.36.0/getting_started/installation) (via brew) and follow
 the instructions to add it to your environment.
+
+Also, you need to install deno's script runner, [`Velociraptor`](https://velociraptor.run/docs/installation/). Don't forget to include the deno bin folder in your `PATH` (this is not very obvious from the installation manual).
 
 ### Initialization
 
@@ -144,6 +148,13 @@ Every time the above command stops, you can check that the working directory is 
 Now you can open the projects in your favourite IDE. It's up to you whether you open the holi-meta folder or the checked
 out project subfolders in several IDEs .
 
+### Last steps
+
+* The Unified API currently uses the same local redis instance as okuna. Therefore, please copy the `REDIS_PASSWORD` environment variable from
+`./holi-okuna/.env` to `./holi-unified-api/.envrc.local`
+* Please make sure you have `ffmpeg` installed. Okuna has a runtime dependency on it.
+* You might need to initialize okuna a bit. If okuna is not running properly, please follow `holi-okuna/README.md` for manual initialization.
+
 ## Running dev environments via mprocs
 
 In this repository, there are `mprocs*.yaml` files. Each one creates a unique dev environment by starting multiple cli
@@ -153,24 +164,27 @@ simply switch panes using `Ctrl+a`.
 
 If you need to work on APIs as well, you can execute different mprocs configurations. For example, in order to work on
 the okuna backend, run `mprocs -c mprocs-local-backend.yaml` instead, which will spin up Oathkeeper, the unified API and
-Okuna locally next to the frontends. This is currently not possible for Open Source contributors, see [TODO for Open Source contributions](#todo-for-open-source-contributions)
+Okuna locally next to the frontends. This is currently not well tested for Open Source contributors, see [TODO for Open Source contributions](#todo-for-open-source-contributions).
 
-### Local backend on Android
+And now, finally, comes the moment: Go to your browser and open `http://localhost:3000` and/or scan the QR code with the Expo Go app in your
+mobile phone. You should see your own instance of holi and be able to code away.
 
-For Android you have to explicitly forward the port for the locally running backend, e.g. using
+### Local backend on Android Emulator
+
+For using an Android Emulator you have to explicitly forward the port for the locally running backend, e.g. using
 
 ```sh
 adb reverse tcp:4455 tcp:4455
 ```
 
+and you have to change the DEV_HOST variable in `./holi-frontends/.env.local` (it's documented and prepared for you).
+
 ## TODO for Open Source contributions
 
-The following issues currently do not allow Open Source contributors to have a full development environment including backends:
+The following issues currently make it difficult for Open Source contributors to have a full development environment including backends:
 
-* running a completely local emulator without a dependency on an existing gcloud project
-* not depending on an ory cloud account for local identity management
-
-
+* Some backends need secrets in order to function properly (holi-app-*, holi-geo-api). Current solution: They provide a fake mode, in which they return dummy data.
+* okuna needs a token to call the ory API. Current solution: if no token is set, the API is not called.
 
 ## Helper scripts
 

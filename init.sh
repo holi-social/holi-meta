@@ -75,8 +75,10 @@ set -o pipefail
 ensureAvailable ory
 ensureAvailable docker
 ensureAvailable deno
+ensureAvailable vr
 ensureAvailable brew
 ensureAvailable pyenv
+ensureAvailable ffmpeg # needed by okuna
 
 # dependencies we can auto-install
 # install velociraptor for deno projects
