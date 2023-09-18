@@ -82,7 +82,8 @@ procs:
         python3 okuna-cli.py up-services-only;
       else
         echo "Not starting local okuna because LOCAL_BACKEND_OKUNA is not set to 'true'";
-        sleep infinity;
+        # block doing nothing
+        tail -f /dev/null
       fi;
     stop:
       send-keys:
@@ -109,7 +110,8 @@ procs:
         python3 start_server.py --reload || echo 'maybe you need to execute "python manage.py migrate" again?';
       else
         echo "Not starting local okuna because LOCAL_BACKEND_OKUNA is not set to 'true'";
-        sleep infinity;
+        # block doing nothing
+        tail -f /dev/null
       fi;
   donations-api:
     cwd: <CONFIG_DIR>/holi-app-donations
@@ -164,7 +166,8 @@ procs:
         docker compose up;
       else
         echo "Not starting local ocis because LOCAL_BACKEND_OCIS is not set to 'true'";
-        sleep infinity;
+        # block doing nothing
+        tail -f /dev/null
       fi;
     stop:
       send-keys:
@@ -183,7 +186,8 @@ procs:
         docker compose up;
       else
         echo "Not starting local chat because LOCAL_BACKEND_CHAT is not set to 'true'";
-        sleep infinity;
+        # block doing nothing
+        tail -f /dev/null
       fi;
     stop:
       send-keys:
