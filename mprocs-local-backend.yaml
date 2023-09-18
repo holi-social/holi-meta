@@ -5,14 +5,14 @@ procs:
       DEV_ENV: local
     shell: >
       . ./.envrc.local;
-      yarn mobile:dev
+      yarn mobile:dev;
   web:
     cwd: <CONFIG_DIR>/holi-frontends
     env:
       DEV_ENV: local
     shell: >
       . ./.envrc.local;
-      yarn web:dev
+      yarn web:dev;
   storybook:
     cwd: <CONFIG_DIR>/holi-frontends
     shell: yarn storybook:dev --no-open
@@ -28,10 +28,21 @@ procs:
       . .venv/bin/activate; pip3 install -r requirements.txt;
       python3 init.py;
       fg;
+    stop:
+      send-keys:
+        - <C-c>
+        - <C-c>
   ocis-subscriber:
     cwd: <CONFIG_DIR>/holi-ocis-integration
     shell: >
-      . ./.envrc.local; ./start-ocis-integration-local.sh; yarn build; yarn start:dev
+      . ./.envrc.local;
+      ./start-ocis-integration-local.sh;
+      yarn build;
+      yarn start:dev;
+    stop:
+      send-keys:
+        - <C-c>
+        - <C-c>
   oathkeeper:
     cwd: <CONFIG_DIR>/holi-unified-api/oathkeeper
     shell: >
@@ -43,7 +54,7 @@ procs:
         --env-file=.env.local \
         --mount type=bind,source=$PWD,target=/opt/oathkeeper/ \
         --add-host=host.docker.internal:host-gateway \
-        oryd/oathkeeper:v0.40.3 --config /opt/oathkeeper/config.yaml serve
+        oryd/oathkeeper:v0.40.3 --config /opt/oathkeeper/config.yaml serve;
     stop:
       send-keys:
         - <C-c>
@@ -51,19 +62,29 @@ procs:
   unified-api:
     cwd: <CONFIG_DIR>/holi-unified-api
     shell: >
+      . ../.envrc.local.backends;
       . ./.envrc.local;
-      ../wait-for-port.sh 8000;
+      [ "$LOCAL_BACKEND_CHAT" = "true" ] && ../wait-for-port.sh 8008;
+      [ "$LOCAL_BACKEND_OKUNA" = "true" ] && ../wait-for-port.sh 8000;
       ../wait-for-port.sh 8001;
       ../wait-for-port.sh 8002;
-      ../wait-for-port.sh 8003;
+      [ "$LOCAL_BACKEND_GEOAPI" = "true" ] && ../wait-for-port.sh 8003;
       ../wait-for-port.sh 8004;
       yarn mesh build;
       cp logger.ts .mesh/;
-      yarn serve
+      yarn serve;
   okuna-services:
     cwd: <CONFIG_DIR>/holi-okuna
     shell: >
-      pip3 install -r requirements-cli-only.txt; python3 okuna-cli.py up-services-only
+      . ../.envrc.local.backends;
+      if [ "$LOCAL_BACKEND_OKUNA" = "true" ]; then
+        pip3 install -r requirements-cli-only.txt;
+        python3 okuna-cli.py up-services-only;
+      else
+        echo "Not starting local okuna because LOCAL_BACKEND_OKUNA is not set to 'true'";
+        # block doing nothing
+        tail -f /dev/null
+      fi;
     stop:
       send-keys:
         - <C-c>
@@ -72,31 +93,82 @@ procs:
     cwd: <CONFIG_DIR>/holi-okuna
     # Before starting the server process, the services need to be up. Therefore, we wait until the services are up via a small until loop.
     shell: >
-      echo "waiting for services"; until docker ps|grep okuna-redis; 
-      do sleep 1; echo -n .; done; . .venv/bin/activate; pip3 install -r requirements.txt;
-      . ./.envrc.local;
-      ../wait-for-port.sh 8085; $(gcloud beta emulators pubsub env-init); python3 manage.py migrate; python3 manage.py collectstatic --no-input; python3 start_server.py --reload
-      || echo 'maybe you need to execute "python manage.py migrate" again?'
+      . ../.envrc.local.backends;
+      if [ "$LOCAL_BACKEND_OKUNA" = "true" ]; then
+        echo "waiting for services";
+        until docker ps|grep okuna-redis; do
+          sleep 1;
+          echo -n .;
+        done
+        . .venv/bin/activate;
+        pip3 install -r requirements.txt;
+        . ./.envrc.local;
+        ../wait-for-port.sh 8085;
+        $(gcloud beta emulators pubsub env-init);
+        python3 manage.py migrate;
+        python3 manage.py collectstatic --no-input;
+        python3 start_server.py --reload || echo 'maybe you need to execute "python manage.py migrate" again?';
+      else
+        echo "Not starting local okuna because LOCAL_BACKEND_OKUNA is not set to 'true'";
+        # block doing nothing
+        tail -f /dev/null
+      fi;
   donations-api:
     cwd: <CONFIG_DIR>/holi-app-donations
     shell: >
-      vr install && vr dev
+      . ../.envrc.local.backends;
+      vr install;
+      echo starting $LOCAL_BACKEND_DONATIONS;
+      if [ "$LOCAL_BACKEND_DONATIONS" = "true" ]; then
+        vr dev;
+      else
+        echo starting fake;
+        FAKE="true" vr dev;
+      fi;
   geo-api:
     cwd: <CONFIG_DIR>/holi-geo-api
     shell: >
-      . ./.envrc.local && vr install && vr dev
+      . ../.envrc.local.backends;
+      . ./.envrc.local;
+      vr install;
+      if [ "$LOCAL_BACKEND_GEOAPI" = "true" ]; then
+        vr dev;
+      else
+        FAKE="true" vr dev;
+      fi;
   goodnews-api:
     cwd: <CONFIG_DIR>/holi-app-goodnews
     shell: >
-      . ./.envrc.local && vr install && vr dev
+      . ../.envrc.local.backends;
+      . ./.envrc.local;
+      vr install;
+      if [ "$LOCAL_BACKEND_GOODNEWS" = "true" ]; then
+        vr dev;
+      else
+        FAKE="true" vr dev;
+      fi;
   volunteering-api:
     cwd: <CONFIG_DIR>/holi-app-volunteering
     shell: >
-      . ./.envrc.local && vr install && vr dev
+      . ../.envrc.local.backends;
+      . ./.envrc.local;
+      vr install;
+      if [ "$LOCAL_BACKEND_VOLUNTEERING" = "true" ]; then
+        vr dev;
+      else
+        FAKE="true" vr dev;
+      fi;
   ocis:
     cwd: <CONFIG_DIR>/holi-ocis
     shell: >
-      docker-compose rm -f && docker-compose up
+      if [ "$LOCAL_BACKEND_OCIS" = "true" ]; then
+        docker compose rm -f;
+        docker compose up;
+      else
+        echo "Not starting local ocis because LOCAL_BACKEND_OCIS is not set to 'true'";
+        # block doing nothing
+        tail -f /dev/null
+      fi;
     stop:
       send-keys:
         - <C-c>
@@ -104,11 +176,19 @@ procs:
   chat-server:
     cwd: <CONFIG_DIR>/holi-chat-server
     shell: >
-      . ./.envrc.local
-      ./generate-homeserver-config.sh
-      . ./.envrc-push-gateway.local
-      ./generate-push-gateway-config.sh
-      docker-compose rm -f && docker-compose up
+      . ../.envrc.local.backends;
+      if [ "$LOCAL_BACKEND_CHAT" = "true" ]; then
+        . ./.envrc.local;
+        ./generate-homeserver-config.sh;
+        . ./.envrc-push-gateway.local;
+        ./generate-push-gateway-config.sh;
+        docker compose rm -f;
+        docker compose up;
+      else
+        echo "Not starting local chat because LOCAL_BACKEND_CHAT is not set to 'true'";
+        # block doing nothing
+        tail -f /dev/null
+      fi;
     stop:
       send-keys:
         - <C-c>

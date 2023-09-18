@@ -22,6 +22,8 @@ paths = [
     '''pnpm-lock.yaml''',
     '''Database.refactorlog''',
     '''vendor''',
+    '''lock.json''',
+    '''deno.lock''',
 ]
 
 [[rules]]

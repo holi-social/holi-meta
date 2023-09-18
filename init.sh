@@ -32,6 +32,7 @@ checkoutAndPrepare() {
   git clone "$1" "$2" >/dev/null 2>&1 || true
   pushd "$2"
   direnv allow .
+  eval "$(direnv export bash)"
   # install git hooks via husky
   husky install
   popd
@@ -41,16 +42,7 @@ checkoutAndPrepare() {
 # That way we can re-init at any time and all be on the same spot.
 
 # we need a couple of prerequisites installed, but can't universally install it for everyone because of differing installation methods on different platforms/distros
-ensureAvailable yarn
-ensureAvailable direnv
-ensureAvailable gcloud
-
-# Install Google PubSub emulator
-# first, update all components for easy filtering later
-yes | gcloud components update || true
-gcloud components list --filter=Status=Installed| grep beta > /dev/null || yes | gcloud components install beta
-gcloud components list --filter=Status=Installed| grep pubsub-emulator > /dev/null || yes | gcloud components install pubsub-emulator
-
+#
 # nvm is oftentimes installed as a function sourced in the shell environment and might not be available in the script subshell
 # therefore we try sourcing it here before
 # (ignore shellcheck warning:)
@@ -67,16 +59,31 @@ elif isAvailable brew; then
   fi
 fi
 isAvailable nvm || isAvailable nodenv || fail "Neither nvm nor nodenv are installed. Please install one of them according to README.md and run $0 again afterwards"
+ensureAvailable yarn
+ensureAvailable direnv
+ensureAvailable gcloud
+
+# Install Google PubSub emulator
+# some commands in the following chain of commands are supposed to fail, therefore we suspend the pipefail option temporarily
+set +o pipefail
+# first, update all components for easy filtering later
+yes | gcloud components update || true
+gcloud components list --filter=state.name=Installed | grep beta > /dev/null || yes | gcloud components install beta
+gcloud components list --filter=state.name=Installed | grep pubsub-emulator > /dev/null || yes | gcloud components install pubsub-emulator
+set -o pipefail
+
 
 ensureAvailable ory
-ensureAvailable emulator
-ensureAvailable docker-compose
+ensureAvailable docker
 ensureAvailable deno
+ensureAvailable vr
 ensureAvailable brew
-# install velociraptor
-isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
+ensureAvailable pyenv
+ensureAvailable ffmpeg # needed by okuna
 
 # dependencies we can auto-install
+# install velociraptor for deno projects
+isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
 # we want to use mprocs for running the development environments
 isAvailable mprocs || yarn global add mprocs
 # we want to use husky for pre-commit hooks
@@ -92,29 +99,42 @@ popd
 
 checkoutAndPrepare git@gitlab.holi.team:app/holi-okuna.git holi-okuna
 pushd holi-okuna
+# install the Python virtualenv
+pyenv install -s "$(cat .python-version)"
+pyenv local "$(cat .python-version)"
 # we need to install some postgis libs for holi-okuna
 brewInstall gdal
 brewInstall proj
 brewInstall geos
+[[ -f .envrc.local ]] || cp .envrc.local.template .envrc.local
 if [[ -f /opt/homebrew/lib/libgdal.dylib && -f /opt/homebrew/lib/libgeos_c.dylib && -f /opt/homebrew/lib/libproj.dylib ]]; then
   # MacOS
-  [[ -f .envrc.local ]] || cat <<- EOF > .envrc.local
+  if ! grep -q "GDAL_LIBRARY_PATH" .envrc.local; then # LIBRARY_PATH variables are not yet set
+    cat <<- EOF >> .envrc.local
+
 export GDAL_LIBRARY_PATH=/opt/homebrew/lib/libgdal.dylib
 export GEOS_LIBRARY_PATH=/opt/homebrew/lib/libgeos_c.dylib
 export PROJ_LIBRARY_PATH=/opt/homebrew/lib/libproj.dylib
 EOF
+  fi
 elif [[ -f /home/linuxbrew/.linuxbrew/lib/libgdal.so && -f /home/linuxbrew/.linuxbrew/lib/libgeos_c.so && -f /home/linuxbrew/.linuxbrew/lib/libproj.so ]]; then
   # Linux
-  [[ -f .envrc.local ]] || cat <<- EOF > .envrc.local
+  if ! grep -q "GDAL_LIBRARY_PATH" .envrc.local; then # LIBRARY_PATH variables are not yet set
+    cat <<- EOF >> .envrc.local
+
 export GDAL_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib/libgdal.so
 export GEOS_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib/libgeos_c.so
 export PROJ_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib/libproj.so
 # if not exported like this, system libs will be used as deps of brew libs
 export LD_LIBRARY_PATH=/home/linuxbrew/.linuxbrew/lib/:\$LD_LIBRARY_PATH
 EOF
+  fi
 else
   fail "Could not determine how to include the libraries necessary for PostGIS. Please investigate in init.sh."
 fi
+# now, reinitialize via direnv (first run in checkoutAndPrepare did not succeed due to missing python interpreter)
+direnv reload
+eval "$(direnv export bash)"
 popd
 
 checkoutAndPrepare git@gitlab.holi.team:app/holi-unified-api.git holi-unified-api
@@ -145,7 +165,11 @@ fi
 
 # Install dependencies to run Google Pub/Sub locally
 pushd pubsub
+# install the Python virtualenv
+pyenv install -s "$(cat .python-version)"
+pyenv local "$(cat .python-version)"
 direnv allow .
+eval "$(direnv export bash)"
 popd
 
 set +x

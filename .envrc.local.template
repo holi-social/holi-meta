@@ -12,5 +12,3 @@ else
   . ~/.nvm/nvm.sh
   nvm install "$(cat .node-version)"
 fi
-
-#export PATH="$PATH:$(yarn global bin)"
