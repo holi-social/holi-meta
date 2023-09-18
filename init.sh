@@ -32,6 +32,7 @@ checkoutAndPrepare() {
   git clone "$1" "$2" >/dev/null 2>&1 || true
   pushd "$2"
   direnv allow .
+  eval "$(direnv export bash)"
   # install git hooks via husky
   husky install
   popd
@@ -67,8 +68,8 @@ ensureAvailable gcloud
 set +o pipefail
 # first, update all components for easy filtering later
 yes | gcloud components update || true
-gcloud components list --filter=Status=Installed| grep beta > /dev/null || yes | gcloud components install beta
-gcloud components list --filter=Status=Installed| grep pubsub-emulator > /dev/null || yes | gcloud components install pubsub-emulator
+gcloud components list --filter=state.name=Installed | grep beta > /dev/null || yes | gcloud components install beta
+gcloud components list --filter=state.name=Installed | grep pubsub-emulator > /dev/null || yes | gcloud components install pubsub-emulator
 set -o pipefail
 
 
@@ -103,6 +104,7 @@ pyenv install -s "$(cat .python-version)"
 pyenv local "$(cat .python-version)"
 # now, reinitialize via direnv (first run in checkoutAndPrepare did not succeed due to missing python interpreter)
 direnv reload
+eval "$(direnv export bash)"
 # we need to install some postgis libs for holi-okuna
 brewInstall gdal
 brewInstall proj
@@ -164,6 +166,7 @@ pushd pubsub
 pyenv install -s "$(cat .python-version)"
 pyenv local "$(cat .python-version)"
 direnv allow .
+eval "$(direnv export bash)"
 popd
 
 set +x
