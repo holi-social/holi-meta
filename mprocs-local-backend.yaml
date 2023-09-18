@@ -118,7 +118,6 @@ procs:
     shell: >
       . ../.envrc.local.backends;
       vr install;
-      echo starting $LOCAL_BACKEND_DONATIONS;
       if [ "$LOCAL_BACKEND_DONATIONS" = "true" ]; then
         vr dev;
       else
