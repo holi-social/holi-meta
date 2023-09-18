@@ -15,7 +15,12 @@ procs:
       yarn web:dev;
   storybook:
     cwd: <CONFIG_DIR>/holi-frontends
-    shell: yarn storybook:dev --no-open
+    shell: >
+      if [ "$LOCAL_BACKEND_STORYBOOK" = "true" ]; then
+        yarn storybook:dev --no-open
+      else
+        echo "Not starting local Storybook because LOCAL_BACKEND_STORYBOOK is not set to 'true'";
+      fi
   adb reverse:
     shell: >
       adb reverse tcp:4455 tcp:4455 && echo 'Android should now be able to communicate with oathkeeper / unified api'
