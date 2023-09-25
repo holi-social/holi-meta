@@ -94,14 +94,6 @@ brewInstall gitleaks
 # check out and initialize the repositories
 checkoutAndPrepare git@gitlab.holi.team:app/holi-frontends.git holi-frontends
 checkoutAndPrepare git@gitlab.holi.team:app/holi-okuna.git holi-okuna
-[[ -f .envrc.local ]] || cp .envrc.local.template .envrc.local
-    cat <<- EOF >> .envrc.local
-
-    cat <<- EOF >> .envrc.local
-
-# now, reinitialize via direnv (first run in checkoutAndPrepare did not succeed due to missing python interpreter)
-direnv reload
-eval "$(direnv export bash)"
 checkoutAndPrepare git@gitlab.holi.team:app/holi-unified-api.git holi-unified-api
 checkoutAndPrepare git@gitlab.holi.team:app/holi-app-donations.git holi-app-donations
 checkoutAndPrepare git@gitlab.holi.team:app/holi-app-goodnews.git holi-app-goodnews
