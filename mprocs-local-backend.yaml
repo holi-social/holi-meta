@@ -3,21 +3,17 @@ procs:
     cwd: <CONFIG_DIR>/holi-frontends
     env:
       DEV_ENV: local
-    shell: >
-      . ./.envrc.local;
-      yarn mobile:dev;
+    shell: ./mprocs-start-mobile.sh
   web:
     cwd: <CONFIG_DIR>/holi-frontends
     env:
       DEV_ENV: local
-    shell: >
-      . ./.envrc.local;
-      yarn web:dev;
+    shell: ./mprocs-start-web.sh
   storybook:
     cwd: <CONFIG_DIR>/holi-frontends
     shell: >
       if [ "$LOCAL_BACKEND_STORYBOOK" = "true" ]; then
-        yarn storybook:dev --no-open
+        ./mprocs-start-storybook.sh;
       else
         echo "Not starting local Storybook because LOCAL_BACKEND_STORYBOOK is not set to 'true'";
       fi
@@ -30,13 +26,7 @@ procs:
       fi
   pubsub-emulator:
     cwd: <CONFIG_DIR>/pubsub
-    shell: >
-      set -m;
-      gcloud beta emulators pubsub start --project=holi-dev --host-port=localhost:8085 & ../wait-for-port.sh 8085;
-      $(gcloud beta emulators pubsub env-init);
-      . .venv/bin/activate; pip3 install -r requirements.txt;
-      python3 init.py;
-      fg;
+    shell: ./mprocs-start.sh
     stop:
       send-keys:
         - <C-c>
@@ -45,10 +35,7 @@ procs:
     cwd: <CONFIG_DIR>/holi-ocis-integration
     shell: >
       if [ "$LOCAL_BACKEND_OCIS" = "true" ]; then
-        . ./.envrc.local;
-        ./start-ocis-integration-local.sh;
-        yarn build;
-        yarn start:dev;
+        ./mprocs-start.sh;
       else
         echo "Not starting local ocis subscriber because LOCAL_BACKEND_OCIS is not set to 'true'";
       fi;
@@ -58,41 +45,20 @@ procs:
         - <C-c>
   oathkeeper:
     cwd: <CONFIG_DIR>/holi-unified-api/oathkeeper
-    shell: >
-      docker run \
-        --rm \
-        --name ory-oathkeeper-unified-api \
-        -p 0.0.0.0:4455:4455 \
-        -p 0.0.0.0:4456:4456 \
-        --env-file=.env.local \
-        --mount type=bind,source=$PWD,target=/opt/oathkeeper/ \
-        --add-host=host.docker.internal:host-gateway \
-        oryd/oathkeeper:v0.40.3 --config /opt/oathkeeper/config.yaml serve;
+    shell: ../mprocs-start-oathkeeper.sh
     stop:
       send-keys:
         - <C-c>
         - <C-c>
   unified-api:
     cwd: <CONFIG_DIR>/holi-unified-api
-    shell: >
-      . ../.envrc.local.backends;
-      . ./.envrc.local;
-      [ "$LOCAL_BACKEND_CHAT" = "true" ] && ../wait-for-port.sh 8008;
-      [ "$LOCAL_BACKEND_OKUNA" = "true" ] && ../wait-for-port.sh 8000;
-      ../wait-for-port.sh 8001;
-      ../wait-for-port.sh 8002;
-      [ "$LOCAL_BACKEND_GEOAPI" = "true" ] && ../wait-for-port.sh 8003;
-      ../wait-for-port.sh 8004;
-      yarn mesh build;
-      cp logger.ts .mesh/;
-      yarn serve;
+    shell: ./mprocs-start.sh
   okuna-services:
     cwd: <CONFIG_DIR>/holi-okuna
     shell: >
       . ../.envrc.local.backends;
       if [ "$LOCAL_BACKEND_OKUNA" = "true" ]; then
-        pip3 install -r requirements-cli-only.txt;
-        python3 okuna-cli.py up-services-only;
+        ./mprocs-start-services.sh;
       else
         echo "Not starting local okuna because LOCAL_BACKEND_OKUNA is not set to 'true'";
       fi;
@@ -106,19 +72,7 @@ procs:
     shell: >
       . ../.envrc.local.backends;
       if [ "$LOCAL_BACKEND_OKUNA" = "true" ]; then
-        echo "waiting for services";
-        until docker ps|grep okuna-redis; do
-          sleep 1;
-          echo -n .;
-        done
-        . .venv/bin/activate;
-        pip3 install -r requirements.txt;
-        . ./.envrc.local;
-        ../wait-for-port.sh 8085;
-        $(gcloud beta emulators pubsub env-init);
-        python3 manage.py migrate;
-        python3 manage.py collectstatic --no-input;
-        python3 start_server.py --reload || echo 'maybe you need to execute "python manage.py migrate" again?';
+        ./mprocs-start.sh;
       else
         echo "Not starting local okuna because LOCAL_BACKEND_OKUNA is not set to 'true'";
       fi;
@@ -128,10 +82,10 @@ procs:
       . ../.envrc.local.backends;
       vr install;
       if [ "$LOCAL_BACKEND_DONATIONS" = "true" ]; then
-        vr dev;
+        ./mprocs-start.sh;
       else
         echo starting fake;
-        FAKE="true" vr dev;
+        FAKE="true" ./mprocs-start.sh;
       fi;
   geo-api:
     cwd: <CONFIG_DIR>/holi-geo-api
@@ -140,10 +94,10 @@ procs:
       . ./.envrc.local;
       vr install;
       if [ "$LOCAL_BACKEND_GEOAPI" = "true" ]; then
-        vr dev;
+        ./mprocs-start.sh;
       else
         echo starting fake;
-        FAKE="true" vr dev;
+        FAKE="true" ./mprocs-start.sh;
       fi;
   goodnews-api:
     cwd: <CONFIG_DIR>/holi-app-goodnews
@@ -152,10 +106,10 @@ procs:
       . ./.envrc.local;
       vr install;
       if [ "$LOCAL_BACKEND_GOODNEWS" = "true" ]; then
-        vr dev;
+        ./mprocs-start.sh;
       else
         echo starting fake;
-        FAKE="true" vr dev;
+        FAKE="true" ./mprocs-start.sh;
       fi;
   volunteering-api:
     cwd: <CONFIG_DIR>/holi-app-volunteering
@@ -164,17 +118,16 @@ procs:
       . ./.envrc.local;
       vr install;
       if [ "$LOCAL_BACKEND_VOLUNTEERING" = "true" ]; then
-        vr dev;
+        ./mprocs-start.sh;
       else
         echo starting fake;
-        FAKE="true" vr dev;
+        FAKE="true" ./mprocs-start.sh;
       fi;
   ocis:
     cwd: <CONFIG_DIR>/holi-ocis
     shell: >
       if [ "$LOCAL_BACKEND_OCIS" = "true" ]; then
-        docker compose rm -f;
-        docker compose up;
+        ./mprocs-start.sh;
       else
         echo "Not starting local ocis because LOCAL_BACKEND_OCIS is not set to 'true'";
       fi;
@@ -187,12 +140,7 @@ procs:
     shell: >
       . ../.envrc.local.backends;
       if [ "$LOCAL_BACKEND_CHAT" = "true" ]; then
-        . ./.envrc.local;
-        ./generate-homeserver-config.sh;
-        . ./.envrc-push-gateway.local;
-        ./generate-push-gateway-config.sh;
-        docker compose rm -f;
-        docker compose up;
+        ./mprocs-start.sh;
       else
         echo "Not starting local chat because LOCAL_BACKEND_CHAT is not set to 'true'";
       fi;
