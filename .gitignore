@@ -1,5 +1,6 @@
 # all subdirectories that start with holi (git checkouts)
 /holi-*/
+app.gitlab-pages.holi.team/
 
 # secret GCP key file for terraform should not be committed
 .holi-terraform.key
