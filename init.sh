@@ -29,6 +29,7 @@ brewInstall() {
 }
 
 checkoutAndPrepare() {
+  message "Preparing $2 ---------------------------------------------------------"
   git clone "$1" "$2" >/dev/null 2>&1 || true
   pushd "$2"
   direnv allow .
@@ -95,15 +96,7 @@ brewInstall gitleaks
 checkoutAndPrepare git@gitlab.holi.team:app/holi-frontends.git holi-frontends
 checkoutAndPrepare git@gitlab.holi.team:app/holi-okuna.git holi-okuna
 checkoutAndPrepare git@gitlab.holi.team:app/holi-unified-api.git holi-unified-api
-pushd holi-unified-api
-yarn install
-popd
-
 checkoutAndPrepare git@gitlab.holi.team:app/app.gitlab-pages.holi.team app.gitlab-pages.holi.team
-pushd app.gitlab-pages.holi.team
-yarn install
-popd
-
 checkoutAndPrepare git@gitlab.holi.team:app/holi-app-donations.git holi-app-donations
 checkoutAndPrepare git@gitlab.holi.team:app/holi-app-goodnews.git holi-app-goodnews
 checkoutAndPrepare git@gitlab.holi.team:app/holi-geo-api.git holi-geo-api
