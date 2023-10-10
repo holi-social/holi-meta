@@ -56,12 +56,7 @@ procs:
   okuna-services:
     cwd: <CONFIG_DIR>/holi-okuna
     shell: >
-      . ../.envrc.local.backends;
-      if [ "$LOCAL_BACKEND_OKUNA" = "true" ]; then
-        ./mprocs-start-services.sh;
-      else
-        echo "Not starting local okuna because LOCAL_BACKEND_OKUNA is not set to 'true'";
-      fi;
+      ./mprocs-start-services.sh;
     stop:
       send-keys:
         - <C-c>
@@ -70,12 +65,7 @@ procs:
     cwd: <CONFIG_DIR>/holi-okuna
     # Before starting the server process, the services need to be up. Therefore, we wait until the services are up via a small until loop.
     shell: >
-      . ../.envrc.local.backends;
-      if [ "$LOCAL_BACKEND_OKUNA" = "true" ]; then
-        ./mprocs-start.sh;
-      else
-        echo "Not starting local okuna because LOCAL_BACKEND_OKUNA is not set to 'true'";
-      fi;
+      ./mprocs-start.sh;
   donations-api:
     cwd: <CONFIG_DIR>/holi-app-donations
     shell: >
