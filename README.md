@@ -232,6 +232,10 @@ Okuna locally next to the frontends. This is currently not well tested for Open 
 And now, finally, comes the moment: Go to your browser and open `http://localhost:3000` and/or scan the QR code with the Expo Go app in your
 mobile phone. You should see your own instance of holi and be able to code away.
 
+### Creating an account
+
+The local dev environment uses a separate identity database, so feel free to create test accounts for any amount of users you want or need for your development needs via the registration workflow on your local machine.
+
 ### Local backend on Android Emulator
 
 For using an Android Emulator you have to explicitly forward the port for the locally running backend, e.g. using
