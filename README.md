@@ -91,7 +91,7 @@ Please install [`gcloud` CLI](https://cloud.google.com/sdk/docs/install), as wel
 
 Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
 
-Currently, `okuna` stands as the sole `publisher` of Google Pub/Sub. Similarly, `holi-ocis-integration`, which is referred to as `ocis-subscriber` in `mprocs-local-backend.yaml`, is the only `subscriber` of this service. This means that `okuna` is responsible for pushing messages to the Pub/Sub topic, and `ocis-subscriber` is the only client that receives and consumes those messages.
+Currently, `okuna` stands as the sole `publisher` of Google Pub/Sub and is responsible for pushing messages to the Pub/Sub topic. There are 2 currently `subscribers` of this service, `holi-ocis-integration` (`ocis-subscriber` in `mprocs-local-backend.yaml`) and `holi-chat-integration` (`chat-subscriber` in `mprocs-local-backend.yaml`), both receive and consume those messages.
 
 To obtain further information on the `holi-ocis-integration` project, please refer to the accompanying [`README.md`](https://gitlab.holi.team/app/holi-ocis-integration/-/blob/a876e59b1985685827f937243f9d0b286060efc9/README.md).
 
@@ -222,6 +222,7 @@ The following table lists all ports that are used for local execution.
 | pubsub-emulator                 | 8085 |
 | ocis-subscriber                 | 8086 |
 | ocis-postgres                   | 8087 |
+| chat-subscriber                 | 8088 |
 | ocis                            | 9200 |
 | onlyoffice                      | 9201 |
 | wopiserver                      | 8880 |

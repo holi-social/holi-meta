@@ -31,18 +31,6 @@ procs:
       send-keys:
         - <C-c>
         - <C-c>
-  ocis-subscriber:
-    cwd: <CONFIG_DIR>/holi-ocis-integration
-    shell: >
-      if [ "$LOCAL_BACKEND_OCIS" = "true" ]; then
-        ./mprocs-start.sh;
-      else
-        echo "Not starting local ocis subscriber because LOCAL_BACKEND_OCIS is not set to 'true'";
-      fi;
-    stop:
-      send-keys:
-        - <C-c>
-        - <C-c>
   oathkeeper:
     cwd: <CONFIG_DIR>/holi-unified-api/oathkeeper
     shell: ../mprocs-start-oathkeeper.sh
@@ -66,17 +54,6 @@ procs:
     # Before starting the server process, the services need to be up. Therefore, we wait until the services are up via a small until loop.
     shell: >
       ./mprocs-start.sh;
-  donations-api:
-    cwd: <CONFIG_DIR>/holi-app-donations
-    shell: >
-      . ../.envrc.local.backends;
-      vr install;
-      if [ "$LOCAL_BACKEND_DONATIONS" = "true" ]; then
-        ./mprocs-start.sh;
-      else
-        echo starting fake;
-        FAKE="true" ./mprocs-start.sh;
-      fi;
   geo-api:
     cwd: <CONFIG_DIR>/holi-geo-api
     shell: >
@@ -84,6 +61,17 @@ procs:
       . ./.envrc.local;
       vr install;
       if [ "$LOCAL_BACKEND_GEOAPI" = "true" ]; then
+        ./mprocs-start.sh;
+      else
+        echo starting fake;
+        FAKE="true" ./mprocs-start.sh;
+      fi;
+  donations-api:
+    cwd: <CONFIG_DIR>/holi-app-donations
+    shell: >
+      . ../.envrc.local.backends;
+      vr install;
+      if [ "$LOCAL_BACKEND_DONATIONS" = "true" ]; then
         ./mprocs-start.sh;
       else
         echo starting fake;
@@ -125,6 +113,18 @@ procs:
       send-keys:
         - <C-c>
         - <C-c>
+  ocis-subscriber:
+    cwd: <CONFIG_DIR>/holi-ocis-integration
+    shell: >
+      if [ "$LOCAL_BACKEND_OCIS" = "true" ]; then
+        ./mprocs-start.sh;
+      else
+        echo "Not starting local ocis subscriber because LOCAL_BACKEND_OCIS is not set to 'true'";
+      fi;
+    stop:
+      send-keys:
+        - <C-c>
+        - <C-c>
   chat-server:
     cwd: <CONFIG_DIR>/holi-chat-server
     shell: >
@@ -133,6 +133,18 @@ procs:
         ./mprocs-start.sh;
       else
         echo "Not starting local chat because LOCAL_BACKEND_CHAT is not set to 'true'";
+      fi;
+    stop:
+      send-keys:
+        - <C-c>
+        - <C-c>
+  chat-subscriber:
+    cwd: <CONFIG_DIR>/holi-chat-integration
+    shell: >
+      if [ "$LOCAL_BACKEND_CHAT" = "true" ]; then
+        ./mprocs-start.sh;
+      else
+        echo "Not starting local chat subscriber because LOCAL_BACKEND_CHAT is not set to 'true'";
       fi;
     stop:
       send-keys:
