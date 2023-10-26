@@ -81,6 +81,7 @@ ensureAvailable deno
 ensureAvailable brew
 ensureAvailable pyenv
 ensureAvailable ffmpeg # needed by okuna
+brewInstall libmagic # needed by okuna, missing on mac, we just install it independent of OS
 
 # dependencies we can auto-install
 # install velociraptor for deno projects
