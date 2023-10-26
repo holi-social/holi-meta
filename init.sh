@@ -105,6 +105,7 @@ checkoutAndPrepare git@gitlab.holi.team:app/holi-chat-server.git holi-chat-serve
 checkoutAndPrepare git@gitlab.holi.team:app/holi-ocis.git holi-ocis
 checkoutAndPrepare git@gitlab.holi.team:app/holi-meet.git holi-meet
 checkoutAndPrepare git@gitlab.holi.team:app/holi-ocis-integration.git holi-ocis-integration
+checkoutAndPrepare git@gitlab.holi.team:app/holi-chat-integration.git holi-chat-integration
 
 # these are technically not used in a local development environment, but they
 # make use of common definitions from holi-meta. If you want to check them out,
