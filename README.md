@@ -3,19 +3,36 @@
 The meta repository which helps you check out the other repositories and run a development environment locally.
 
 <!-- TOC -->
+- [Preface](#preface)
 - [Getting started](#getting-started)
   - [Requirements](#requirements)
     - [brew](#brew)
-    - [direnv && nodenv/nvm](#direnv--nodenvnvm)
+      - [Installation](#installation)
+      - [Configuration](#configuration)
+    - [direnv](#direnv)
+      - [Installation](#installation)
+      - [Configuration](#configuration)
+    - [nodenv/nvm](#nodenvnvm)
+      - [Installation](#installation)
+      - [Allowing direnv](#allowing-direnv)
     - [Yarn](#yarn)
+      - [Installation](#installation)
+      - [Configuration](#configuration)
     - [pyenv](#pyenv)
+      - [Installation](#installation)
+      - [Configuration](#configuration)
     - [Ory](#ory)
     - [Google Pub/Sub Emulator](#google-pubsub-emulator)
+      - [Install gcloud](#install-gcloud)
+      - [Information about Pub/Sub in development](#information-about-pubsub-in-development)
     - [OwnCloud Infinite Storage (OCIS)](#owncloud-infinite-storage-ocis)
     - [Jitsi Meet](#jitsi-meet)
     - [Chat](#chat)
     - [Docker-Compose](#docker-compose)
+      - [Start Docker Desktop (optional)](#start-docker-desktop-optional)
     - [Deno](#deno)
+      - [Installation](#installation)
+      - [Install velociraptor](#install-velociraptor)
   - [Initialization](#initialization)
   - [IDE setup](#ide-setup)
   - [Last steps](#last-steps)
@@ -28,27 +45,47 @@ The meta repository which helps you check out the other repositories and run a d
 - [Terraform authentication (optional)](#terraform-authentication-optional)
 <!-- /TOC -->
 
+## Preface
+
+holi is quite complex, consisting of many components, running on a diverse tech stack. Because of this, setting up a development environment is hard to do without help. Even with help, it can go wrong.
+
+We tried and are trying continuously to give our best support for setting up a dev environment. This manual is very detailed, while leaving some degrees of freedom to the developer. In order to succeed in setting up your dev environment, please try to follow this documentation as strict as you can. If you are running into issues during the setup that you can't figure out and where the documentation is lacking, feel free to contact the holi dev team for support.
+
 ## Getting started
 
 ### Requirements
 
 #### brew
 
+##### Installation
+
 Some tools are installed via [brew](https://docs.brew.sh/Installation). Please follow the instructions for installing it
 (on MacOS AND also on Linux (using the default installation script, no "local installation") in order to keep cross-platform complexity low).
+
+##### Configuration
 
 Make sure to integrate the brew shell-hook before direnv, nodenv, nvm and pyenv to allow your environment to find tools
 installed via brew and to avoid brew installed versions to take precedence over ones installed via other methods. 
 You can achieve this by installing the brew shell hook to `.bashrc` (above all other hook we will install) instead
 of the recommended `.profile` file.
 
-#### direnv && nodenv/nvm
+#### direnv
 
-Before we can get started building, please ensure that
-both [`direnv`](https://github.com/direnv/direnv/blob/master/docs/installation.md) (can be installed via `brew install direnv` & [shell hook](https://github.com/direnv/direnv/blob/master/docs/hook.md))
-and one of the following node version managers are installed and properly set up on your system (we mostly use nodenv):
+##### Installation 
 
-- [`nodenv`](https://github.com/nodenv/nodenv) (`brew install nodenv` & shell hook) or
+Please install [`direnv`](https://github.com/direnv/direnv/blob/master/docs/installation.md) (can be installed via `brew install direnv` 
+
+##### Configuration
+
+Please set up the [shell hook](https://github.com/direnv/direnv/blob/master/docs/hook.md)) for direnv.
+
+#### nodenv/nvm
+
+##### Installation
+
+Before we can get started building, please ensure that at least one of the following node version managers are installed and properly set up on your system (we mostly use nodenv, so when in doubt, use that):
+
+- [`nodenv`](https://github.com/nodenv/nodenv) (`brew install nodenv` & set up shell hook) or
 - [`nvm`](https://github.com/nvm-sh/nvm)
 
 Follow the instructions in the corresponding READMEs for setup.
@@ -56,6 +93,8 @@ Follow the instructions in the corresponding READMEs for setup.
 `.node-version` (used by `nodenv`) ensures that all developers are using the same `node`/`npm` versions.
 It is kept in sync with `.nvmrc` (used by `nvm`) by a symbolic link, so please make sure to use a format that is
 understood by both tools (e.g. a fixed version).
+
+##### Allowing direnv
 
 Once you installed these tools, please leave and re-enter the project directory. direnv will ask you for permission to execute:
 
@@ -68,13 +107,21 @@ Afterwards, `which npm` should point to a node environment managed by either `no
 
 #### Yarn
 
-Install yarn using `npm install --global yarn`, log out of your shell and log back in, and add yarn commands to your path by commenting out the line
-`export PATH="$PATH:$(yarn global bin)"` in your .envrc.local for being able to run `mprocs` later.
+##### Installation
+
+Install yarn using `npm install --global yarn`.
+
+##### Configuration
+
+Add yarn commands to your path by commenting out the line `export PATH="$PATH:$(yarn global bin)"` in your .envrc.local for being able to run `mprocs` later. Afterwards, log out of your shell and log back in, switching back to the holi-meta project's directory. You should now be able to run 'yarn --version' successfully.
 
 #### pyenv
 
-Some components (e.g. holi-okuna and pubsub) require Python. They are using [pyenv](https://github.com/pyenv/pyenv) in order to install the specific versions of Python they need into virtualenvs. You can [install](https://github.com/pyenv/pyenv#installation) it via
-brew.
+##### Installation
+
+Some components (e.g. holi-okuna and pubsub) require Python. They are using [pyenv](https://github.com/pyenv/pyenv) in order to install the specific versions of Python they need into virtualenvs. You can [install](https://github.com/pyenv/pyenv#installation) it via brew.
+
+##### Configuration
 
 For building python versions from source, pyenv needs some build dependencies. Please install them according to [this manual](https://devguide.python.org/getting-started/setup-building/index.html#install-dependencies).
 
@@ -87,7 +134,11 @@ via <https://www.ory.sh/docs/guides/cli/installation> using brew.
 
 To develop and test our event-driven applications locally, we use the [Google Pub/Sub emulator](https://cloud.google.com/pubsub/docs/emulator), which provides local emulation of the Google Cloud Pub/Sub production service.
 
+##### Install gcloud
+
 Please install [`gcloud` CLI](https://cloud.google.com/sdk/docs/install), as well as a Java Runtime (via your preferred method). Later steps will then ensure correct installation of the emulator.
+
+##### Information about Pub/Sub in development
 
 Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
 
@@ -112,12 +163,24 @@ Chat is not run locally as a default. To run chat locally there are additional s
 Some projects (e.g. okuna) are using Docker or Docker-Compose to run their dev environment.
 Please [`install Docker-Compose`](https://docs.docker.com/compose/install/) via the plugin, not as standalone. Afterwards, you might need to log out of your console and back in again.
 
+##### Start Docker Desktop (optional)
+
+If you installed Docker-Compose via Docker Desktop, you need to start it before development, or else the development environment will not successfully start.
+
 #### Deno
 
-Some projects are using deno. [`Install it`](https://deno.land/manual@v1.36.0/getting_started/installation) (via brew) and follow
-the instructions to add it to your environment.
+##### Installation
 
-Also, you need to install deno's script runner, [`Velociraptor`](https://velociraptor.run/docs/installation/). Don't forget to include the deno bin folder in your `PATH` (this is not very obvious from the installation manual).
+Some projects are using deno. [`Install it`](https://docs.deno.com/runtime/manual/getting_started/installation) (via brew) and follow
+the instructions to verify the installation.
+
+##### Install velociraptor
+
+Also, you need to install deno's script runner, [`Velociraptor`](https://velociraptor.run/docs/installation/). Don't forget to include the deno bin folder in your `PATH` (this is not very obvious from the installation manual) via e.g.
+
+```
+echo 'export PATH="$HOME/.deno/bin:$PATH"' >> ~/.bashrc
+```
 
 ### Initialization
 
@@ -126,7 +189,7 @@ Once you have installed all prerequisites (or after anything changed in the setu
 `./init.sh`
 
 and the script will set up everything for you. At the end, it will display a big `DONE` banner. If it does not,
-then either it ran into an error, giving a message, or stopped due to a bug. Either fix the error or re-run the script.
+then either it ran into an error, giving a message, or stopped due to a bug. Try to fix the error and then re-run the script.
 
 If you also want to work on any optional, private repositories, then please execute
 
@@ -153,8 +216,7 @@ out project subfolders in several IDEs .
 
 * The Unified API currently uses the same local redis instance as okuna. Therefore, please copy the `REDIS_PASSWORD` environment variable from
 `./holi-okuna/.env` to `./holi-unified-api/.envrc.local`
-* Please make sure you have `ffmpeg` installed. Okuna has a runtime dependency on it.
-* You might need to initialize okuna a bit. If okuna is not running properly, please follow `holi-okuna/README.md` for manual initialization.
+* You will need to initialize okuna a bit. If okuna is not running properly, please follow `holi-okuna/README.md` for manual initialization.
 
 ## Running dev environments via mprocs
 
@@ -165,10 +227,14 @@ simply switch panes using `Ctrl+a`.
 
 If you need to work on APIs as well, you can execute different mprocs configurations. For example, in order to work on
 the okuna backend, run `mprocs -c mprocs-local-backend.yaml` instead, which will spin up Oathkeeper, the unified API and
-Okuna locally next to the frontends. This is currently not well tested for Open Source contributors, see [TODO for Open Source contributions](#todo-for-open-source-contributions).
+Okuna locally next to the frontends. This is currently not well tested for Open Source contributors, see [TODO for Open Source contributions](#todo-for-open-source-contributions). When running this, please be aware that initial startup might take minutes. Please carefully inspect all outputs to make sure that all processes (depending on one another) are starting up successfully.
 
 And now, finally, comes the moment: Go to your browser and open `http://localhost:3000` and/or scan the QR code with the Expo Go app in your
 mobile phone. You should see your own instance of holi and be able to code away.
+
+### Creating an account
+
+The local dev environment uses a separate identity database, so feel free to create test accounts for any amount of users you want or need for your development needs via the registration workflow on your local machine.
 
 ### Local backend on Android Emulator
 
