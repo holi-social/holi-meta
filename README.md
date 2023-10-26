@@ -3,6 +3,7 @@
 The meta repository which helps you check out the other repositories and run a development environment locally.
 
 <!-- TOC -->
+- [Preface](#preface)
 - [Getting started](#getting-started)
   - [Requirements](#requirements)
     - [brew](#brew)
