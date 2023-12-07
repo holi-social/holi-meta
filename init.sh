@@ -114,6 +114,7 @@ checkoutAndPrepare git@gitlab.holi.team:app/holi-chat-integration.git holi-chat-
 if [ "${1-default}" = "full" ]; then
   checkoutAndPrepare git@gitlab.holi.team:app/holi-infra.git holi-infra
   checkoutAndPrepare git@gitlab.holi.team:app/holi-docker.git holi-docker
+  checkoutAndPrepare git@gitlab.holi.team:app/holi-load-testing.git holi-load-testing
 fi
 
 # Install dependencies to run Google Pub/Sub locally
