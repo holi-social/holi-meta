@@ -275,9 +275,9 @@ The following table lists all ports that are used for local execution.
 |---------------------------------|------|
 | oathkeeper                      | 4455 |
 | unified-api                     | 4000 |
-| chat-server (matrix client)     | 8008 | 
-| chat-server (matrix federation) | 8448 | 
-| chat-server (traefik proxy)     | 8010 | 
+| chat-server (matrix client)     | 8008 |
+| chat-server (matrix federation) | 8448 |
+| chat-server (traefik proxy)     | 8010 |
 | chat-server (traefik proxy)     | 8011 |
 | chat-server (sygnal)            | 8050 |
 | okuna                           | 8000 |
@@ -285,6 +285,7 @@ The following table lists all ports that are used for local execution.
 | goodnews                        | 8002 |
 | geo                             | 8003 |
 | volunteering                    | 8004 |
+| notifications                   | 8005 |
 | pubsub-emulator                 | 8085 |
 | ocis-subscriber                 | 8086 |
 | ocis-postgres                   | 8087 |
