@@ -101,6 +101,18 @@ procs:
         echo starting fake;
         FAKE="true" ./mprocs-start.sh;
       fi;
+  notifications-api:
+    cwd: <CONFIG_DIR>/holi-notifications
+    shell: >
+      . ../.envrc.local.backends;
+      . ./.envrc.local;
+      vr install;
+      if [ "$LOCAL_BACKEND_NOTIFICATIONS" = "true" ]; then
+        ./mprocs-start.sh;
+      else
+        echo starting fake;
+        FAKE="true" ./mprocs-start.sh;
+      fi;
   ocis:
     cwd: <CONFIG_DIR>/holi-ocis
     shell: >
