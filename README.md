@@ -3,6 +3,7 @@
 The meta repository which helps you check out the other repositories and run a development environment locally.
 
 <!-- TOC -->
+
 - [Preface](#preface)
 - [Getting started](#getting-started)
   - [Requirements](#requirements)
@@ -65,15 +66,15 @@ Some tools are installed via [brew](https://docs.brew.sh/Installation). Please f
 ##### Configuration
 
 Make sure to integrate the brew shell-hook before direnv, nodenv, nvm and pyenv to allow your environment to find tools
-installed via brew and to avoid brew installed versions to take precedence over ones installed via other methods. 
+installed via brew and to avoid brew installed versions to take precedence over ones installed via other methods.
 You can achieve this by installing the brew shell hook to `.bashrc` (above all other hook we will install) instead
 of the recommended `.profile` file.
 
 #### direnv
 
-##### Installation 
+##### Installation
 
-Please install [`direnv`](https://github.com/direnv/direnv/blob/master/docs/installation.md) (can be installed via `brew install direnv` 
+Please install [`direnv`](https://github.com/direnv/direnv/blob/master/docs/installation.md) (can be installed via `brew install direnv`
 
 ##### Configuration
 
@@ -156,7 +157,7 @@ Jitsi Meet is not run locally as a default. To run jitsi locally there are addit
 
 #### Chat
 
-Chat is not run locally as a default. To run chat locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-chat/-/blob/main/README.md) in `holi-chat`.
+Chat is not run locally as a default. To run chat locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-chat-server/-/blob/main/README.md) in `holi-chat-server`.
 
 #### Docker-Compose
 
@@ -214,9 +215,9 @@ out project subfolders in several IDEs .
 
 ### Last steps
 
-* The Unified API currently uses the same local redis instance as okuna. Therefore, please copy the `REDIS_PASSWORD` environment variable from
-`./holi-okuna/.env` to `./holi-unified-api/.envrc.local`
-* You will need to initialize okuna a bit. If okuna is not running properly, please follow `holi-okuna/README.md` for manual initialization.
+- The Unified API currently uses the same local redis instance as okuna. Therefore, please copy the `REDIS_PASSWORD` environment variable from
+  `./holi-okuna/.env` to `./holi-unified-api/.envrc.local`
+- You will need to initialize okuna a bit. If okuna is not running properly, please follow `holi-okuna/README.md` for manual initialization.
 
 ## Running dev environments via mprocs
 
@@ -250,8 +251,8 @@ and you have to change the DEV_HOST variable in `./holi-frontends/.env.local` (i
 
 The following issues currently make it difficult for Open Source contributors to have a full development environment including backends:
 
-* Some backends need secrets in order to function properly (holi-app-*, holi-geo-api). Current solution: They provide a fake mode, in which they return dummy data.
-* okuna needs a token to call the ory API. Current solution: if no token is set, the API is not called.
+- Some backends need secrets in order to function properly (holi-app-\*, holi-geo-api). Current solution: They provide a fake mode, in which they return dummy data.
+- okuna needs a token to call the ory API. Current solution: if no token is set, the API is not called.
 
 ## Helper scripts
 
@@ -272,7 +273,7 @@ forall-git git pull # pull all repositories
 The following table lists all ports that are used for local execution.
 
 | Application                     | Port |
-|---------------------------------|------|
+| ------------------------------- | ---- |
 | oathkeeper                      | 4455 |
 | unified-api                     | 4000 |
 | chat-server (matrix client)     | 8008 |
