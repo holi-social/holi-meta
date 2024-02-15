@@ -287,6 +287,7 @@ The following table lists all ports that are used for local execution.
 | geo                             | 8003 |
 | volunteering                    | 8004 |
 | notifications                   | 8005 |
+| tracking-endpoint               | 8006 |
 | pubsub-emulator                 | 8085 |
 | ocis-subscriber                 | 8086 |
 | ocis-postgres                   | 8087 |
