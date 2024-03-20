@@ -34,8 +34,10 @@ checkoutAndPrepare() {
   pushd "$2"
   direnv allow .
   eval "$(direnv export bash)"
-  # install git hooks via husky
-  husky install
+  # disable husky, this can be removed after a while, let's say april 2024
+  git config --unset-all core.hooksPath || true
+  # install git hooks via pre-commit
+  pre-commit install
   [ -x ./init.sh ] && ./init.sh
   popd
 }
@@ -87,11 +89,11 @@ brewInstall libmagic # needed by okuna, missing on mac, we just install it indep
 # install velociraptor for deno projects
 isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
 # we want to use mprocs for running the development environments
-isAvailable mprocs || yarn global add mprocs
-# we want to use husky for pre-commit hooks
-isAvailable husky || yarn global add husky
-# in husky pre-commit hooks, we're using gitleaks for secret detection
-brewInstall gitleaks
+isAvailable mprocs || brewInstall mprocs
+# in pre-commit hooks, we're using gitleaks for secret detection
+isAvailable pre-commit || brewInstall pre-commit
+isAvailable gitleaks || brewInstall gitleaks
+pre-commit install # in holi-meta. The other repositories are initialized during checkout
 
 # check out and initialize the repositories
 checkoutAndPrepare git@gitlab.holi.team:app/holi-frontends.git holi-frontends
