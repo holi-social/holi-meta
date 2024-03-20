@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
-set -euxo pipefail
-
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
@@ -10,6 +7,23 @@ NOCOLOR='\033[0m'
 message() {
   echo -e >&2 "${GREEN}${1}${NOCOLOR}"
 }
+
+trap 'message "$(cat << EOF
+${RED}
+███████╗ █████╗ ██╗██╗     ███████╗██████╗ 
+██╔════╝██╔══██╗██║██║     ██╔════╝██╔══██╗
+█████╗  ███████║██║██║     █████╗  ██║  ██║
+██╔══╝  ██╔══██║██║██║     ██╔══╝  ██║  ██║
+██║     ██║  ██║██║███████╗███████╗██████╔╝
+╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝╚══════╝╚═════╝
+
+Please inspect the output for any errors and fix them.
+${NOCOLOR}
+EOF
+)"' ERR
+
+# https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -euxo pipefail
 
 fail() {
   echo -e >&2 "${RED}${1}${NOCOLOR}"
