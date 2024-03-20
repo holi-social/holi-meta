@@ -107,7 +107,9 @@ isAvailable mprocs || brewInstall mprocs
 # in pre-commit hooks, we're using gitleaks for secret detection
 isAvailable pre-commit || brewInstall pre-commit
 isAvailable gitleaks || brewInstall gitleaks
-pre-commit install # in holi-meta. The other repositories are initialized during checkout
+# install pre-commit in holi-meta. The other repositories are initialized during checkout
+git config --unset-all core.hooksPath || true
+pre-commit install 
 
 # check out and initialize the repositories
 checkoutAndPrepare git@gitlab.holi.team:app/holi-frontends.git holi-frontends
