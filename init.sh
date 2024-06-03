@@ -135,6 +135,7 @@ if [ "${1-default}" = "full" ]; then
   checkoutAndPrepare git@gitlab.holi.team:app/holi-infra.git holi-infra
   checkoutAndPrepare git@gitlab.holi.team:app/holi-docker.git holi-docker
   checkoutAndPrepare git@gitlab.holi.team:app/holi-load-testing.git holi-load-testing
+  checkoutAndPrepare git@gitlab.holi.team:app/holi-data-classification.git holi-data-classification
 fi
 
 # Install dependencies to run Google Pub/Sub locally
