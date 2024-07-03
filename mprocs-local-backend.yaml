@@ -113,18 +113,6 @@ procs:
         echo starting fake;
         FAKE="true" ./mprocs-start.sh;
       fi;
-  tracking-endpoint:
-    cwd: <CONFIG_DIR>/holi-tracking-endpoint
-    shell: >
-      . ../.envrc.local.backends;
-      . ./.envrc.local;
-      vr install;
-      if [ "$LOCAL_BACKEND_TRACKING_ENDPOINT" = "true" ]; then
-        ./mprocs-start.sh;
-      else
-        echo starting fake;
-        FAKE="true" ./mprocs-start.sh;
-      fi;
   ocis:
     cwd: <CONFIG_DIR>/holi-ocis
     shell: >
