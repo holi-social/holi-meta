@@ -127,6 +127,9 @@ checkoutAndPrepare git@gitlab.holi.team:app/holi-meet.git holi-meet
 checkoutAndPrepare git@gitlab.holi.team:app/holi-ocis-integration.git holi-ocis-integration
 checkoutAndPrepare git@gitlab.holi.team:app/holi-chat-integration.git holi-chat-integration
 
+# former repositories that shall be deleted
+rm -rf holi-tracking-endpoint # added 2024/07/12, can be removed pretty safely end of 2024
+
 # these are technically not used in a local development environment, but they
 # make use of common definitions from holi-meta. If you want to check them out,
 # then use `./init.sh full`
