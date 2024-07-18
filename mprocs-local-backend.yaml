@@ -113,6 +113,30 @@ procs:
         echo starting fake;
         FAKE="true" ./mprocs-start.sh;
       fi;
+  translation-api:
+    cwd: <CONFIG_DIR>/holi-translation
+    shell: >
+      . ../.envrc.local.backends;
+      . ./.envrc.local;
+      vr install;
+      if [ "$LOCAL_BACKEND_TRANSLATION" = "true" ]; then
+        ./mprocs-start.sh;
+      else
+        echo starting fake;
+        FAKE="true" ./mprocs-start.sh;
+      fi;
+  libretranslate:
+    cwd: <CONFIG_DIR>/holi-libretranslate
+    shell: >
+      if [ "$LOCAL_BACKEND_LIBRETRANSLATE" = "true" ]; then
+        ./mprocs-start.sh;
+      else
+        echo "Not starting local LibreTranslate because LOCAL_BACKEND_LIBRETRANSLATE is not set to 'true'";
+      fi;
+    stop:
+      send-keys:
+        - <C-c>
+        - <C-c>
   ocis:
     cwd: <CONFIG_DIR>/holi-ocis
     shell: >
