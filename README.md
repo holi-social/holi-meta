@@ -159,6 +159,10 @@ Jitsi Meet is not run locally as a default. To run jitsi locally there are addit
 
 Chat is not run locally as a default. To run chat locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-chat-server/-/blob/main/README.md) in `holi-chat-server`.
 
+#### Translation
+
+Translation is not run locally as a default. To run translation locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-libretranslate/-/blob/main/README.md) in `holi-libretranslate`.
+
 #### Docker-Compose
 
 Some projects (e.g. okuna) are using Docker or Docker-Compose to run their dev environment.
@@ -297,6 +301,8 @@ The following table lists all ports that are used for local execution.
 | meet                            | 9300 |
 | meet (ssl)                      | 9343 |
 | meet (auth)                     | 9301 |
+| translation-api                 | 8089 |
+| libretranslate                  | 5000 |
 
 ## Terraform authentication (optional)
 
