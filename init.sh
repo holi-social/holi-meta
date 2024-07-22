@@ -126,6 +126,8 @@ checkoutAndPrepare git@gitlab.holi.team:app/holi-ocis.git holi-ocis
 checkoutAndPrepare git@gitlab.holi.team:app/holi-meet.git holi-meet
 checkoutAndPrepare git@gitlab.holi.team:app/holi-ocis-integration.git holi-ocis-integration
 checkoutAndPrepare git@gitlab.holi.team:app/holi-chat-integration.git holi-chat-integration
+checkoutAndPrepare git@gitlab.holi.team:app/holi-libretranslate.git holi-libretranslate
+checkoutAndPrepare git@gitlab.holi.team:app/holi-translation-api.git holi-translation-api
 
 # former repositories that shall be deleted
 rm -rf holi-tracking-endpoint # added 2024/07/12, can be removed pretty safely end of 2024
