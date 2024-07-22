@@ -114,7 +114,7 @@ procs:
         FAKE="true" ./mprocs-start.sh;
       fi;
   translation-api:
-    cwd: <CONFIG_DIR>/holi-translation
+    cwd: <CONFIG_DIR>/holi-translation-api
     shell: >
       . ../.envrc.local.backends;
       . ./.envrc.local;
