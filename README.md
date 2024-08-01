@@ -84,10 +84,9 @@ Please set up the [shell hook](https://github.com/direnv/direnv/blob/master/docs
 
 ##### Installation
 
-Before we can get started building, please ensure that at least one of the following node version managers are installed and properly set up on your system (we mostly use nodenv, so when in doubt, use that):
+Before we get started with building, please ensure that nodenv is installed on your system:
 
-- [`nodenv`](https://github.com/nodenv/nodenv) (`brew install nodenv` & set up shell hook) or
-- [`nvm`](https://github.com/nvm-sh/nvm)
+- [`nodenv`](https://github.com/nodenv/nodenv) (`brew install nodenv` & set up shell hook)
 
 Follow the instructions in the corresponding READMEs for setup.
 
