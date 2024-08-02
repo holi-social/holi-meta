@@ -9,7 +9,7 @@ NC='\033[m'
 
 if which parallel >/dev/null; then
 
-  find -L . -maxdepth 3 -name .git -type d | parallel -j 10 "cd {//}; echo -ne '$COLOR'; pwd; echo -ne '$NC'; $@"
+  find -L . -maxdepth 3 -name .git -type d | parallel -j $(nproc --all) "cd {//}; echo -ne '$COLOR'; pwd; echo -ne '$NC'; $@"
 
 else
 
