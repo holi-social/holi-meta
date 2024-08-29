@@ -186,3 +186,20 @@ procs:
       send-keys:
         - <C-c>
         - <C-c>
+  moderation:
+    cwd: <CONFIG_DIR>/holi-moderation
+    env:
+      DEV_ENV: local
+    shell: >
+      corepack yarn install;
+      if [ "$LOCAL_MODERATION" = "true" ]; then
+        corepack yarn start
+      else
+        echo starting fake;
+        corepack yarn build;
+        corepack yarn start-fake;
+      fi;
+    stop:
+      send-keys:
+        - <C-c>
+        - <C-c>
