@@ -277,7 +277,7 @@ forall-git git pull # pull all repositories
 The following table lists all ports that are used for local execution.
 
 | Application                     | Port |
-| ------------------------------- | ---- |
+|---------------------------------|------|
 | oathkeeper                      | 4455 |
 | unified-api                     | 4000 |
 | chat-server (matrix client)     | 8008 |
@@ -303,6 +303,9 @@ The following table lists all ports that are used for local execution.
 | meet (auth)                     | 9301 |
 | translation-api                 | 8089 |
 | libretranslate                  | 5000 |
+| moderation ui (backoffice)      | 5173 |  
+| moderation backend              | 3001 |  
+| moderation federator            | 8080 |  
 
 ## Terraform authentication (optional)
 

@@ -15,12 +15,13 @@ if ocis_enabled:
 if chat_enabled:
     print("Adding CHAT subscription")
     subscribers.append(['chat', 8088])
+
 publisher = pubsub_v1.PublisherClient()
 
-for topic_name in topic_names:    
+for topic_name in topic_names:
     topic_path = publisher.topic_path(PUBSUB_PROJECT_ID, topic_name)
     topic = publisher.create_topic(request={"name": topic_path})
-    subscriber = pubsub_v1.SubscriberClient()    
+    subscriber = pubsub_v1.SubscriberClient()
     print(f"Topic: {topic.name}")
 
     for sub in subscribers:
@@ -37,4 +38,3 @@ for topic_name in topic_names:
 
         print(f"Push subscription: {subscription.name}")
         print(f"Subscription endpoint: {subscription.push_config.push_endpoint}")
-   
