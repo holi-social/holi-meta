@@ -306,6 +306,9 @@ The following table lists all ports that are used for local execution.
 | moderation ui (backoffice)      | 5173 |  
 | moderation backend              | 3001 |  
 | moderation federator            | 8080 |  
+|                                 |      |
+| storybook (holi-bricks)         | 6006 |
+| storybook (legacy)              | 6007 |
 
 ## Terraform authentication (optional)
 
