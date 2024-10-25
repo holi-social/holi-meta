@@ -9,7 +9,15 @@ procs:
     env:
       DEV_ENV: local
     shell: ./mprocs-start-web.sh
-  storybook:
+  storybook (holi-bricks web):
+    cwd: <CONFIG_DIR>/holi-frontends
+    shell: >
+      if [ "$LOCAL_BACKEND_STORYBOOK" = "true" ]; then
+        ./mprocs-start-holi-bricks.sh;
+      else
+        echo "Not starting local Storybook for holi-bricks because LOCAL_BACKEND_STORYBOOK is not set to 'true'";
+      fi
+  storybook (legacy):
     cwd: <CONFIG_DIR>/holi-frontends
     shell: >
       if [ "$LOCAL_BACKEND_STORYBOOK" = "true" ]; then
