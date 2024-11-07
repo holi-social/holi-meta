@@ -15,10 +15,10 @@ else
 
   find -L . -maxdepth 3 -name .git -type d|while read gitdir; do
     projectdir=$(dirname $gitdir)
-    pushd $projectdir > /dev/null
-    WD=$(basename $(pwd))
+    pushd "$projectdir" > /dev/null || exit
+    WD=$(basename "$(pwd)")
     echo -e "${COLOR}${WD}${NC}"
     "$@"
-    popd > /dev/null
+    popd > /dev/null || exit
   done
 fi
