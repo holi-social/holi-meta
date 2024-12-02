@@ -88,6 +88,7 @@ set +o pipefail
 yes | gcloud components update || true
 gcloud components list --filter=state.name=Installed | grep beta > /dev/null || yes | gcloud components install beta
 gcloud components list --filter=state.name=Installed | grep pubsub-emulator > /dev/null || yes | gcloud components install pubsub-emulator
+gcloud components list --filter=state.name=Installed | grep " bq " > /dev/null || yes | gcloud components install bq
 set -o pipefail
 
 
