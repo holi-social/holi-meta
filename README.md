@@ -95,6 +95,20 @@ Follow the instructions in the corresponding READMEs for setup.
 It is kept in sync with `.nvmrc` (used by `nvm`) by a symbolic link, so please make sure to use a format that is
 understood by both tools (e.g. a fixed version).
 
+##### NVM Configuration
+
+By default, the Unified API uses `nodenv` to manage the node version. If you are using `nvm`,
+please comment out the `nodenv` line and uncomment the `nvm` lines in your `holi-unified-api/.envrc.local` file,
+as shown in the example below:
+
+```sh
+# installing correct node version using nodeenv
+# nodenv install -s $(cat .node-version)
+# alternative using nvm
+. ~/.nvm/nvm.sh # load nvm command
+nvm use
+```
+
 ##### Allowing direnv
 
 Once you installed these tools, please leave and re-enter the project directory. direnv will ask you for permission to execute:
@@ -137,7 +151,7 @@ To develop and test our event-driven applications locally, we use the [Google Pu
 
 ##### Install gcloud
 
-Please install [`gcloud` CLI](https://cloud.google.com/sdk/docs/install), as well as a Java Runtime (via your preferred method). Later steps will then ensure correct installation of the emulator.
+Please install [`gcloud` CLI](https://cloud.google.com/sdk/docs/install), as well as a **Java Runtime** (via your preferred method). Later steps will then ensure correct installation of the emulator.
 
 ##### Information about Pub/Sub in development
 
@@ -219,8 +233,13 @@ out project subfolders in several IDEs .
 
 ### Last steps
 
-- The Unified API currently uses the same local redis instance as okuna. Therefore, please copy the `REDIS_PASSWORD` environment variable from
-  `./holi-okuna/.env` to `./holi-unified-api/.envrc.local`
+- Run the following command to authorize Docker to access the Google Cloud Artifact registry.
+  ```
+  gcloud auth configure-docker europe-north1-docker.pkg.dev
+  ```
+- The Unified API uses imagekit.io for media processing. Please set the `IMAGEKIT_PUBLIC_KEY` and `IMAGEKIT_PRIVATE_KEY` available in Passbolt in `./holi-okuna/.env`.
+- The Unified API and Translation API currently uses the same local redis instance as okuna. Therefore, please copy the `redisPassword` environment variable from
+  `./holi-okuna/.okuna-cli.json` to `REDIS_PASSWORD` in both `./holi-unified-api/.envrc.local` and `./holi-translation-api/.envrc.local`.
 - You will need to initialize okuna a bit. If okuna is not running properly, please follow `holi-okuna/README.md` for manual initialization.
 
 ## Running dev environments via mprocs
@@ -309,6 +328,10 @@ The following table lists all ports that are used for local execution.
 |                                 |      |
 | storybook (holi-bricks)         | 6006 |
 | storybook (legacy)              | 6007 |
+
+## Terraform Installation (optional)
+
+If you want to run terraform locally, it's better to install it through [tfenv](https://github.com/tfutils/tfenv#tfenv) to avoid version conflicts. You can install it via brew: `brew install tfenv`
 
 ## Terraform authentication (optional)
 
