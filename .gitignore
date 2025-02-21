@@ -12,3 +12,4 @@ app.gitlab-pages.holi.team/
 .envrc.local.backends
 
 .idea
+/.gitlab-ci-local
