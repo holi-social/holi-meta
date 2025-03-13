@@ -121,6 +121,18 @@ procs:
         echo starting fake;
         FAKE="true" ./mprocs-start.sh;
       fi;
+  app-events:
+    cwd: <CONFIG_DIR>/holi-app-events
+    shell: >
+      . ../.envrc.local.backends;
+      . ./.envrc.local;
+      deno install;
+      if [ "$LOCAL_BACKEND_EVENTS" = "true" ]; then
+        ./mprocs-start.sh;
+      else
+        echo starting fake;
+        FAKE="true" ./mprocs-start.sh;
+      fi;
   translation-api:
     cwd: <CONFIG_DIR>/holi-translation-api
     shell: >
