@@ -128,6 +128,7 @@ checkoutAndPrepare git@gitlab.holi.team:app/holi-chat-integration.git holi-chat-
 checkoutAndPrepare git@gitlab.holi.team:app/holi-libretranslate.git holi-libretranslate
 checkoutAndPrepare git@gitlab.holi.team:app/holi-translation-api.git holi-translation-api
 checkoutAndPrepare git@gitlab.holi.team:app/holi-moderation.git holi-moderation
+checkoutAndPrepare git@gitlab.holi.team:app/holi-app-events.git holi-app-events
 
 # these are technically not used in a local development environment, but they
 # make use of common definitions from holi-meta. If you want to check them out,
