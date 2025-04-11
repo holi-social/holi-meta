@@ -138,7 +138,7 @@ if [ "${1-default}" = "full" ]; then
   checkoutAndPrepare git@gitlab.holi.team:app/holi-docker.git holi-docker
   checkoutAndPrepare git@gitlab.holi.team:app/holi-load-testing.git holi-load-testing
   checkoutAndPrepare git@gitlab.holi.team:app/holi-data-classification.git holi-data-classification
-  checkoutAndPrepare git@gitlab.holi.team:app/holi-data-pipeline.git holi-data-pipeline
+  checkoutAndPrepare git@gitlab.holi.team:app/holi-data-pipelines.git holi-data-pipelines
   checkoutAndPrepare git@gitlab.holi.team:app/holi-search-integration.git holi-search-integration
 fi
 
