@@ -1,0 +1,20 @@
+-   id: gitleaks
+    name: gitleaks
+    language: system
+    entry: gitleaks protect --staged -v -c .gitleaks.toml
+    pass_filenames: false
+    always_run: true
+-   id: scan-comments
+    name: scan-comments
+    entry: scripts/scan-comments.sh .
+    language: system
+    pass_filenames: true
+    always_run: true
+    verbose: true
+-   id: security-checks
+    name: security-checks
+    entry: scripts/security-checks.sh .
+    language: system
+    pass_filenames: true
+    always_run: true
+    verbose: true
