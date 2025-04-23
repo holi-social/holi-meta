@@ -27,7 +27,6 @@ def check_gitleaks_hook(config_path: Path) -> bool:
             lines = f.readlines()
             for line in lines:
                 if PRECOMMIT_CONFIG_GITLEAKS_PATTERN.search(line.strip()):
-                    print("[OK] gitleaks hook is present.")
                     return False
     except Exception as e:
         print(f"[ERROR] Failed to read {config_path}: {e}")
