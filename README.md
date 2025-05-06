@@ -26,7 +26,6 @@ The meta repository which helps you check out the other repositories and run a d
     - [Google Pub/Sub Emulator](#google-pubsub-emulator)
       - [Install gcloud](#install-gcloud)
       - [Information about Pub/Sub in development](#information-about-pubsub-in-development)
-    - [OwnCloud Infinite Storage (OCIS)](#owncloud-infinite-storage-ocis)
     - [Jitsi Meet](#jitsi-meet)
     - [Chat](#chat)
     - [Docker-Compose](#docker-compose)
@@ -157,13 +156,7 @@ Please install [`gcloud` CLI](https://cloud.google.com/sdk/docs/install), as wel
 
 Please note that all topics, subscriptions, and messages published to the emulator are only maintained for the lifetime of the emulator session.
 
-Currently, `okuna` stands as the sole `publisher` of Google Pub/Sub and is responsible for pushing messages to the Pub/Sub topic. There are 2 currently `subscribers` of this service, `holi-ocis-integration` (`ocis-subscriber` in `mprocs-local-backend.yaml`) and `holi-chat-integration` (`chat-subscriber` in `mprocs-local-backend.yaml`), both receive and consume those messages.
-
-To obtain further information on the `holi-ocis-integration` project, please refer to the accompanying [`README.md`](https://gitlab.holi.team/app/holi-ocis-integration/-/blob/a876e59b1985685827f937243f9d0b286060efc9/README.md).
-
-#### OwnCloud Infinite Storage (OCIS)
-
-OCIS is not run locally as a default. To run OCIS locally there are additional steps required, please read the [`readme`](https://gitlab.holi.team/app/holi-ocis/-/blob/main/README.md) in `holi-ocis`.
+Currently, `okuna` stands as the sole `publisher` of Google Pub/Sub and is responsible for pushing messages to the Pub/Sub topic. `subscribers` of this service like `holi-chat-integration` (`chat-subscriber` in `mprocs-local-backend.yaml`) consume those messages.
 
 #### Jitsi Meet
 
@@ -312,12 +305,8 @@ The following table lists all ports that are used for local execution.
 | notifications                   | 8005 |
 | app-events                      | 8006 |
 | pubsub-emulator                 | 8085 |
-| ocis-subscriber                 | 8086 |
-| ocis-postgres                   | 8087 |
 | chat-subscriber                 | 8088 |
-| ocis                            | 9200 |
 | onlyoffice                      | 9201 |
-| wopiserver                      | 8880 |
 | meet                            | 9300 |
 | meet (ssl)                      | 9343 |
 | meet (auth)                     | 9301 |

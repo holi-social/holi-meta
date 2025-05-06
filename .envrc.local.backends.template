@@ -1,7 +1,6 @@
 #!/bin/sh
 
 export LOCAL_BACKEND_CHAT=false
-export LOCAL_BACKEND_OCIS=false
 export LOCAL_BACKEND_GOODNEWS=false
 export LOCAL_BACKEND_DONATIONS=false
 export LOCAL_BACKEND_VOLUNTEERING=false

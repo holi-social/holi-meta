@@ -4,14 +4,10 @@ from google.cloud import pubsub_v1
 PUBSUB_PROJECT_ID = 'holi-dev'
 PUBSUB_SUBSCRIBER_ENDPOINT = 'http://localhost'
 
-ocis_enabled = os.getenv('LOCAL_BACKEND_OCIS') == "true"
 chat_enabled = os.getenv('LOCAL_BACKEND_CHAT') == "true"
 
 topic_names = ['okuna_local']
 subscribers = []
-if ocis_enabled:
-    print("Adding OCIS subscription")
-    subscribers.append(['ocis', 8086])
 if chat_enabled:
     print("Adding CHAT subscription")
     subscribers.append(['chat', 8088])

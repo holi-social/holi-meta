@@ -157,30 +157,6 @@ procs:
       send-keys:
         - <C-c>
         - <C-c>
-  ocis:
-    cwd: <CONFIG_DIR>/holi-ocis
-    shell: >
-      if [ "$LOCAL_BACKEND_OCIS" = "true" ]; then
-        ./mprocs-start.sh;
-      else
-        echo "Not starting local ocis because LOCAL_BACKEND_OCIS is not set to 'true'";
-      fi;
-    stop:
-      send-keys:
-        - <C-c>
-        - <C-c>
-  ocis-subscriber:
-    cwd: <CONFIG_DIR>/holi-ocis-integration
-    shell: >
-      if [ "$LOCAL_BACKEND_OCIS" = "true" ]; then
-        ./mprocs-start.sh;
-      else
-        echo "Not starting local ocis subscriber because LOCAL_BACKEND_OCIS is not set to 'true'";
-      fi;
-    stop:
-      send-keys:
-        - <C-c>
-        - <C-c>
   chat-server:
     cwd: <CONFIG_DIR>/holi-chat-server
     shell: >
