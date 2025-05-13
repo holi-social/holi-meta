@@ -1,20 +1,19 @@
+# This file is necessary to ensure the functionality of pre-commit hooks in sub-repositories.
+-   id: scan-comments
+    name: scan comments
+    language: system
+    entry: ../scripts/scan-comments.sh
+    pass_filenames: false
+    always_run: true
+-   id: security-checks
+    name: security checks
+    language: system
+    entry: ../scripts/security-checks.sh
+    pass_filenames: false
+    always_run: true
 -   id: gitleaks
     name: gitleaks
     language: system
-    entry: gitleaks protect --staged -v -c .gitleaks.toml
+    entry: gitleaks protect --staged -v -c ../.gitleaks.toml
     pass_filenames: false
     always_run: true
--   id: scan-comments
-    name: scan-comments
-    entry: scripts/scan-comments.sh .
-    language: system
-    pass_filenames: true
-    always_run: true
-    verbose: true
--   id: security-checks
-    name: security-checks
-    entry: scripts/security-checks.sh .
-    language: system
-    pass_filenames: true
-    always_run: true
-    verbose: true

@@ -103,6 +103,8 @@ brewInstall libmagic # needed by okuna, missing on mac, we just install it indep
 isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
 # we want to use mprocs for running the development environments
 isAvailable mprocs || brewInstall mprocs
+# in pre-commit hooks, we're using ripgrep for secret detection
+isAvailable ripgrep || brewInstall ripgrep
 # in pre-commit hooks, we're using gitleaks for secret detection
 isAvailable pre-commit || brewInstall pre-commit
 isAvailable gitleaks || brewInstall gitleaks
