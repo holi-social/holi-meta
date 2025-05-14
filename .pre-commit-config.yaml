@@ -7,6 +7,7 @@ repos:
         entry: ./scripts/scan-comments.sh
         pass_filenames: false
         always_run: true
+        verbose: true
     -   id: security-checks
         name: security checks
         language: system
