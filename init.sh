@@ -99,6 +99,7 @@ brewInstall ffmpeg # needed by okuna
 brewInstall libmagic # needed by okuna, missing on mac, we just install it independent of OS
 
 # dependencies we can auto-install
+isAvailable uv || brewInstall uv # needed for all projects using uv as package/project manager (e.g. okuna and holi-data-pipelines)
 # install velociraptor for deno projects
 isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
 # we want to use mprocs for running the development environments
