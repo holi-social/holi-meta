@@ -2,10 +2,10 @@
 procs:
   mobile:
     shell: >
+      . ./.env.production;
       yarn mobile:dev
     env:
-      HOLI_API_URL: "https://production.unified.apis.holi.social/graphql"
-      HOLI_API_GATEWAY: "https://production.unified.apis.holi.social"
+      DEV_ENV: production
       KRATOS_BASE_URL: "https://auth.holi.social"
     cwd: "<CONFIG_DIR>/holi-frontends"
   web:
