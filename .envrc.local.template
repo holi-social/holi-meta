@@ -3,12 +3,3 @@
 # template file, copy it to '.envrc.local' and adjust for your personal configuration
 # the '.envrc.local' file is to be included by .envrc and can contain personal secrets or configuration so it is NOT TO BE CHECKED IN
 
-if type -t nodenv >/dev/null 2>&1; then
-  # installing correct node version using nodenv
-  nodenv install -s "$(cat .node-version)"
-else
-  # alternative using nvm
-  # shellcheck source=/dev/null
-  . ~/.nvm/nvm.sh
-  nvm install "$(cat .node-version)"
-fi
