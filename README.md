@@ -4,45 +4,50 @@ The meta repository which helps you check out the other repositories and run a d
 
 <!-- TOC -->
 
-- [Preface](#preface)
-- [Getting started](#getting-started)
-  - [Requirements](#requirements)
-    - [brew](#brew)
-      - [Installation](#installation)
-      - [Configuration](#configuration)
-    - [direnv](#direnv)
-      - [Installation](#installation)
-      - [Configuration](#configuration)
-    - [nodenv/nvm](#nodenvnvm)
-      - [Installation](#installation)
-      - [Allowing direnv](#allowing-direnv)
-    - [Yarn](#yarn)
-      - [Installation](#installation)
-      - [Configuration](#configuration)
-    - [pyenv](#pyenv)
-      - [Installation](#installation)
-      - [Configuration](#configuration)
-    - [Ory](#ory)
-    - [Google Pub/Sub Emulator](#google-pubsub-emulator)
-      - [Install gcloud](#install-gcloud)
-      - [Information about Pub/Sub in development](#information-about-pubsub-in-development)
-    - [Jitsi Meet](#jitsi-meet)
-    - [Chat](#chat)
-    - [Docker-Compose](#docker-compose)
-      - [Start Docker Desktop (optional)](#start-docker-desktop-optional)
-    - [Deno](#deno)
-      - [Installation](#installation)
-      - [Install velociraptor](#install-velociraptor)
-  - [Initialization](#initialization)
-  - [IDE setup](#ide-setup)
-  - [Last steps](#last-steps)
-- [Running dev environments via mprocs](#running-dev-environments-via-mprocs)
-  - [Local backend on Android Emulator](#local-backend-on-android-emulator)
-- [TODO for Open Source contributions](#todo-for-open-source-contributions)
-- [Helper scripts](#helper-scripts)
-  - [forall-git](#forall-git)
-- [Port registry](#port-registry)
-- [Terraform authentication (optional)](#terraform-authentication-optional)
+- [holi-meta](#holi-meta)
+  - [Preface](#preface)
+  - [Getting started](#getting-started)
+    - [Requirements](#requirements)
+      - [brew](#brew)
+        - [Installation](#installation)
+        - [Configuration](#configuration)
+      - [direnv](#direnv)
+        - [Installation](#installation-1)
+        - [Configuration](#configuration-1)
+      - [nodenv/nvm](#nodenvnvm)
+        - [Installation](#installation-2)
+        - [NVM Configuration](#nvm-configuration)
+        - [Allowing direnv](#allowing-direnv)
+      - [Yarn](#yarn)
+        - [Installation](#installation-3)
+        - [Configuration](#configuration-2)
+      - [pyenv](#pyenv)
+        - [Installation](#installation-4)
+        - [Configuration](#configuration-3)
+      - [Ory](#ory)
+      - [Google Pub/Sub Emulator](#google-pubsub-emulator)
+        - [Install gcloud](#install-gcloud)
+        - [Information about Pub/Sub in development](#information-about-pubsub-in-development)
+      - [Jitsi Meet](#jitsi-meet)
+      - [Chat](#chat)
+      - [Translation](#translation)
+      - [Docker-Compose](#docker-compose)
+        - [Start Docker Desktop (optional)](#start-docker-desktop-optional)
+      - [Deno](#deno)
+        - [Installation](#installation-5)
+        - [Install velociraptor](#install-velociraptor)
+    - [Initialization](#initialization)
+    - [IDE setup](#ide-setup)
+    - [Last steps](#last-steps)
+  - [Running dev environments via mprocs](#running-dev-environments-via-mprocs)
+    - [Creating an account](#creating-an-account)
+    - [Local backend on Android Emulator](#local-backend-on-android-emulator)
+  - [TODO for Open Source contributions](#todo-for-open-source-contributions)
+  - [Helper scripts](#helper-scripts)
+    - [forall-git](#forall-git)
+  - [Port registry](#port-registry)
+  - [Terraform Installation (optional)](#terraform-installation-optional)
+  - [Terraform authentication (optional)](#terraform-authentication-optional)
 <!-- /TOC -->
 
 ## Preface
@@ -304,6 +309,7 @@ The following table lists all ports that are used for local execution.
 | volunteering                    | 8004 |
 | notifications                   | 8005 |
 | app-events                      | 8006 |
+| rewards                         | 8015 |
 | pubsub-emulator                 | 8085 |
 | chat-subscriber                 | 8088 |
 | onlyoffice                      | 9201 |
@@ -318,6 +324,11 @@ The following table lists all ports that are used for local execution.
 |                                 |      |
 | storybook (holi-bricks)         | 6006 |
 | storybook (legacy)              | 6007 |
+|                                 |      |
+| okuna DB                        | 5432 |
+| chat DB                         | 5433 |
+| moderation DB                   | 5434 |
+| rewards DB                      | 5435 |
 
 ## Terraform Installation (optional)
 
