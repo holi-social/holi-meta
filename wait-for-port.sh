@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
 PORT=$1
+SERVICE=$2
 
 if ! command -v nc &>/dev/null; then
   echo "Error: netcat (nc) is not installed. Please install it to use this script."
   exit 1
 fi
 
-echo -n "Waiting for port ${PORT} to be open ...";
+echo -n "Waiting for ${SERVICE}:${PORT} to be open ...";
 for _ in $(seq 1 60); do
   if nc -w 1 -z localhost "${PORT}" 2>/dev/null ; then 
     echo ""
