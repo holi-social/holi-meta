@@ -199,3 +199,15 @@ procs:
       send-keys:
         - <C-c>
         - <C-c>
+  rewards:
+    cwd: <CONFIG_DIR>/holi-rewards
+    shell: >
+      if [ "$LOCAL_BACKEND_REWARDS" = "true" ]; then
+        docker compose up
+      else
+        FAKE=true docker compose up
+      fi
+    stop:
+      send-keys:
+        - <C-c>
+        - <C-c>
