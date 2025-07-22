@@ -1,36 +1,34 @@
 import os
+
 from google.cloud import pubsub_v1
 
-PUBSUB_PROJECT_ID = 'holi-dev'
-PUBSUB_SUBSCRIBER_ENDPOINT = 'http://localhost'
-
-chat_enabled = os.getenv('LOCAL_BACKEND_CHAT') == "true"
-
-topic_names = ['okuna_local']
-subscribers = []
-if chat_enabled:
-    print("Adding CHAT subscription")
-    subscribers.append(['chat', 8088])
+GOOGLE_PROJECT_ID = 'holi-dev'
 
 publisher = pubsub_v1.PublisherClient()
+subscriber = pubsub_v1.SubscriberClient()
 
-for topic_name in topic_names:
-    topic_path = publisher.topic_path(PUBSUB_PROJECT_ID, topic_name)
-    topic = publisher.create_topic(request={"name": topic_path})
-    subscriber = pubsub_v1.SubscriberClient()
-    print(f"Topic: {topic.name}")
+topics = ["okuna_local", "external-data-local"]
 
-    for sub in subscribers:
-        subscription_path = subscriber.subscription_path(PUBSUB_PROJECT_ID, f"{sub[0]}-{topic_name}-sub")
-        push_config = pubsub_v1.types.PushConfig(push_endpoint=f"{PUBSUB_SUBSCRIBER_ENDPOINT}:{sub[1]}/{topic_path}")
+for topic in topics:
+    topic_path = publisher.topic_path(GOOGLE_PROJECT_ID, topic)
+    publisher.create_topic(request={"name": topic_path})
+    print(f"Created Topic: {topic}")
 
-        subscription = subscriber.create_subscription(
-            request={
-                "name": subscription_path,
-                "topic": topic_path,
-                "push_config": push_config,
-            }
-        )
 
-        print(f"Push subscription: {subscription.name}")
-        print(f"Subscription endpoint: {subscription.push_config.push_endpoint}")
+def subscribe(service_name:str, to_topic_name: str, push_endpoint: str):
+    subscription_name = subscriber.subscription_path(GOOGLE_PROJECT_ID, f"{service_name}-{to_topic_name}-sub")
+    push_config = pubsub_v1.types.PushConfig(push_endpoint=push_endpoint)
+    subscription = subscriber.create_subscription(
+        request={
+            "name": subscription_name,
+            "topic": publisher.topic_path(GOOGLE_PROJECT_ID, to_topic_name),
+            "push_config": push_config,
+        },
+    )
+    print(f"Subscribed {service_name} to {to_topic_name} on {subscription.push_config.push_endpoint}")
+
+
+subscribe('okuna',"external-data-local", "http://localhost:8000/pubsub/external-data-local/")
+
+if os.getenv('LOCAL_BACKEND_CHAT') == "true":
+    subscribe('chat-integration-service',"okuna_local", f"http://localhost:8088/projects/{GOOGLE_PROJECT_ID}/subscriptions/okuna_local")
