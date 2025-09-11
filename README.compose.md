@@ -138,10 +138,33 @@ This will try to starts the essential services for local development in the back
 
 Or, if you want to run a specific profile (a group of services), you can set the `COMPOSE_PROFILES` environment variable once (recommended) or use the `-p` or `--profile` argument on **every command**. Available profiles are:
 
-- `minimal` (default): Only starts the necessary services for backend and frontend development.
-- `all`: Starts all services, including all the backend and frontend services.
-- `moderation`: Only starts the moderation services. It can be used in addition to minimal profile.
-- `frontend-staging`: Only starts the frontend services (web and mobile) against the staging backend. It doesn't run the backend services locally.
+- `minimal` (default): Only starts the necessary services for backend and frontend development. This includes:
+  + `app-donations`
+  + `app-goodnews`
+  + `geo-api`
+  + `app-volunteering`
+  + `app-events`
+  + `translation-api`
+  + `notifications`
+  + `unified-api`
+  + `oathkeeper`
+  + `okuna`
+  + `pubsub-emulators`
+  + `chat-server`
+  + `chat-push-gateway`
+  + `chat-integration`
+  + `frontend-web`
+  + `frontend-mobile`
+- `moderation`: Only starts the moderation services. This includes:
+  + `moderation-backend`
+  + `moderation-frontend`
+  + `moderation-federator`
+- `all`: This runs all the available services in `holi-meta`. This includes:
+  + All the services in `minimal` and `moderation` profiles
+  + `libretranslate`
+  + `rewards`
+  + `frontend-storybook`
+- `frontend-staging`: Only starts the frontend services (`frontend-web` and `frontend-mobile`) against the staging backend. It doesn't run the backend services locally.
 
 The command is as follows:
 
@@ -192,7 +215,7 @@ export COMPOSE_PROFILES=frontend-staging
 ./holi-dev.sh --profile frontend-staging
 ```
 
-**Example 2:** This runs all the available services in `holi-meta` including libretranslate, new storybook, and rewards.
+**Example 2:** This runs all the available services in `holi-meta`.
 
 ```sh
 export COMPOSE_PROFILES=all
@@ -202,6 +225,18 @@ export COMPOSE_PROFILES=all
 
 ./holi-dev.sh --profile all
 ```
+
+**Example 3:** This runs the services in `minimal` and `moderation` profiles.
+
+```sh
+export COMPOSE_PROFILES=minimal,moderation
+./holi-dev.sh start
+
+# or
+
+./holi-dev.sh --profile minimal,moderation
+```
+
 
 > **Advanced Tip**
 >
