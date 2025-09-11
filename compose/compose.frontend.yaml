@@ -1,0 +1,116 @@
+# Contains base frontend services
+
+services:
+  frontend-web:
+    container_name: frontend-web
+    build:
+      context: ./holi-frontends
+      dockerfile: ../compose/frontends/Dockerfile
+    image: holi-dev-frontend-web:latest
+    entrypoint: ["/entrypoint.sh"]
+    command: ["yarn", "web:dev"]
+    env_file:
+      - ./compose/frontends/.env
+    environment:
+      PORT: ${FRONTEND_WEB_PORT}
+      UNIFIED_API_SCHEMA_ENDPOINT: http://unified-api:${UNIFIED_API_PORT}/graphql
+      HOLI_API_URL: http://${DEV_HOST}:${UNIFIED_API_PORT}/graphql
+      HOLI_API_GATEWAY: http://${DEV_HOST}:${UNIFIED_API_PORT}
+      HOLI_NEXTJS_API_URL: http://${DEV_HOST}:${FRONTEND_WEB_PORT}
+      HOLI_CHAT_SERVER_NAME: ${DEV_HOST}
+      HOLI_CHAT_SERVER_URL: http://${DEV_HOST}:${CHAT_SERVER_MATRIX_CLIENT_PORT}/
+      HOLI_CHAT_PUSH_GATEWAY_URL: https://${DEV_HOST}:${CHAT_PUSH_GATEWAY_PORT}/
+      HOLI_CHAT_ADMIN_USER_ID: "@chat-admin:${DEV_HOST}"
+      NEXT_PUBLIC_HOLI_CHAT_SERVER_NAME: ${DEV_HOST}
+      NEXT_PUBLIC_HOLI_CHAT_SERVER_URL: http://${DEV_HOST}:${CHAT_SERVER_MATRIX_CLIENT_PORT}/
+      NEXT_PUBLIC_HOLI_CHAT_ADMIN_USER_ID: "@chat-admin:${DEV_HOST}"
+      # FIXME review this when challenges is added
+      HOLI_CHALLENGES_APP: http://${DEV_HOST}:8080
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./compose/frontends/entrypoint.sh:/entrypoint.sh:ro
+      - ./holi-frontends/apps/web:/app/apps/web:delegated
+    ports:
+      - ${FRONTEND_WEB_PORT}:${FRONTEND_WEB_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-frontends/apps/web
+          target: /app/apps/web
+        - action: sync+restart
+          path: ./holi-frontends/apps/web/next.config.js
+          target: /app/apps/web
+        - action: sync+restart
+          path: ./holi-frontends/.envrc.local
+          target: /app
+        - action: rebuild
+          path: ./holi-frontends/package.json
+        - action: rebuild
+          path: ./holi-frontends/apps/web/package.json
+        - action: rebuild
+          path: ./holi-frontends/holi-bricks/package.json
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via node-http http://127.0.0.1:${FRONTEND_WEB_PORT}/api/health"]
+      interval: 30s 
+      timeout: 10s
+      start_period: 20s
+      retries: 5
+    networks:
+      - holi-local
+
+  frontend-mobile:
+    container_name: frontend-mobile
+    # Uses the same image as web, but runs frontend mobile instead
+    image: holi-dev-frontend-web:latest
+    entrypoint: ["/entrypoint.sh"]
+    command: ["yarn", "mobile:dev"]
+    # Enable tty and interactive mode for expo interactive mode
+    tty: true
+    stdin_open: true
+    env_file:
+      - ./compose/frontends/.env
+    environment:
+      UNIFIED_API_SCHEMA_ENDPOINT: http://unified-api:${UNIFIED_API_PORT}/graphql
+      HOLI_API_URL: http://${DEV_HOST}:${UNIFIED_API_PORT}/graphql
+      HOLI_API_GATEWAY: http://${DEV_HOST}:${UNIFIED_API_PORT}
+      HOLI_NEXTJS_API_URL: http://${DEV_HOST}:${FRONTEND_WEB_PORT}
+      HOLI_CHAT_SERVER_NAME: ${DEV_HOST}
+      HOLI_CHAT_SERVER_URL: http://${DEV_HOST}:${CHAT_SERVER_MATRIX_CLIENT_PORT}/
+      HOLI_CHAT_PUSH_GATEWAY_URL: https://${DEV_HOST}:${CHAT_PUSH_GATEWAY_PORT}/
+      HOLI_CHAT_ADMIN_USER_ID: "@chat-admin:${DEV_HOST}"
+      NEXT_PUBLIC_HOLI_CHAT_SERVER_NAME: ${DEV_HOST}
+      NEXT_PUBLIC_HOLI_CHAT_SERVER_URL: http://${DEV_HOST}:${CHAT_SERVER_MATRIX_CLIENT_PORT}/
+      NEXT_PUBLIC_HOLI_CHAT_ADMIN_USER_ID: "@chat-admin:${DEV_HOST}"
+      # TODO review this when challenges is added
+      # HOLI_CHALLENGES_APP: http://${DEV_HOST}:8080
+      REACT_NATIVE_PACKAGER_HOSTNAME: ${DEV_HOST}
+      EXPO_DEVTOOLS_LISTEN_ADDRESS: 0.0.0.0
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./compose/frontends/entrypoint.sh:/entrypoint.sh:ro
+      - ./holi-frontends/apps/mobile:/app/apps/mobile:delegated
+    ports:
+      - ${FRONTEND_MOBILE_PORT}:${FRONTEND_MOBILE_PORT}
+      - ${FRONTEND_MOBILE_METRO_PORT}:${FRONTEND_MOBILE_METRO_PORT}
+      - ${FRONTEND_MOBILE_METRO_WEBSOCKET_PORT}:${FRONTEND_MOBILE_METRO_WEBSOCKET_PORT}
+      - ${FRONTEND_MOBILE_DEVTOOLS_PORT}:${FRONTEND_MOBILE_DEVTOOLS_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-frontends/apps/mobile
+          target: /app/apps/mobile
+        - action: sync+restart
+          path: ./holi-frontends/.envrc.local
+          target: /app
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via node-http http://127.0.0.1:${FRONTEND_MOBILE_PORT}"]
+      interval: 30s 
+      timeout: 10s
+      start_period: 10s
+      retries: 5
+    depends_on:
+      # frontend-mobile needs the image created by the frontend-web
+      frontend-web:
+        condition: service_started
+    networks:
+      - holi-local

@@ -1,3 +1,6 @@
+# Ignore macOS system files
+.DS_Store
+
 # all subdirectories that start with holi (git checkouts)
 /holi-*/
 app.gitlab-pages.holi.team/
@@ -13,3 +16,7 @@ app.gitlab-pages.holi.team/
 
 .idea
 /.gitlab-ci-local
+
+# Ignore local configuration files
+/compose/*/.env
+/compose/pg/migration.sql
