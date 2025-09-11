@@ -83,7 +83,7 @@ services:
           target: /app/holi-bricks
         - action: sync+restart
           path: ./holi-frontends/.envrc.local
-          target: /app
+          target: /app/.envrc.local
     healthcheck:
       test: ["CMD-SHELL", "healthcheck-via node-http http://127.0.0.1:${FRONTEND_STORYBOOK_PORT}"]
       interval: 30s 
