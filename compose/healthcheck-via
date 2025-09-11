@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+# this script is used to perform health checks in Docker containers using different methods
+# Usage: ./healthcheck.sh {python-http|deno-http|node-http|curl|bash} URL
+
+types="python-http|deno-http|node-http|curl|bash"
+
+if [ $# -lt 2 ] || [ $# -gt 3 ]; then
+  echo "Usage: $0 {$types} URL [status_code]" >&2
+  exit 1
+fi
+
+type="$1"
+url="$2"
+status_codes="${3:-200}"
+
+case "$type" in
+  python-http)
+    python3 - "$url" "$status_codes" << 'PYCODE'
+import sys, urllib.request
+
+def is_valid(code, valid):
+    valid_set = set(int(x) for x in valid.split(","))
+    return code in valid_set
+
+try:
+    resp = urllib.request.urlopen(sys.argv[1])
+    code = resp.getcode()
+    valid = sys.argv[2]
+    sys.exit(0 if is_valid(code, valid) else 1)
+except Exception:
+    sys.exit(1)
+PYCODE
+    ;;
+
+  deno-http)
+    # Uses top-level await in Deno
+    echo '
+const valid = Deno.args[1].split(",").map(Number);
+const resp = await fetch(Deno.args[0]);
+if (!valid.includes(resp.status)) Deno.exit(1);
+' | deno run --quiet --allow-net - "$url" "$status_codes"
+    ;;
+
+  node-http)
+    node - "$url" "$status_codes" << 'NODECODE'
+const url = new URL(process.argv[2]);
+const valid = process.argv[3].split(",").map(Number);
+const lib = url.protocol === 'https:' ? require('https') : require('http');
+
+lib.get(url, res => {
+  process.exit(valid.includes(res.statusCode) ? 0 : 1);
+}).on('error', () => {
+  process.exit(1);
+});
+NODECODE
+    ;;
+
+  curl)
+    # Silent, fail on HTTP errors, discard body
+    # Use curl to get status code and check against status_codes
+    code=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+    IFS=',' read -ra codes <<< "$status_codes"
+    for c in "${codes[@]}"; do
+      if [ "$code" = "$c" ]; then exit 0; fi
+    done
+    exit 1
+    ;;
+  
+  bash)
+    if [ ! -x "$target" ]; then
+      echo "Error: script '$target' not found or not executable" >&2
+      exit 1
+    fi
+    bash "$target"
+    ;;
+
+  *)
+    echo "Error: unknown type '$type'" >&2
+    echo "Usage: $0 {$types} URL [status_code]" >&2
+    exit 1
+    ;;
+esac
+
+exit $?

@@ -1,0 +1,39 @@
+# Contains this ov
+
+services:
+  frontend-web:
+    env_file:
+      - ./compose/frontends/.env
+    environment:
+      PORT: ${FRONTEND_WEB_PORT}
+      UNIFIED_API_SCHEMA_ENDPOINT: https://staging.unified.apis.holi.social/graphql
+      HOLI_API_URL: https://staging.unified.apis.holi.social/graphql
+      HOLI_API_GATEWAY: https://staging.unified.apis.holi.social
+      HOLI_NEXTJS_API_URL: https://staging.dev.holi.social
+      HOLI_CHAT_SERVER_NAME: development-chat.holi.social
+      HOLI_CHAT_SERVER_URL: https://development-chat.holi.social/
+      HOLI_CHAT_PUSH_GATEWAY_URL: https://development-chat-push.holi.social/
+      HOLI_CHAT_ADMIN_USER_ID: "@chat-admin:development-chat.holi.social"
+      NEXT_PUBLIC_HOLI_CHAT_SERVER_NAME: development-chat.holi.social
+      NEXT_PUBLIC_HOLI_CHAT_SERVER_URL: https://development-chat.holi.social/
+      NEXT_PUBLIC_HOLI_CHAT_ADMIN_USER_ID: "@chat-admin:development-chat.holi.social"
+      HOLI_CHALLENGES_APP: https://staging.challenges-dev.holi.social
+
+  frontend-mobile:
+    env_file:
+      - ./compose/frontends/.env
+    environment:
+      UNIFIED_API_SCHEMA_ENDPOINT: https://staging.unified.apis.holi.social/graphql
+      HOLI_API_URL: https://staging.unified.apis.holi.social/graphql
+      HOLI_API_GATEWAY: https://staging.unified.apis.holi.social
+      HOLI_NEXTJS_API_URL: https://staging.dev.holi.social
+      HOLI_CHAT_SERVER_NAME: development-chat.holi.social
+      HOLI_CHAT_SERVER_URL: https://development-chat.holi.social/
+      HOLI_CHAT_PUSH_GATEWAY_URL: https://development-chat-push.holi.social/
+      HOLI_CHAT_ADMIN_USER_ID: "@chat-admin:development-chat.holi.social"
+      NEXT_PUBLIC_HOLI_CHAT_SERVER_NAME: development-chat.holi.social
+      NEXT_PUBLIC_HOLI_CHAT_SERVER_URL: https://development-chat.holi.social/
+      NEXT_PUBLIC_HOLI_CHAT_ADMIN_USER_ID: "@chat-admin:development-chat.holi.social"
+      HOLI_CHALLENGES_APP: https://staging.challenges-dev.holi.social
+      REACT_NATIVE_PACKAGER_HOSTNAME: ${DEV_HOST}
+      EXPO_DEVTOOLS_LISTEN_ADDRESS: 0.0.0.0

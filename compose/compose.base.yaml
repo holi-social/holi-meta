@@ -1,0 +1,653 @@
+# Contains base services for running a minimal local setup
+
+services:
+  app-donations:
+    container_name: app-donations
+    build:
+      context: ./holi-app-donations
+      dockerfile: Dockerfile
+    command: ["deno", "run", "--allow-import", "--allow-net", "--allow-env", "--allow-read", "--lock=deno.lock", "--cached-only", "--watch", "app/main.ts"]
+    env_file:
+      - ./holi-app-donations/.envrc.local
+    environment:
+      PORT: ${APP_DONATIONS_PORT}
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-app-donations/app:/app:delegated
+    ports:
+      - ${APP_DONATIONS_PORT}:${APP_DONATIONS_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-app-donations/app
+          target: /app
+        - action: sync+restart
+          path: ./holi-app-donations/app/.envrc.local
+          target: /app
+        - action: rebuild
+          path: ./holi-app-donations/deno.json
+        - action: rebuild
+          path: ./holi-app-donations/deno.lock
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via deno-http http://127.0.0.1:${APP_DONATIONS_PORT}/health"]
+      interval: 30s 
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+
+
+  app-goodnews:
+    container_name: app-goodnews
+    build:
+      context: ./holi-app-goodnews
+      dockerfile: Dockerfile
+    command: ["deno", "run", "--allow-import", "--allow-net", "--allow-env", "--lock=deno.lock", "--cached-only", "--watch", "app/main.ts"]
+    env_file:
+      - ./holi-app-goodnews/.envrc.local
+    environment:
+      PORT: ${APP_GOODNEWS_PORT}
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-app-goodnews/app:/app:delegated
+    ports:
+      - ${APP_GOODNEWS_PORT}:${APP_GOODNEWS_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-app-goodnews/app
+          target: /app
+        - action: sync+restart
+          path: ./holi-app-goodnews/app/.envrc.local
+          target: /app
+        - action: rebuild
+          path: ./holi-app-goodnews/deno.json
+        - action: rebuild
+          path: ./holi-app-goodnews/deno.lock
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via deno-http http://127.0.0.1:${APP_GOODNEWS_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+
+  geo-api:
+    container_name: geo-api
+    build:
+      context: ./holi-geo-api
+      dockerfile: Dockerfile
+    command: ["deno", "run", "--allow-import", "--allow-net", "--allow-env", "--lock=deno.lock", "--cached-only", "--watch", "app/main.ts"]
+    env_file:
+      - ./holi-geo-api/.envrc.local
+    environment:
+      PORT: ${GEO_API_PORT}
+    ports:
+      - ${GEO_API_PORT}:${GEO_API_PORT}
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-geo-api/app:/app:delegated
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-geo-api/app
+          target: /app
+          # x-initialSync: true
+        - action: sync+restart
+          path: ./holi-geo-api/app/.envrc.local
+          target: /app
+        - action: rebuild
+          path: ./holi-geo-api/deno.json
+        - action: rebuild
+          path: ./holi-geo-api/deno.lock
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via deno-http http://127.0.0.1:${GEO_API_PORT}/health"]
+      interval: 30s 
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+  
+  app-volunteering:
+    container_name: app-volunteering
+    build:
+      context: ./holi-app-volunteering
+      dockerfile: Dockerfile
+    command: ["deno", "run", "--allow-import", "--allow-net", "--allow-env", "--lock=deno.lock", "--cached-only", "--watch", "app/main.ts"]
+    env_file:
+      - ./holi-app-volunteering/.envrc.local
+    environment:
+      PORT: ${APP_VOLUNTEERING_PORT}
+      GEO_API_ENDPOINT_URL: http://geo-api:${GEO_API_PORT}/graphql
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_NAME: ${APP_VOLUNTEERING_DB_NAME}
+      DB_USERNAME: ${APP_VOLUNTEERING_DB_USER}
+      DB_PASSWORD: ${APP_VOLUNTEERING_DB_PASSWORD}
+    ports:
+      - ${APP_VOLUNTEERING_PORT}:${APP_VOLUNTEERING_PORT}
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-app-volunteering/app:/app:delegated
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-app-volunteering/app
+          target: /app
+        - action: sync+restart
+          path: ./holi-app-volunteering/app/.envrc.local
+          target: /app
+        - action: rebuild
+          path: ./holi-app-volunteering/deno.json
+        - action: rebuild
+          path: ./holi-app-volunteering/deno.lock
+    depends_on:
+      pg:
+        condition: service_healthy
+        restart: true
+      geo-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via deno-http http://127.0.0.1:${APP_VOLUNTEERING_PORT}/health"]
+      interval: 30s 
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+  
+  app-events:
+    container_name: app-events
+    build:
+      context: ./holi-app-events
+      dockerfile: Dockerfile
+    command: ["deno", "run", "--allow-import", "--allow-net", "--allow-env", "--allow-read", "--lock=deno.lock", "--cached-only", "--watch", "app/main.ts"]
+    env_file:
+      - ./holi-app-events/.envrc.local
+    environment:
+      PORT: ${APP_EVENTS_PORT}
+      GEO_API_ENDPOINT_URL: http://geo-api:8003/graphql
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-app-events/app:/app:delegated
+    ports:
+      - ${APP_EVENTS_PORT}:${APP_EVENTS_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-app-events/app
+          target: /app
+        - action: sync+restart
+          path: ./holi-app-events/app/.envrc.local
+          target: /app
+        - action: rebuild
+          path: ./holi-app-events/deno.json
+        - action: rebuild
+          path: ./holi-app-events/deno.lock
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via deno-http http://127.0.0.1:${APP_EVENTS_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+
+  translation-api:
+    container_name: translation-api
+    build:
+      context: ./holi-translation-api
+      dockerfile: Dockerfile
+    command: ["deno", "run", "--allow-import", "--allow-net", "--allow-env", "--allow-read", "--lock=deno.lock", "--cached-only", "--watch", "app/main.ts"]
+    env_file:
+      - ./holi-translation-api/.envrc.local
+    environment:
+      PORT: ${TRANSLATION_API_PORT}
+      HOLI_LIBRETRANSLATE_BASE_URL: http://libretranslate:${LIBRETRANSLATE_INTERNAL_PORT}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-translation-api/app:/app:delegated
+    ports:
+      - ${TRANSLATION_API_PORT}:${TRANSLATION_API_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-translation-api/app
+          target: /app
+        - action: sync+restart
+          path: ./holi-translation-api/app/.envrc.local
+          target: /app
+        - action: rebuild
+          path: ./holi-translation-api/deno.json
+        - action: rebuild
+          path: ./holi-translation-api/deno.lock
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via deno-http http://127.0.0.1:${TRANSLATION_API_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+
+  notifications:
+    container_name: notifications
+    build:
+      context: ./holi-notifications
+      dockerfile: Dockerfile
+    command: ["deno", "run", "--allow-import", "--allow-net", "--allow-env", "--allow-read", "--lock=deno.lock", "--cached-only", "--watch", "app/main.ts"]
+    env_file:
+      - ./holi-notifications/.envrc.local
+    environment:
+      PORT: ${NOTIFICATIONS_PORT}
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-notifications/app:/app:delegated
+    ports:
+      - ${NOTIFICATIONS_PORT}:${NOTIFICATIONS_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-notifications/app
+          target: /app
+        - action: sync+restart
+          path: ./holi-notifications/app/.envrc.local
+          target: /app
+        - action: rebuild
+          path: ./holi-notifications/deno.json
+        - action: rebuild
+          path: ./holi-notifications/deno.lock
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via deno-http http://127.0.0.1:${NOTIFICATIONS_PORT}/health"]
+      interval: 30s 
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+
+  unified-api:
+    container_name: unified-api
+    build:
+      context: ./holi-unified-api
+      dockerfile: ../compose/unified-api/Dockerfile
+    env_file:
+      - ./compose/unified-api/.env
+    environment:
+      PORT: ${UNIFIED_API_PORT}
+      OKUNA_DOMAIN: http://okuna:${OKUNA_PORT}
+      OKUNA_URL: http://okuna:${OKUNA_INTERNAL_PORT}/graphql
+      DONATIONS_API_URL: http://app-donations:${APP_DONATIONS_PORT}/graphql
+      GOODNEWS_API_URL: http://app-goodnews:${APP_GOODNEWS_PORT}/graphql
+      GEO_API_URL: http://geo-api:${GEO_API_PORT}/graphql
+      VOLUNTEERING_API_URL: http://app-volunteering:${APP_VOLUNTEERING_PORT}/graphql
+      NOTIFICATIONS_API_URL: http://notifications:${NOTIFICATIONS_PORT}/graphql
+      TRANSLATION_API_URL: http://translation-api:${TRANSLATION_API_PORT}/graphql
+      MODERATION_BACKEND_URL: http://moderation-backend:${MODERATION_BACKEND_PORT}/graphql
+      EVENTS_API_URL: http://app-events:${APP_EVENTS_PORT}/graphql
+      REWARDS_API_URL: http://rewards:${REWARDS_PORT}/graphql
+
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DB: 5
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-unified-api:/app:delegated
+    ports:
+      - ${UNIFIED_API_PORT}:${UNIFIED_API_PORT}
+    develop:
+      watch:
+        - action: rebuild
+          path: ./holi-unified-api/.meshrc.yaml
+        - action: sync+restart
+          path: ./holi-unified-api/.env
+          target: /app
+        - action: sync+restart
+          path: ./holi-unified-api/server.ts
+          target: /app/server.ts
+        - action: sync+restart
+          path: ./holi-unified-api/logger.ts
+          target: /app/logger.ts
+        - action: sync+restart
+          path: ./holi-unified-api/url.ts
+          target: /app/url.ts
+        - action: sync+restart
+          path: ./holi-unified-api/handlers
+          target: /app/handlers
+        - action: rebuild
+          path: ./holi-unified-api/package.json
+        - action: rebuild
+          path: ./holi-unified-api/yarn.lock
+    depends_on:
+      okuna:
+        condition: service_healthy
+      app-donations:
+        condition: service_healthy
+      app-goodnews:
+        condition: service_healthy
+      geo-api:
+        condition: service_healthy
+      app-volunteering:
+        condition: service_healthy
+      notifications:
+        condition: service_healthy
+      app-events:
+        condition: service_healthy
+      translation-api:
+        condition: service_healthy
+      chat-server:
+        condition: service_healthy
+      moderation-backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via node-http http://127.0.0.1:${UNIFIED_API_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+
+  oathkeeper:
+    container_name: oathkeeper
+    image: europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/oryd/oathkeeper:v0.40.7
+    command: ["--config", "/opt/oathkeeper/config.yaml", "serve"]
+    env_file:
+      - ./holi-unified-api/oathkeeper/.env.local
+    volumes:
+      - ./holi-unified-api/oathkeeper:/opt/oathkeeper
+    ports:
+      - ${OATHKEEPER_PROXY_PORT}:${OATHKEEPER_PROXY_PORT}
+      - ${OATHKEEPER_API_PORT}:${OATHKEEPER_API_PORT}
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./holi-unified-api/oathkeeper
+          target: /opt/oathkeeper
+        - action: sync+restart
+          path: ./holi-unified-api/oathkeeper/.env.local
+          target: /opt/oathkeeper
+    depends_on:
+      unified-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "oathkeeper health ready --endpoint http://127.0.0.1:${OATHKEEPER_API_PORT}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+
+  okuna:
+    container_name: okuna
+    build:
+      context: ./holi-okuna
+      dockerfile: Dockerfile
+    entrypoint: ["/opt/okuna-api/.docker/api/local-entrypoint.sh"]
+    command: ["python", "start_server.py", "--reload", "--host", "0.0.0.0", "--port", "${OKUNA_INTERNAL_PORT}"]
+    env_file:
+      - ./holi-okuna/.docker-compose.env.local
+      - ./holi-okuna/.envrc.local
+    environment:
+      RDS_HOSTNAME: ${POSTGRES_HOST}
+      RDS_HOSTNAME_READER: ${POSTGRES_HOST}
+      RDS_HOSTNAME_WRITER: ${POSTGRES_HOST}
+      RDS_PORT: ${POSTGRES_PORT}
+      RDS_USERNAME: ${OKUNA_DB_USER}
+      RDS_PASSWORD: ${OKUNA_DB_PASSWORD}
+      RDS_DB_NAME: ${OKUNA_DB_NAME}
+      TEST_DB_HOSTNAME: ${POSTGRES_HOST}
+      TEST_DB_PORT: ${POSTGRES_PORT}
+      TEST_DB_USERNAME: ${OKUNA_TEST_DB_USER}
+      TEST_DB_PASSWORD: ${OKUNA_TEST_DB_PASSWORD}
+      TEST_DB_NAME: ${OKUNA_TEST_DB_NAME}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      PUBSUB_EMULATOR_HOST: pubsub-emulators:${PUBSUB_EMULATOR_PORT}
+      # these being set in holi-dev.sh based on the system architecture
+      GDAL_LIBRARY_PATH: ${GDAL_LIBRARY_PATH}
+      GEOS_LIBRARY_PATH: ${GEOS_LIBRARY_PATH}
+      PROJ_LIBRARY_PATH: ${PROJ_LIBRARY_PATH}
+    ports:
+      - ${OKUNA_PORT}:${OKUNA_INTERNAL_PORT}
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-okuna:/opt/okuna-api:delegated
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-okuna
+          target: /opt/okuna-api
+        - action: sync+restart
+          path: ./holi-okuna/.envrc.local
+          target: /opt/okuna-api
+        - action: rebuild
+          path: ./holi-okuna/uv.lock
+    depends_on:
+      pubsub-emulators:
+        condition: service_healthy
+        restart: true
+      pg:
+        condition: service_healthy
+        restart: true
+      redis:
+        condition: service_healthy
+        restart: true
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via python-http http://127.0.0.1:${OKUNA_INTERNAL_PORT}/graphql?query=%7B__typename%7D"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+
+  pubsub-emulators:
+    container_name: pubsub-emulators
+    build:
+      context: ./compose
+      dockerfile: pubsub-emulators/Dockerfile
+    environment:
+      PUBSUB_PROJECT_ID: holi-shared
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+    ports:
+      - "${PUBSUB_EMULATOR_PORT}:${PUBSUB_EMULATOR_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via python-http http://127.0.0.1:${PUBSUB_EMULATOR_PORT}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+
+  chat-server:
+    container_name: chat-server
+    image: europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/matrixdotorg/synapse:latest
+    entrypoint: ["/entrypoint.sh"]
+    command: ["/start.py"]
+    restart: always
+    env_file:
+      - ./holi-chat-server/.envrc.local
+    environment:
+      HOLI_CHAT_SERVER_NAME: chat-server
+      HOLI_CHAT_DB_HOST: ${POSTGRES_HOST}
+      HOLI_CHAT_DB_PORT: ${POSTGRES_PORT}
+      HOLI_CHAT_DB_NAME: ${CHAT_DB_NAME}
+      HOLI_CHAT_DB_USER: ${CHAT_DB_USER}
+      HOLI_CHAT_DB_PASSWORD: ${CHAT_DB_PASSWORD}
+      # ip range used within the docker-compose container, needs to be unblocked in order for Synapse to be able to resolve Sygnal
+      HOLI_CHAT_IP_RANGE_WHITELIST: "- '${DOCKER_NETWORK_SUBNET}'"
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./compose/chat-server/entrypoint.sh:/entrypoint.sh:ro
+      - ./holi-chat-server/data:/data:delegated
+    ports:
+      - ${CHAT_SERVER_MATRIX_CLIENT_PORT}:${CHAT_SERVER_MATRIX_CLIENT_PORT}
+      - ${CHAT_SERVER_MATRIX_FEDERATION_PORT}:${CHAT_SERVER_MATRIX_FEDERATION_PORT}
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./holi-chat-server/data
+          target: /data
+        - action: sync+restart
+          path: ./compose/chat-server/entrypoint.sh
+          target: /entrypoint.sh
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via python-http http://127.0.0.1:${CHAT_SERVER_MATRIX_CLIENT_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      pg:
+        condition: service_healthy
+        restart: true
+      chat-push-gateway:
+        condition: service_healthy
+        restart: true
+    networks:
+      - holi-local
+
+  chat-push-gateway:
+    container_name: chat-push-gateway
+    image: europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/matrixdotorg/sygnal:latest
+    entrypoint: ["/entrypoint.sh"]
+    command: ["python","-m","sygnal.sygnal"]
+    restart: always
+    env_file:
+      - ./holi-chat-server/.envrc-push-gateway.local
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./compose/chat-push-gateway/entrypoint.sh:/entrypoint.sh:ro
+      - ./holi-chat-server/data-push-gateway:/data:delegated
+    ports:
+      - ${CHAT_PUSH_GATEWAY_PORT}:${CHAT_PUSH_GATEWAY_INTERNAL_PORT}
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./holi-chat-server/data-push-gateway
+          target: /data
+        - action: sync+restart
+          path: ./holi-chat-server/chat-push-gateway/entrypoint.sh
+          target: /entrypoint.sh
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via python-http http://127.0.0.1:${CHAT_PUSH_GATEWAY_INTERNAL_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      pg:
+        condition: service_healthy
+        restart: true
+    networks:
+      - holi-local
+
+  chat-integration:
+    container_name: chat-integration
+    build:
+      context: ./holi-chat-integration
+      dockerfile: ../compose/chat-integration/Dockerfile
+    restart: always
+    env_file:
+      - ./holi-chat-integration/.envrc.local
+    environment:
+      CHAT_SERVER_URL: http://${DEV_HOST}:${CHAT_SERVER_MATRIX_CLIENT_PORT}
+      CHAT_SERVER_NAME: chat-server
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+    ports:
+      - ${CHAT_INTEGRATION_PORT}:${CHAT_INTEGRATION_PORT}
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./holi-integration/src
+          target: /app/src
+        - action: sync+restart
+          path: ./holi-integration/.envrc.local
+          target: /app/.envrc.local
+        - action: sync+restart
+          path: ./holi-integration/tsconfig.json
+          target: /app/tsconfig.json
+        - action: rebuild
+          path: ./holi-integration/.yarnrc.yml
+          target: /app/.yarnrc.yml
+        - action: rebuild
+          path: ./holi-integration/package.json
+        - action: rebuild
+          path: ./holi-integration/yarn.lock
+    depends_on:
+      pg:
+        condition: service_healthy
+        restart: true
+    networks:
+      - holi-local
+
+  redis:
+    container_name: redis
+    image: europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/redis:7.2
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass $REDIS_PASSWORD --port $REDIS_PORT
+    privileged: false
+    environment:
+      REDIS_HOSTNAME: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    volumes:
+      - redis_data:/data
+      - ./holi-okuna/.docker/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a '${REDIS_PASSWORD}' ping"]
+      interval: 30s
+      timeout: 10s
+      start_period: 20s
+      retries: 5
+    networks:
+      - holi-local
+
+  pg:
+    container_name: pg
+    build:
+      context: ./compose
+      dockerfile: pg/Dockerfile
+    privileged: false
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./compose/pg/init.sql:/docker-entrypoint-initdb.d/pg-init.sql:ro
+    environment:
+      POSTGRES_HOSTNAME: ${POSTGRES_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 5
+    networks:
+      - holi-local
+
+networks:
+  holi-local:
+    driver: bridge
+    name: holi-local
+    ipam:
+      config:
+        - subnet: ${DOCKER_NETWORK_SUBNET}
+
+volumes:
+  pg_data:
+    name: holi-dev_pg_data
+    driver: local
+  redis_data:
+    name: holi-dev_redis_data
+    driver: local
+
+# TODO Add secrets management
+# secrets:
+#   SOME_SECRET_KEY:
+#     file: ./secrets/some_secret_key
+#   SOME_SECRET_KEY2:
+#     environment: SOME_SECRET_KEY22

@@ -1,0 +1,174 @@
+services:
+  moderation-backend:
+    container_name: moderation-backend
+    build:
+      context: ./holi-moderation
+      dockerfile: ../compose/moderation/Dockerfile
+    image: holi-dev-moderation-backend:latest
+    command: ["yarn", "workspace", "@holi/moderation-backend", "nest", "start", "--watch"]
+    restart: always
+    env_file:
+      - ./holi-moderation/.env
+    environment:
+      PORT: ${MODERATION_BACKEND_PORT} # dont clash with web app nextjs
+      LISTEN_ADDR: 0.0.0.0
+      DEBUG: "true"
+      OKUNA_DB_HOST: ${POSTGRES_HOST}
+      OKUNA_DB_PORT: ${POSTGRES_PORT}
+      OKUNA_DB_USER: ${OKUNA_DB_USER}
+      OKUNA_DB_PASSWORD: ${OKUNA_DB_PASSWORD}
+      OKUNA_DB_NAME: ${OKUNA_DB_NAME}
+      OKUNA_ADMIN_BASE_URL: http://okuna:${OKUNA_PORT}/local/admin
+      MODERATION_DB_HOST: ${POSTGRES_HOST}
+      MODERATION_DB_PORT: ${POSTGRES_PORT}
+      MODERATION_DB_USER: ${MODERATION_DB_USER}
+      MODERATION_DB_PASSWORD: ${MODERATION_DB_PASSWORD}
+      MODERATION_DB_NAME: ${MODERATION_DB_NAME}
+      CHAT_DB_HOST: ${POSTGRES_HOST}
+      CHAT_DB_PORT: ${POSTGRES_PORT}
+      CHAT_DB_USER: ${CHAT_DB_USER}
+      CHAT_DB_PASSWORD: ${CHAT_DB_PASSWORD}
+      CHAT_DB_NAME: ${CHAT_DB_NAME}
+      PUBSUB_EMULATOR_HOST: pubsub-emulators:${PUBSUB_EMULATOR_PORT}
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-moderation/package.json:/app/package.json:delegated
+      - ./holi-moderation/yarn.lock:/app/yarn.lock:delegated
+      - ./holi-moderation/.yarnrc.yml:/app/.yarnrc.yml:delegated
+      - ./holi-moderation/apps/backend/package.json:/app/apps/backend/package.json:delegated
+      - ./holi-moderation/apps/backend/tsconfig.json:/app/apps/backend/tsconfig.json:delegated
+      - ./holi-moderation/apps/backend/.yarnrc.yml:/app/apps/backend/.yarnrc.yml:delegated
+      - ./holi-moderation/apps/backend/src:/app/apps/backend/src:delegated
+    ports:
+      - ${MODERATION_BACKEND_PORT}:${MODERATION_BACKEND_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-moderation/app/apps/backend/src
+          target: /app/apps/backend/src
+        - action: sync+restart
+          path: ./holi-moderation/app/.env
+          target: /app/app/.env
+        - action: sync+restart
+          path: ./holi-moderation/apps/backend/package.json
+          target: /app/apps/backend/package.json
+        - action: sync+restart
+          path: ./holi-moderation/apps/backend/tsconfig.json
+          target: /app/apps/backend/tsconfig.json
+        - action: rebuild
+          path: ./holi-moderation/apps/backend/.yarnrc.yml
+        - action: rebuild
+          path: ./holi-moderation/.yarnrc.yml
+        - action: rebuild
+          path: ./holi-moderation/yarn.lock
+        - action: rebuild
+          path: ./holi-moderation/package.json
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via node-http http://127.0.0.1:${MODERATION_BACKEND_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      pg:
+        condition: service_healthy
+        restart: true
+      okuna:
+        condition: service_healthy
+      pubsub-emulators:
+        condition: service_healthy
+        restart: true
+    networks:
+      - holi-local
+
+  moderation-frontend:
+    container_name: moderation-frontend
+    # Uses the same image as moderation backend, but runs frontend instead
+    image: holi-dev-moderation-backend:latest
+    command: ["yarn", "workspace", "@holi/moderation-frontend", "dev"]
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-moderation/package.json:/app/package.json:delegated
+      - ./holi-moderation/yarn.lock:/app/yarn.lock:delegated
+      - ./holi-moderation/.yarnrc.yml:/app/.yarnrc.yml:delegated
+      - ./holi-moderation/apps/frontend/package.json:/app/apps/frontend/package.json:delegated
+      - ./holi-moderation/apps/frontend/tsconfig.json:/app/apps/frontend/tsconfig.json:delegated
+      - ./holi-moderation/apps/frontend/src:/app/apps/frontend/src:delegated
+    environment:
+      VITE_OKUNA_ADMIN_BASE_URL: "http://okuna:${OKUNA_PORT}/local/admin"
+      VITE_GRAPHQL_URL: "http://moderation-backend:${MODERATION_BACKEND_PORT}/v1/graphql"
+      # the admin secret should NEVER be added to the deployed container, only locally to facilitate schema introspection for codegen
+      HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      INTERNAL_GRAPHQL_URL: "http://hasura:8080/v1/graphql"
+    ports:
+      - ${MODERATION_FRONTEND_PORT}:${MODERATION_FRONTEND_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-moderation/app/apps/frontend/src
+          target: /app/apps/frontend/src
+        - action: sync+restart
+          path: ./holi-moderation/apps/frontend/package.json
+          target: /app/apps/frontend/package.json
+        - action: sync+restart
+          path: ./holi-moderation/apps/frontend/tsconfig.json
+          target: /app/apps/frontend/tsconfig.json
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via node-http http://127.0.0.1:${MODERATION_FRONTEND_PORT}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      okuna:
+        condition: service_healthy
+      moderation-backend:
+        condition: service_healthy
+    networks:
+      - holi-local
+
+  moderation-federator:
+    container_name: moderation-federator
+    image: europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/hasura/graphql-engine:v2.45.2.cli-migrations-v3.ubi
+    ports:
+      - ${MODERATION_FEDERATOR_PORT}:${MODERATION_FEDERATOR_PORT}
+    restart: no
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-moderation/apps/federator/hasura-metadata:/hasura-metadata
+    environment:
+      ## enable the console served by server
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      ## enable debugging mode. It is recommended to disable this in production
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, webhook-log, websocket-log, query-log
+      ## uncomment next line to run console offline (i.e load console assets from server instead of CDN)
+      # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      HASURA_GRAPHQL_ENABLE_REMOTE_SCHEMA_PERMISSIONS: "true"
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
+      HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: "naming_convention"
+      # runtime secrets
+      HASURA_GRAPHQL_JWT_SECRET: "{\"type\": \"HS256\", \"key\": \"${MODERATION_JWT_SECRET}\"}"
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: "postgres://${MODERATION_DB_USER}:${MODERATION_DB_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${MODERATION_DB_NAME}"
+      OKUNA_DATABASE_URL: "postgres://${OKUNA_DB_USER}:${OKUNA_DB_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${OKUNA_DB_NAME}"
+      ## Federated data sources
+      BACKEND_GRAPHQL_URL: "http://moderation-backend:${MODERATION_BACKEND_PORT}/graphql"
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./holi-moderation/app/apps/federator/hasura-metadata
+          target: /hasura-metadata
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via curl http://127.0.0.1:${MODERATION_FEDERATOR_PORT}/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      pg:
+        condition: service_healthy
+        restart: true
+      okuna:
+        condition: service_healthy
+      moderation-backend:
+        condition: service_healthy
+    networks:
+      - holi-local

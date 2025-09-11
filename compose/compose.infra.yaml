@@ -1,0 +1,24 @@
+# Contains infrastructure resources for docker compose setup
+
+networks:
+  holi-local:
+    driver: bridge
+    name: holi-local
+    ipam:
+      config:
+        - subnet: ${DOCKER_NETWORK_SUBNET}
+
+volumes:
+  pg_data:
+    name: holi-dev_pg_data
+    driver: local
+  redis_data:
+    name: holi-dev_redis_data
+    driver: local
+
+# TODO Add secrets management
+# secrets:
+#   SOME_SECRET_KEY:
+#     file: ./secrets/some_secret_key
+#   SOME_SECRET_KEY2:
+#     environment: SOME_SECRET_KEY22

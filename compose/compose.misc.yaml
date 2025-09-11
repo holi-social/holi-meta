@@ -1,0 +1,94 @@
+
+services:
+  libretranslate:
+    container_name: libretranslate
+    build:
+      context: ./holi-libretranslate
+      dockerfile: Dockerfile
+      args:
+        lang_codes: en,de
+    environment:
+      LT_HOST: 0.0.0.0
+      LT_PORT: ${LIBRETRANSLATE_INTERNAL_PORT}
+    ports:
+      - ${LIBRETRANSLATE_PORT}:${LIBRETRANSLATE_INTERNAL_PORT}
+    healthcheck:
+      test: ["CMD-SHELL", "/app/venv/bin/python /app/scripts/healthcheck.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+
+  rewards:
+    container_name: rewards
+    build:
+      context: ./holi-rewards
+      dockerfile: ../compose/rewards/Dockerfile
+    env_file:
+      - ./holi-rewards/.env
+    environment:
+      PORT: ${REWARDS_PORT}
+      DB_HOST: ${POSTGRES_HOST}
+      DB_NAME: ${REWARDS_DB_NAME}
+      DB_USER: ${REWARDS_DB_USER}
+      DB_PASSWORD: ${REWARDS_DB_PASSWORD}
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./holi-rewards:/app:delegated
+    ports:
+      - ${REWARDS_PORT}:${REWARDS_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-rewards
+          target: /app
+        - action: sync+restart
+          path: ./holi-rewards/.env
+          target: /app/.env
+        - action: rebuild
+          path: ./holi-rewards/deno.json
+        - action: rebuild
+          path: ./holi-rewards/deno.lock
+    depends_on:
+      pg:
+        condition: service_healthy
+        restart: true
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via deno-http http://127.0.0.1:${REWARDS_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - holi-local
+
+  frontend-storybook:
+    container_name: frontend-storybook
+    # Uses the same image as web, but runs storybook instead
+    image: holi-dev-frontend-web:latest
+    entrypoint: ["/entrypoint.sh"]
+    command: ["yarn", "holi-bricks:web", "--no-open"]
+    environment:
+      PORT: ${FRONTEND_STORYBOOK_PORT}
+    volumes:
+      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
+      - ./compose/frontends/entrypoint.sh:/entrypoint.sh:ro
+      - ./holi-frontends/holi-bricks:/app/holi-bricks:delegated
+    ports:
+      - ${FRONTEND_STORYBOOK_PORT}:${FRONTEND_STORYBOOK_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./holi-frontends/holi-bricks
+          target: /app/holi-bricks
+        - action: sync+restart
+          path: ./holi-frontends/.envrc.local
+          target: /app
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck-via node-http http://127.0.0.1:${FRONTEND_STORYBOOK_PORT}"]
+      interval: 30s 
+      timeout: 10s
+      start_period: 30s
+      retries: 5
+    networks:
+      - holi-local
