@@ -10,6 +10,9 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 -- Okuna test database
 CREATE DATABASE okuna_test;
 CREATE USER okuna_test WITH PASSWORD 'okuna-test';
+ALTER USER okuna_test CREATEDB; -- Allow user to create databases
+ALTER USER okuna_test CREATEROLE; -- Allow user to delete databases
+ALTER USER okuna_test SUPERUSER; -- Allow user to create extensions
 GRANT ALL PRIVILEGES ON DATABASE okuna_test TO okuna_test;
 \connect okuna_test
 GRANT USAGE, CREATE ON SCHEMA public TO okuna_test;
