@@ -73,7 +73,6 @@ if [ "$command" = "init" ]; then
     fi
     # step 3: replace {{DJANGO_SECRET_KEY}} in the .docker-compose.env.local file with the generated secret key
     sed -i.bak "s|{{DJANGO_SECRET_KEY}}|$OKUNA_SECRET_KEY|" ./holi-okuna/.docker-compose.env.local && rm ./holi-okuna/.docker-compose.env.local.bak
-    exit 0
   fi
 
   # Create frontends env file
@@ -81,6 +80,9 @@ if [ "$command" = "init" ]; then
 
   # Create unified api env file
   create_env_file "./compose/unified-api" ".env.template" ".env"
+
+  echo "Initialization completed."
+  exit 0
 else
   if [ ! -f $OKUNA_COMPOSE_ENV_FILE ]; then
     echo "The file $OKUNA_COMPOSE_ENV_FILE does not exist. Please run './holi-dev.sh init' first to create it."
