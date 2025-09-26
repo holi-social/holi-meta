@@ -121,7 +121,6 @@ checkoutAndPrepare git@gitlab.holi.team:app/app.gitlab-pages.holi.team app.gitla
 checkoutAndPrepare git@gitlab.holi.team:app/holi-app-donations.git holi-app-donations
 checkoutAndPrepare git@gitlab.holi.team:app/holi-app-goodnews.git holi-app-goodnews
 checkoutAndPrepare git@gitlab.holi.team:app/holi-geo-api.git holi-geo-api
-checkoutAndPrepare git@gitlab.holi.team:app/holi-app-volunteering.git holi-app-volunteering
 checkoutAndPrepare git@gitlab.holi.team:app/holi-notifications.git holi-notifications
 checkoutAndPrepare git@gitlab.holi.team:app/holi-chat-server.git holi-chat-server
 checkoutAndPrepare git@gitlab.holi.team:app/holi-meet.git holi-meet

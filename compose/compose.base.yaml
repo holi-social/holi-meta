@@ -108,53 +108,6 @@ services:
     networks:
       - holi-local
   
-  app-volunteering:
-    container_name: app-volunteering
-    build:
-      context: ./holi-app-volunteering
-      dockerfile: Dockerfile
-    command: ["deno", "run", "--allow-import", "--allow-net", "--allow-env", "--lock=deno.lock", "--cached-only", "--watch", "app/main.ts"]
-    env_file:
-      - ./holi-app-volunteering/.envrc.local
-    environment:
-      PORT: ${APP_VOLUNTEERING_PORT}
-      GEO_API_ENDPOINT_URL: http://geo-api:${GEO_API_PORT}/graphql
-      DB_HOST: ${POSTGRES_HOST}
-      DB_PORT: ${POSTGRES_PORT}
-      DB_NAME: ${APP_VOLUNTEERING_DB_NAME}
-      DB_USERNAME: ${APP_VOLUNTEERING_DB_USER}
-      DB_PASSWORD: ${APP_VOLUNTEERING_DB_PASSWORD}
-    ports:
-      - ${APP_VOLUNTEERING_PORT}:${APP_VOLUNTEERING_PORT}
-    volumes:
-      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
-      - ./holi-app-volunteering/app:/app:delegated
-    develop:
-      watch:
-        - action: sync
-          path: ./holi-app-volunteering/app
-          target: /app
-        - action: sync+restart
-          path: ./holi-app-volunteering/app/.envrc.local
-          target: /app
-        - action: rebuild
-          path: ./holi-app-volunteering/deno.json
-        - action: rebuild
-          path: ./holi-app-volunteering/deno.lock
-    depends_on:
-      pg:
-        condition: service_healthy
-        restart: true
-      geo-api:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "healthcheck-via deno-http http://127.0.0.1:${APP_VOLUNTEERING_PORT}/health"]
-      interval: 30s 
-      timeout: 10s
-      retries: 5
-    networks:
-      - holi-local
-  
   app-events:
     container_name: app-events
     build:
@@ -279,7 +232,6 @@ services:
       DONATIONS_API_URL: http://app-donations:${APP_DONATIONS_PORT}/graphql
       GOODNEWS_API_URL: http://app-goodnews:${APP_GOODNEWS_PORT}/graphql
       GEO_API_URL: http://geo-api:${GEO_API_PORT}/graphql
-      VOLUNTEERING_API_URL: http://app-volunteering:${APP_VOLUNTEERING_PORT}/graphql
       NOTIFICATIONS_API_URL: http://notifications:${NOTIFICATIONS_PORT}/graphql
       TRANSLATION_API_URL: http://translation-api:${TRANSLATION_API_PORT}/graphql
       MODERATION_BACKEND_URL: http://moderation-backend:${MODERATION_BACKEND_PORT}/graphql
@@ -326,8 +278,6 @@ services:
       app-goodnews:
         condition: service_healthy
       geo-api:
-        condition: service_healthy
-      app-volunteering:
         condition: service_healthy
       notifications:
         condition: service_healthy
