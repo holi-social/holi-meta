@@ -46,11 +46,3 @@ GRANT ALL PRIVILEGES ON DATABASE rewards TO rewards;
 \connect rewards
 GRANT USAGE, CREATE ON SCHEMA public TO rewards;
 \disconnect
-
--- Volunteering database
-CREATE DATABASE volunteering;
-CREATE USER volunteering WITH PASSWORD 'volunteering';
-GRANT ALL PRIVILEGES ON DATABASE volunteering TO volunteering;
-\connect volunteering
-GRANT USAGE, CREATE ON SCHEMA public TO volunteering;
-\disconnect

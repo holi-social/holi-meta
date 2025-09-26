@@ -232,9 +232,11 @@ out project subfolders in several IDEs .
 ### Last steps
 
 - Run the following command to authorize Docker to access the Google Cloud Artifact registry.
+
   ```
   gcloud auth configure-docker europe-north1-docker.pkg.dev
   ```
+
 - The Unified API uses imagekit.io for media processing. Please set the `IMAGEKIT_PUBLIC_KEY` and `IMAGEKIT_PRIVATE_KEY` available in Passbolt in `./holi-okuna/.env`.
 - The Unified API and Translation API currently uses the same local redis instance as okuna. Therefore, please copy the `redisPassword` environment variable from
   `./holi-okuna/.okuna-cli.json` to `REDIS_PASSWORD` in both `./holi-unified-api/.envrc.local` and `./holi-translation-api/.envrc.local`.
@@ -306,7 +308,6 @@ The following table lists all ports that are used for local execution.
 | donations                       | 8001 |
 | goodnews                        | 8002 |
 | geo                             | 8003 |
-| volunteering                    | 8004 |
 | notifications                   | 8005 |
 | app-events                      | 8006 |
 | rewards                         | 8015 |

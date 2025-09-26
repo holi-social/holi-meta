@@ -102,17 +102,20 @@ out project subfolders in several IDEs .
 ### Last steps
 
 1. Run the following command to authorize Docker to access the Google Cloud Artifact registry.
+
   ```
   gcloud auth configure-docker europe-north1-docker.pkg.dev
   ```
+
 2. Run `./holi-dev.sh init` to create the necessary environment files.
 3. Fill the following secrets from passbolt:
-  - The Unified API uses imagekit.io for media processing. Please set the `IMAGEKIT_PUBLIC_KEY` and `IMAGEKIT_PRIVATE_KEY` available in Passbolt in `./holi-okuna/.docker-compose.env.local`.
-  - Set `HOLI_CHAT_ORY_CLIENT_ID` and `HOLI_CHAT_ORY_CLIENT_SECRET` in `./holi-chat-server/.envrc.local`.
-  - Set `APNS_KEY_ID`, `APNS_TEAM_ID`, and `APNS_TOPIC` in `./holi-chat-server/.envrc-push-gateway.local`.
-  - Fill `./holi-chat-server/data-push-gateway/apns_keyfile_staging.p8` with `APNS_KEYFILE_STAGING` and manually format it so that it looks like a ssh key.
-  - Fill `./holi-chat-server/data-push-gateway/fcm_keyfile.json` with `FCM Keyfile`
-  - Set `TYPESENSE_API_KEY` in `./compose/unified-api/.env`.
+
+- The Unified API uses imagekit.io for media processing. Please set the `IMAGEKIT_PUBLIC_KEY` and `IMAGEKIT_PRIVATE_KEY` available in Passbolt in `./holi-okuna/.docker-compose.env.local`.
+- Set `HOLI_CHAT_ORY_CLIENT_ID` and `HOLI_CHAT_ORY_CLIENT_SECRET` in `./holi-chat-server/.envrc.local`.
+- Set `APNS_KEY_ID`, `APNS_TEAM_ID`, and `APNS_TOPIC` in `./holi-chat-server/.envrc-push-gateway.local`.
+- Fill `./holi-chat-server/data-push-gateway/apns_keyfile_staging.p8` with `APNS_KEYFILE_STAGING` and manually format it so that it looks like a ssh key.
+- Fill `./holi-chat-server/data-push-gateway/fcm_keyfile.json` with `FCM Keyfile`
+- Set `TYPESENSE_API_KEY` in `./compose/unified-api/.env`.
 
 ## Running dev environments via docker compose
 
@@ -129,41 +132,40 @@ To get started with the development environment, you can use the following comma
 This will try to starts the essential services for local development in the background, and if docker images do not exist, it will build them locally and watch for file changes.
 
 > ℹ️ **Note:** If you are running this command for the first time, please note that it takes a few minutes to build all docker images locally and
->  uses system resources heavily. So please be patient and try to close the heavy processes before running this command.
-> 
+> uses system resources heavily. So please be patient and try to close the heavy processes before running this command.
+>
 > If you are using Docker Desktop, you can also increase the resource allocation settings.
 
 > ℹ️ **Note:** If you stop the process, the services are still running in the background but the file watch doesn't work anymore and your local changes might not synced with the container.
->  You can simply run the start command again to start the file watch.
+> You can simply run the start command again to start the file watch.
 
 Or, if you want to run a specific profile (a group of services), you can set the `COMPOSE_PROFILES` environment variable once (recommended) or use the `-p` or `--profile` argument on **every command**. Available profiles are:
 
 - `minimal` (default): Only starts the necessary services for backend and frontend development. This includes:
-  + `app-donations`
-  + `app-goodnews`
-  + `geo-api`
-  + `app-volunteering`
-  + `app-events`
-  + `translation-api`
-  + `notifications`
-  + `unified-api`
-  + `oathkeeper`
-  + `okuna`
-  + `pubsub-emulators`
-  + `chat-server`
-  + `chat-push-gateway`
-  + `chat-integration`
-  + `frontend-web`
-  + `frontend-mobile`
+  - `app-donations`
+  - `app-goodnews`
+  - `geo-api`
+  - `app-events`
+  - `translation-api`
+  - `notifications`
+  - `unified-api`
+  - `oathkeeper`
+  - `okuna`
+  - `pubsub-emulators`
+  - `chat-server`
+  - `chat-push-gateway`
+  - `chat-integration`
+  - `frontend-web`
+  - `frontend-mobile`
 - `moderation`: Only starts the moderation services. This includes:
-  + `moderation-backend`
-  + `moderation-frontend`
-  + `moderation-federator`
+  - `moderation-backend`
+  - `moderation-frontend`
+  - `moderation-federator`
 - `all`: This runs all the available services in `holi-meta`. This includes:
-  + All the services in `minimal` and `moderation` profiles
-  + `libretranslate`
-  + `rewards`
-  + `frontend-storybook`
+  - All the services in `minimal` and `moderation` profiles
+  - `libretranslate`
+  - `rewards`
+  - `frontend-storybook`
 - `frontend-staging`: Only starts the frontend services (`frontend-web` and `frontend-mobile`) against the staging backend. It doesn't run the backend services locally.
 
 The command is as follows:
@@ -236,7 +238,6 @@ export COMPOSE_PROFILES=minimal,moderation
 
 ./holi-dev.sh --profile minimal,moderation
 ```
-
 
 > **Advanced Tip**
 >
@@ -334,6 +335,7 @@ and attach to that service stdin and stdout to be able to control it. You can us
 ```sh
 ./holi-dev.sh attach <service_name>
 ```
+
 *CTRL+C can be used to detach from the service.*
 
 #### Compose
