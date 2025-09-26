@@ -308,7 +308,6 @@ The following table lists all ports that are used for local execution.
 | donations                       | 8001 |
 | goodnews                        | 8002 |
 | geo                             | 8003 |
-| ~~volunteering~~                | ~~8004~~ |
 | notifications                   | 8005 |
 | app-events                      | 8006 |
 | rewards                         | 8015 |
