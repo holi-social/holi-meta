@@ -299,7 +299,7 @@ services:
 
   oathkeeper:
     container_name: oathkeeper
-    image: europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/oryd/oathkeeper:v0.40.7
+    image: europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/oryd/oathkeeper:v0.40.9
     command: ["--config", "/opt/oathkeeper/config.yaml", "serve"]
     env_file:
       - ./holi-unified-api/oathkeeper/.env.local
