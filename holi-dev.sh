@@ -12,7 +12,7 @@ while [[ $# -gt 0 ]]; do
       profile="$2"
       shift 2
       ;;
-    init|start|stop|status|logs|exec|migrate|services|attach|compose)
+    init|start|stop|status|logs|exec|migrate|services|attach|build|compose)
       command="$1"
       shift
       ;;
@@ -196,11 +196,14 @@ case "$command" in
   attach)
     "${cmd_base[@]}" attach --detach-keys "ctrl-c" "${rest[@]}"
     ;;
+  build)
+    "${cmd_base[@]}" build "${rest[@]}"
+    ;;
   compose)
     "${cmd_base[@]}" "${rest[@]}"
     ;;
   *)
-    echo "Unknown or missing command. Use one of: start, stop, status, logs, exec, migrate, services, attach, compose."
+    echo "Unknown or missing command. Use one of: start, stop, status, logs, exec, migrate, services, attach, build, compose."
     exit 1
     ;;
 esac

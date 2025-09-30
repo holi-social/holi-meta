@@ -29,6 +29,7 @@ The meta repository which helps you check out the other repositories and run a d
         - [Access the PostgreSQL instance](#access-the-postgresql-instance)
       - [Services](#services)
       - [Attach](#attach)
+      - [Build](#build)
       - [Compose](#compose)
     - [Troubleshooting](#troubleshooting)
       - [Frontend Image Build Error: Cannot Allocate Memory](#frontend-image-build-error-cannot-allocate-memory)
@@ -333,6 +334,16 @@ and attach to that service stdin and stdout to be able to control it. You can us
 ```
 
 *CTRL+C can be used to detach from the service.*
+
+#### Build
+
+You can rebuild the docker image for a specific service using the following command:
+
+```sh
+./holi-dev.sh build <service_name>
+```
+
+Then you can start the services again using the start command to use the newly built image.
 
 #### Compose
 
