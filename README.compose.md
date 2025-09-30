@@ -155,6 +155,7 @@ Or, if you want to run a specific profile (a group of services), you can set the
   - `chat-server`
   - `chat-push-gateway`
   - `chat-integration`
+  - `rewards`
   - `frontend-web`
   - `frontend-mobile`
 - `moderation`: Only starts the moderation services. This includes:
@@ -164,7 +165,6 @@ Or, if you want to run a specific profile (a group of services), you can set the
 - `all`: This runs all the available services in `holi-meta`. This includes:
   - All the services in `minimal` and `moderation` profiles
   - `libretranslate`
-  - `rewards`
   - `frontend-storybook`
 - `frontend-staging`: Only starts the frontend services (`frontend-web` and `frontend-mobile`) against the staging backend. It doesn't run the backend services locally.
 

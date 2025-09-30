@@ -20,48 +20,6 @@ services:
     networks:
       - holi-local
 
-  rewards:
-    container_name: rewards
-    build:
-      context: ./holi-rewards
-      dockerfile: ../compose/rewards/Dockerfile
-    env_file:
-      - ./holi-rewards/.env
-    environment:
-      PORT: ${REWARDS_PORT}
-      DB_HOST: ${POSTGRES_HOST}
-      DB_NAME: ${REWARDS_DB_NAME}
-      DB_USER: ${REWARDS_DB_USER}
-      DB_PASSWORD: ${REWARDS_DB_PASSWORD}
-    volumes:
-      - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
-      - ./holi-rewards:/app:delegated
-    ports:
-      - ${REWARDS_PORT}:${REWARDS_PORT}
-    develop:
-      watch:
-        - action: sync
-          path: ./holi-rewards
-          target: /app
-        - action: sync+restart
-          path: ./holi-rewards/.env
-          target: /app/.env
-        - action: rebuild
-          path: ./holi-rewards/deno.json
-        - action: rebuild
-          path: ./holi-rewards/deno.lock
-    depends_on:
-      pg:
-        condition: service_healthy
-        restart: true
-    healthcheck:
-      test: ["CMD-SHELL", "healthcheck-via deno-http http://127.0.0.1:${REWARDS_PORT}/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    networks:
-      - holi-local
-
   frontend-storybook:
     container_name: frontend-storybook
     # Uses the same image as web, but runs storybook instead
