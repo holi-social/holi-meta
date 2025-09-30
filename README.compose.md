@@ -9,12 +9,10 @@ The meta repository which helps you check out the other repositories and run a d
     - [Requirements](#requirements)
       - [Docker Compose](#docker-compose)
         - [Start Docker Desktop (optional)](#start-docker-desktop-optional)
-      - [brew](#brew)
+      - [gcloud](#gcloud)
+      - [direnv](#direnv)
         - [Installation](#installation)
         - [Configuration](#configuration)
-      - [direnv](#direnv)
-        - [Installation](#installation-1)
-        - [Configuration](#configuration-1)
     - [Initialization](#initialization)
     - [IDE setup](#ide-setup)
     - [Last steps](#last-steps)
@@ -55,19 +53,13 @@ Please [`install Docker Compose`](https://docs.docker.com/compose/install/) via 
 
 If you installed Docker Compose via Docker Desktop, you need to start it before development, or else the development environment will not successfully start.
 
-#### brew
+#### gcloud
 
-##### Installation
+Please install [`gcloud` CLI](https://cloud.google.com/sdk/docs/install) and authenticate with your Google account using
 
-Some tools are installed via [brew](https://docs.brew.sh/Installation). Please follow the instructions for installing it
-(on MacOS AND also on Linux (using the default installation script, no "local installation") in order to keep cross-platform complexity low).
-
-##### Configuration
-
-Make sure to integrate the brew shell-hook before direnv, nodenv, nvm and pyenv to allow your environment to find tools
-installed via brew and to avoid brew installed versions to take precedence over ones installed via other methods.
-You can achieve this by installing the brew shell hook to `.bashrc` (above all other hook we will install) instead
-of the recommended `.profile` file.
+```sh
+gcloud auth login
+```
 
 #### direnv
 
@@ -83,14 +75,18 @@ Please set up the [shell hook](https://github.com/direnv/direnv/blob/master/docs
 
 Once you have installed all prerequisites (or after anything changed in the setup), you can execute
 
-`./init.sh`
+```sh
+./init.sh
+```
 
 and the script will set up everything for you. At the end, it will display a big `DONE` banner. If it does not,
 then either it ran into an error, giving a message, or stopped due to a bug. Try to fix the error and then re-run the script.
 
 If you also want to work on any optional, private repositories, then please execute
 
-`./init.sh full`
+```sh
+./init.sh full
+```
 
 for doing a full checkout.
 
