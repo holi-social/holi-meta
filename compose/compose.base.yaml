@@ -250,7 +250,7 @@ services:
     develop:
       watch:
         - action: rebuild
-          path: ./holi-unified-api/.meshrc.yaml
+          path: ./holi-unified-api/.meshrc.yml
         - action: sync+restart
           path: ./holi-unified-api/.env
           target: /app
@@ -509,21 +509,20 @@ services:
     develop:
       watch:
         - action: sync+restart
-          path: ./holi-integration/src
+          path: ./holi-chat-integration/src
           target: /app/src
         - action: sync+restart
-          path: ./holi-integration/.envrc.local
+          path: ./holi-chat-integration/.envrc.local
           target: /app/.envrc.local
         - action: sync+restart
-          path: ./holi-integration/tsconfig.json
+          path: ./holi-chat-integration/tsconfig.json
           target: /app/tsconfig.json
         - action: rebuild
-          path: ./holi-integration/.yarnrc.yml
-          target: /app/.yarnrc.yml
+          path: ./holi-chat-integration/.yarnrc.yml
         - action: rebuild
-          path: ./holi-integration/package.json
+          path: ./holi-chat-integration/package.json
         - action: rebuild
-          path: ./holi-integration/yarn.lock
+          path: ./holi-chat-integration/yarn.lock
     depends_on:
       pg:
         condition: service_healthy

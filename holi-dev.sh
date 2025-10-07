@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -eo pipefail
 
 # commands and options
@@ -169,6 +169,10 @@ esac
 # handle commands
 case "$command" in
   start)
+    # check if we need to rebuild any services
+    ./compose/compose-rebuild-check.sh
+    
+    # start the services in detached mode and then start watching for changes
     "${cmd_base[@]}" up --detach "${rest[@]}" && \
       echo -e "\nServices are running in detach mode.\nWatching the file changes..." && \
       "${cmd_base[@]}" watch --no-up 2>&1 | \
