@@ -324,7 +324,6 @@ The following table lists all ports that are used for local execution.
 | moderation federator            | 8080 |  
 |                                 |      |
 | storybook (holi-bricks)         | 6006 |
-| storybook (legacy)              | 6007 |
 |                                 |      |
 | okuna DB                        | 5432 |
 | chat DB                         | 5433 |
