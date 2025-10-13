@@ -101,7 +101,7 @@ brewInstall libmagic # needed by okuna, missing on mac, we just install it indep
 # dependencies we can auto-install
 isAvailable uv || brewInstall uv # needed for all projects using uv as package/project manager (e.g. okuna and holi-data-pipelines)
 # install velociraptor for deno projects
-isAvailable vr || deno install -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
+isAvailable vr || deno install --global -qAn vr -f https://deno.land/x/velociraptor@1.5.0/cli.ts
 # we want to use mprocs for running the development environments
 isAvailable mprocs || brewInstall mprocs
 # in pre-commit hooks, we're using ripgrep for secret detection
