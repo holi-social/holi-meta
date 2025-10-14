@@ -20,10 +20,17 @@ declare -A SERVICE_WATCH=(
   [moderation-backend]="holi-moderation/apps/backend/.yarnrc.yml holi-moderation/.yarnrc.yml holi-moderation/yarn.lock holi-moderation/package.json"
 )
 
+declare -A PROFILE_SERVICES=(
+  [minimal]="app-donations app-goodnews geo-api app-events translation-api notifications unified-api okuna chat-integration rewards frontend-web"
+  [all]="app-donations app-goodnews geo-api app-events translation-api notifications unified-api okuna chat-integration rewards frontend-web moderation-backend"
+  [moderation]="moderation-backend"
+  [frontend-staging]="frontend-web"
+)
+
 COMPOSE_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 ROOT_DIR=$(cd "$(dirname "${COMPOSE_DIR}")" && pwd)
 STATE_FILE="${COMPOSE_DIR}/.compose-rebuild-state.tsv"   # single file with lines: <key>\t<sha256>
-COMPOSE_CMD=("${ROOT_DIR}/holi-dev.sh")      # override if needed
+COMPOSE_CMD=("${ROOT_DIR}/holi-dev.sh")                  # override if needed
 
 # ---- helpers ----
 hash_cmd() {
@@ -37,9 +44,7 @@ hash_cmd() {
   fi
 }
 
-b64() {  # base64 encode without newlines (portable)
-  printf '%s' "$1" | base64 | tr -d '\n'
-}
+b64() { printf '%s' "$1" | base64 | tr -d '\n'; }
 
 key_for() {  # unique key per (service, file)
   local svc="$1" path="$2"
@@ -55,10 +60,51 @@ write_state_file() {
   mv "${STATE_FILE}.tmp" "${STATE_FILE}"
 }
 
+# ---- resolve active services from COMPOSE_PROFILES ----
+# Accept comma/space separated profiles. Default to "all" (union of everything) if unset.
+resolve_active_services() {
+  local profiles_raw="${COMPOSE_PROFILES:-minimal}"
+  # Normalize separators to spaces
+  read -r -a profiles <<<"$(tr ',:' ' ' <<<"$profiles_raw")"
+
+  # If explicitly empty (e.g., COMPOSE_PROFILES=""), fall back to all
+  if [[ ${#profiles[@]} -eq 0 || -z "${profiles[0]}" ]]; then
+    profiles=(all)
+  fi
+
+  declare -A seen=()
+  for p in "${profiles[@]}"; do
+    if [[ -z "${PROFILE_SERVICES[$p]:-}" ]]; then
+      echo "⚠️  Unknown profile '$p' — ignoring."
+      continue
+    fi
+    for s in ${PROFILE_SERVICES[$p]}; do
+      seen["$s"]=1
+    done
+  done
+
+  # Emit space-separated list
+  if (( ${#seen[@]} == 0 )); then
+    echo ""
+  else
+    printf '%s ' "${!seen[@]}"
+  fi
+}
+
+ACTIVE_SERVICES_STR="$(resolve_active_services)"
+read -r -a ACTIVE_SERVICES <<<"$ACTIVE_SERVICES_STR"
+
+if (( ${#ACTIVE_SERVICES[@]} == 0 )); then
+  echo "ℹ️  No services resolved from COMPOSE_PROFILES='${COMPOSE_PROFILES:-}' — nothing to do."
+  exit 0
+fi
+
+echo "👀  Active profiles: ${COMPOSE_PROFILES:-all}"
+echo "🎯  Services in scope: ${ACTIVE_SERVICES[*]}"
+
 # ---- load or initialize state ----
 declare -A PREV
 if [[ -f "${STATE_FILE}" && -s "${STATE_FILE}" ]]; then
-  # load existing checksums
   while IFS=$'\t' read -r k v; do
     [[ -z "${k:-}" || -z "${v:-}" ]] && continue
     PREV["$k"]="$v"
@@ -71,8 +117,14 @@ fi
 declare -A SERVICES_CHANGED=()
 declare -A NEW_HASHES=()
 
-# ---- compute current hashes ----
-for svc in "${!SERVICE_WATCH[@]}"; do
+# ---- compute current hashes (only for ACTIVE_SERVICES) ----
+for svc in "${ACTIVE_SERVICES[@]}"; do
+  # guard against typos: skip services not defined in SERVICE_WATCH
+  if [[ -z "${SERVICE_WATCH[$svc]:-}" ]]; then
+    echo "⚠️  '$svc' has no watch definition — skipping."
+    continue
+  fi
+
   for watched in ${SERVICE_WATCH[$svc]}; do
     if [[ ! -f "${ROOT_DIR}/$watched" ]]; then
       echo "⚠️  $svc: missing watched file '$watched' — skipping."
@@ -88,8 +140,8 @@ for svc in "${!SERVICE_WATCH[@]}"; do
       if [[ "$current_hash" != "$prev_hash" ]]; then
         SERVICES_CHANGED["$svc"]=1
         echo "🔁  $svc: detected change in $watched"
-      else
-        echo "✅  $svc: no change in $watched"
+      # else
+        # echo "✅  $svc: no change in $watched"
       fi
     fi
   done
@@ -98,17 +150,18 @@ done
 # ---- handle first run or rebuild ----
 if [[ -n "${first_run:-}" ]]; then
   write_state_file
-  echo "✅  Initial checksums recorded. No rebuild needed."
+  echo "✅  Initial checksums recorded for scoped services. No rebuild needed."
   exit 0
 fi
 
 if ((${#SERVICES_CHANGED[@]} == 0)); then
-  echo "✅  No watched changes — no rebuild needed."
+  echo "✅  No watched changes in scoped services — no rebuild needed."
   exit 0
 fi
 
+# Only rebuild scoped, changed services
 services_to_build=("${!SERVICES_CHANGED[@]}")
-echo "🛠️  Rebuilding: ${services_to_build[*]}"
+echo "🛠️  Rebuilding (scoped): ${services_to_build[*]}"
 "${COMPOSE_CMD[@]}" build "${services_to_build[@]}"
 echo "✅  Rebuild done."
 
