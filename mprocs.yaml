@@ -21,11 +21,3 @@ procs:
       else
         echo "Not starting local Storybook for holi-bricks because LOCAL_BACKEND_STORYBOOK is not set to 'true'";
       fi
-  storybook (legacy):
-    cwd: <CONFIG_DIR>/holi-frontends
-    shell: >
-      if [ "$LOCAL_BACKEND_STORYBOOK" = "true" ]; then
-        ./mprocs-start-storybook.sh;
-      else
-        echo "Not starting local Storybook because LOCAL_BACKEND_STORYBOOK is not set to 'true'";
-      fi
