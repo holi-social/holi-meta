@@ -20,3 +20,4 @@ app.gitlab-pages.holi.team/
 # Ignore local configuration files
 /compose/*/.env
 /compose/pg/migration.sql
+/compose/.compose-*
