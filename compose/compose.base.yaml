@@ -261,8 +261,8 @@ services:
           path: ./holi-unified-api/logger.ts
           target: /app/logger.ts
         - action: sync+restart
-          path: ./holi-unified-api/url.ts
-          target: /app/url.ts
+          path: ./holi-unified-api/utils.ts
+          target: /app/utils.ts
         - action: sync+restart
           path: ./holi-unified-api/handlers
           target: /app/handlers

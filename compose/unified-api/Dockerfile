@@ -4,7 +4,7 @@ WORKDIR /app
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
 
-COPY tsconfig.json package.json yarn.lock .meshrc.yml .yarnrc.yml logger.ts utils.ts instrument.ts server.ts /app/
+COPY tsconfig.json package.json yarn.lock .meshrc.yml .yarnrc.yml logger.ts utils.ts instrument.ts server.ts ./
 COPY handlers ./handlers
 
 # RUN chown -R node:node /app && corepack enable
