@@ -18,6 +18,7 @@ The meta repository which helps you check out the other repositories and run a d
     - [Last steps](#last-steps)
   - [Running dev environments via docker compose](#running-dev-environments-via-docker-compose)
     - [Get Started](#get-started)
+      - [Setting Up Chat Server Admin User](#setting-up-chat-server-admin-user)
     - [Commands](#commands)
       - [Start](#start)
       - [Status](#status)
@@ -109,6 +110,7 @@ out project subfolders in several IDEs .
 
 - The Unified API uses imagekit.io for media processing. Please set the `IMAGEKIT_PUBLIC_KEY` and `IMAGEKIT_PRIVATE_KEY` available in Passbolt in `./holi-okuna/.docker-compose.env.local`.
 - Set `HOLI_CHAT_ORY_CLIENT_ID` and `HOLI_CHAT_ORY_CLIENT_SECRET` in `./holi-chat-server/.envrc.local`.
+- Fill `HOLI_CHAT_REGISTRATION_SHARED_SECRET` in `./holi-chat-server/.envrc.local` with `HOLI_CHAT_REGISTRATION_SHARED Development` from Passbolt.
 - Set `APNS_KEY_ID`, `APNS_TEAM_ID`, and `APNS_TOPIC` in `./holi-chat-server/.envrc-push-gateway.local`.
 - Fill `./holi-chat-server/data-push-gateway/apns_keyfile_staging.p8` with `APNS_KEYFILE_STAGING` and manually format it so that it looks like a ssh key.
 - Fill `./holi-chat-server/data-push-gateway/fcm_keyfile.json` with `FCM Keyfile`
@@ -178,9 +180,29 @@ export COMPOSE_PROFILES=minimal
 
 You can check the status of the services and their health using `./holi-dev.sh status --all` command.
 
-> *️⃣ **Tips:** If any of services have unhealthy status or they failed to start you can run the start command again to restart them.
+> *️⃣ **Tips:** If any of services have unhealthy status or they failed to start for any reason you can run the start command again to restart them.
 
 To see the logs for a service, you can use `./holi-dev.sh logs --follow <service_name>` command.
+
+#### Setting Up Chat Server Admin User
+
+If your profile does not include chat server, you can safely skip this section.
+
+After starting the services, in order for Okuna and Chat Server to function properly, you need to create an admin user for the chat server (Synapse server). This can be done by running the following command:
+
+```sh
+./holi-chat-server/create-synapse-admin-user.sh <chat server url> <secret> <password> [username]
+# Username defaults to chat-admin.
+```
+
+For example:
+
+```sh
+./holi-chat-server/create-synapse-admin-user.sh https://development-chat.holi.social SECRET_FROM_PASSBOLT admin chat-admin
+# {"user_id":"@chat-admin:chat-server","home_server":"chat-server","access_token":"ACCESS_TOKEN","device_id":"DEVICE_ID"}
+```
+
+This will create a user with admin privileges. The output will include an `access_token`. Copy the `access_token` value and set it in the `CHAT_ADMIN_ACCESS_TOKEN` field in `./holi-okuna/.docker-compose.env.local`.
 
 ### Commands
 
