@@ -354,6 +354,8 @@ services:
       REDIS_PORT: ${REDIS_PORT}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       PUBSUB_EMULATOR_HOST: pubsub-emulators:${PUBSUB_EMULATOR_PORT}
+      IMAGEKIT_PUBLIC_KEY: ${IMAGEKIT_PUBLIC_KEY}
+      IMAGEKIT_PRIVATE_KEY: ${IMAGEKIT_PRIVATE_KEY}
       # these being set in holi-dev.sh based on the system architecture
       GDAL_LIBRARY_PATH: ${GDAL_LIBRARY_PATH}
       GEOS_LIBRARY_PATH: ${GEOS_LIBRARY_PATH}
