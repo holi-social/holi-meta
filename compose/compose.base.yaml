@@ -332,12 +332,13 @@ services:
     build:
       context: ./holi-okuna
       dockerfile: Dockerfile
-    entrypoint: ["/opt/okuna-api/.docker/api/local-entrypoint.sh"]
+    entrypoint: ["/compose-entrypoint.sh"]
     command: ["python", "start_server.py", "--reload", "--host", "0.0.0.0", "--port", "${OKUNA_INTERNAL_PORT}"]
     env_file:
       - ./holi-okuna/.docker-compose.env.local
       - ./holi-okuna/.envrc.local
     environment:
+      UV_PROJECT_ENVIRONMENT: /opt/okuna-api/.venv-compose
       RDS_HOSTNAME: ${POSTGRES_HOST}
       RDS_HOSTNAME_READER: ${POSTGRES_HOST}
       RDS_HOSTNAME_WRITER: ${POSTGRES_HOST}
@@ -361,6 +362,7 @@ services:
     ports:
       - ${OKUNA_PORT}:${OKUNA_INTERNAL_PORT}
     volumes:
+      - ./compose/okuna/entrypoint.sh:/compose-entrypoint.sh:ro
       - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
       - ./holi-okuna:/opt/okuna-api:delegated
     develop:
