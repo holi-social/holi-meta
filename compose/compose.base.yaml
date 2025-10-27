@@ -357,6 +357,7 @@ services:
       PUBSUB_EMULATOR_HOST: pubsub-emulators:${PUBSUB_EMULATOR_PORT}
       IMAGEKIT_PUBLIC_KEY: ${IMAGEKIT_PUBLIC_KEY}
       IMAGEKIT_PRIVATE_KEY: ${IMAGEKIT_PRIVATE_KEY}
+      IMAGEKIT_URL: ${IMAGEKIT_URL}
       # these being set in holi-dev.sh based on the system architecture
       GDAL_LIBRARY_PATH: ${GDAL_LIBRARY_PATH}
       GEOS_LIBRARY_PATH: ${GEOS_LIBRARY_PATH}
