@@ -21,6 +21,8 @@ The meta repository which helps you check out the other repositories and run a d
       - [Setting Up Chat Server Admin User](#setting-up-chat-server-admin-user)
     - [Commands](#commands)
       - [Start](#start)
+      - [Mobile](#mobile)
+      - [Mprocs](#mprocs)
       - [Status](#status)
       - [Logs](#logs)
       - [Stop](#stop)
@@ -125,13 +127,22 @@ You can use the `./holi-dev.sh` in the root of this repository to run the dev en
 To get started with the development environment, you can use the following command:
 
 ```sh
-./holi-dev.sh start
+./holi-dev.sh start  # Runs all services in docker (except mobile frontend)
+./holi-dev.sh mobile # Runs the mobile frontend
+
+# or
+
+./holi-dev.sh mprocs # Runs both services and mobile frontend, displaying all logs in a single terminal window
 ```
 
-This will try to starts the essential services for local development in the background, and if docker images do not exist, it will build them locally and watch for file changes.
+These commands will start the services needed for local development. If the required Docker images are not available, they will be built automatically.
+The environment will also watch for file changes and update the running containers as needed.
 
-> ℹ️ **Note:** If you are running this command for the first time, please note that it takes a few minutes to build all docker images locally and
+> ℹ️ **Note:** 
+> If you are running these commands for the first time, please note that it takes a few minutes to build all docker images locally and
 > uses system resources heavily. So please be patient and try to close the heavy processes before running this command.
+> 
+> Running `docker system prune` also helps to free up some space if you have many unused docker images.
 >
 > If you are using Docker Desktop, you can also increase the resource allocation settings.
 
@@ -140,7 +151,7 @@ This will try to starts the essential services for local development in the back
 
 Or, if you want to run a specific profile (a group of services), you can set the `COMPOSE_PROFILES` environment variable once (recommended) or use the `-p` or `--profile` argument on **every command**. Available profiles are:
 
-- `minimal` (default): Only starts the necessary services for backend and frontend development. This includes:
+- `minimal` **(default)**: Only starts the necessary services for backend and frontend development. This includes:
   - `app-donations`
   - `app-goodnews`
   - `geo-api`
@@ -265,6 +276,22 @@ export COMPOSE_PROFILES=minimal,moderation
 > ```sh
 > ./holi-dev.sh start <service_name1> <service_name2> ...
 > ```
+
+#### Mobile
+
+You can start the mobile frontend using the following command:
+
+```sh
+./holi-dev.sh mobile
+```
+
+#### Mprocs
+
+You can use the mprocs interface to run both `./holi-dev.sh start` and `./holi-dev.sh mobile` simultaneously, allowing you to view all service logs in a single terminal window:
+
+```sh
+./holi-dev.sh mprocs
+```
 
 #### Status
 

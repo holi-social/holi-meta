@@ -1,0 +1,117 @@
+procs:
+  "holi-dev.sh start":
+    cwd: <CONFIG_DIR>/..
+    stop:
+      send-keys:
+        - <C-c>
+        - <C-c>
+    shell: |
+      ./compose/compose-rebuild-check.sh
+
+      trap '$COMPOSE_CMD_BASE down' EXIT
+
+      $COMPOSE_CMD_BASE up --watch
+  "└─ app-donations":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f app-donations
+  "└─ app-goodnews":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f app-goodnews
+  "└─ geo-api":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f geo-api
+  "└─ app-events":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f app-events
+  "└─ translation-api":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f translation-api
+  "└─ notifications":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f notifications
+  "└─ unified-api":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f unified-api
+  "└─ oathkeeper":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f oathkeeper
+  "└─ okuna":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f okuna
+  "└─ pubsub-emulators":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f pubsub-emulators
+  "└─ chat-server":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f chat-server
+  "└─ chat-push-gateway":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f chat-push-gateway
+  "└─ chat-integration":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f chat-integration
+  "└─ rewards":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f rewards
+  "└─ frontend-web":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f frontend-web
+  "└─ frontend-mobile":
+    cwd: <CONFIG_DIR>/frontends
+    shell: |
+      ./mobile-start.sh
+  "└─ moderation-backend":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f moderation-backend
+  "└─ moderation-frontend":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f moderation-frontend
+  "└─ moderation-federator":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f moderation-federator
+  "└─ libretranslate":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f libretranslate
+  "└─ frontend-storybook":
+    cwd: <CONFIG_DIR>/..
+    autorestart: true
+    shell: >
+      ./holi-dev.sh logs -f frontend-storybook

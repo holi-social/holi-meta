@@ -2,29 +2,29 @@
 set -eo pipefail
 
 # commands and options
-profile="${COMPOSE_PROFILES:-minimal}"
-command=""
-rest=()
+PROFILE="${COMPOSE_PROFILES:-minimal}"
+COMMAND=""
+ARGS=()
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --profile|-p)
-      profile="$2"
+      PROFILE="$2"
       shift 2
       ;;
-    init|start|stop|status|logs|exec|migrate|services|attach|build|compose)
-      command="$1"
+    init|start|stop|status|logs|exec|migrate|services|attach|build|compose|mobile|mprocs)
+      COMMAND="$1"
       shift
       ;;
     *)
-      rest+=("$1")
+      ARGS+=("$1")
       shift
       ;;
   esac
 done
 
 # set the profile for docker compose
-export COMPOSE_PROFILES="${profile}"
+export COMPOSE_PROFILES="${PROFILE}"
 
 ##############################
 # environment variable setup #
@@ -45,10 +45,16 @@ create_env_file() {
   fi
 }
 
+debug_log() {
+  if [ "${DEBUG:-0}" -eq 1 ]; then
+    echo "$@"
+  fi
+}
+
 OKUNA_COMPOSE_ENV_FILE="./holi-okuna/.docker-compose.env.local"
 
 ## Initialization
-if [ "$command" = "init" ]; then
+if [ "$COMMAND" = "init" ]; then
   # Create Okuna env file
   if [ ! -f $OKUNA_COMPOSE_ENV_FILE ]; then
     # generate a random secret key
@@ -118,7 +124,7 @@ if [ -z "${DEV_HOST:-}" ]; then
     echo "Could not determine the local IP address. Please provide it yourself in .env.local"
     exit 1
   fi
-  echo "Determined the local IP to be $DEV_HOST. If this is not correct, please provide it yourself in DEV_HOST"
+  debug_log "Determined the local IP to be $DEV_HOST. If this is not correct, please provide it yourself in DEV_HOST"
 fi
 export DEV_HOST
 
@@ -126,88 +132,96 @@ export DEV_HOST
 # end of environment variable setup #
 #####################################
 
-ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-CONFIG_DIR="$ROOT_DIR/compose"
+export ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+export COMPOSE_DIR="$ROOT_DIR/compose"
 
 # prepare the base command for docker compose
-cmd_base=(docker compose \
+CMD_BASE=(docker compose \
   # sets the root directory for the compose file
   --project-directory	$ROOT_DIR \
   # sets the default variables for the compose file
-  --env-file $CONFIG_DIR/.env \
+  --env-file $COMPOSE_DIR/.env \
   # sets which compose file to use
-  --file $CONFIG_DIR/compose.infra.yaml)
+  --file $COMPOSE_DIR/compose.infra.yaml)
 
 # add overlay compose files based on the profile
-case "$profile" in
+case "$PROFILE" in
   minimal)
-    cmd_base+=(
-      --file $CONFIG_DIR/compose.base.yaml \
-      --file $CONFIG_DIR/compose.frontend.yaml \
-      --file $CONFIG_DIR/compose.moderation.yaml
+    CMD_BASE+=(
+      --file $COMPOSE_DIR/compose.base.yaml \
+      --file $COMPOSE_DIR/compose.frontend.yaml \
+      --file $COMPOSE_DIR/compose.moderation.yaml
     )
     ;;
   all)
-    cmd_base+=(
-      --file $CONFIG_DIR/compose.base.yaml \
-      --file $CONFIG_DIR/compose.frontend.yaml \
-      --file $CONFIG_DIR/compose.moderation.yaml \
-      --file $CONFIG_DIR/compose.misc.yaml
+    CMD_BASE+=(
+      --file $COMPOSE_DIR/compose.base.yaml \
+      --file $COMPOSE_DIR/compose.frontend.yaml \
+      --file $COMPOSE_DIR/compose.moderation.yaml \
+      --file $COMPOSE_DIR/compose.misc.yaml
     )
     ;;
   moderation)
-    cmd_base+=(--file $CONFIG_DIR/compose.moderation.yaml)
+    CMD_BASE+=(--file $COMPOSE_DIR/compose.moderation.yaml)
     ;;
   frontend-staging)
-    cmd_base+=(
-      --file $CONFIG_DIR/compose.frontend.yaml \
-      --file $CONFIG_DIR/compose.frontend.staging.yaml
+    CMD_BASE+=(
+      --file $COMPOSE_DIR/compose.frontend.yaml \
+      --file $COMPOSE_DIR/compose.frontend.staging.yaml
     )
     ;;
 esac
 
 # handle commands
-case "$command" in
+case "$COMMAND" in
   start)
     # check if we need to rebuild any services
     ./compose/compose-rebuild-check.sh
     
     # start the services in detached mode and then start watching for changes
-    "${cmd_base[@]}" up --detach "${rest[@]}" && \
+    "${CMD_BASE[@]}" up --detach "${ARGS[@]}" && \
       echo -e "\nServices are running in detach mode.\nWatching the file changes..." && \
-      "${cmd_base[@]}" watch --no-up 2>&1 | \
+      "${CMD_BASE[@]}" watch --no-up 2>&1 | \
         # Filter the warning logs about volume binding and watch mode path conflicts
         (grep -v ".*declared by a bind mount volume, this path won't be monitored")
     ;;
   stop)
-    "${cmd_base[@]}" down "${rest[@]}"
+    "${CMD_BASE[@]}" down "${ARGS[@]}"
     ;;
   status)
-    "${cmd_base[@]}" ps "${rest[@]}"
+    "${CMD_BASE[@]}" ps "${ARGS[@]}"
     ;;
   logs)
-    "${cmd_base[@]}" logs "${rest[@]}"
+    "${CMD_BASE[@]}" logs "${ARGS[@]}"
     ;;
   exec)
-    "${cmd_base[@]}" exec -it "${rest[@]}"
+    "${CMD_BASE[@]}" exec -it "${ARGS[@]}"
     ;;
   migrate)
-    $CONFIG_DIR/pg/migrate.sh "${rest[@]}"
+    $COMPOSE_DIR/pg/migrate.sh "${ARGS[@]}"
     ;;
   services)
-    "${cmd_base[@]}" config --service
+    "${CMD_BASE[@]}" config --service
     ;;
   attach)
-    "${cmd_base[@]}" attach --detach-keys "ctrl-c" "${rest[@]}"
+    "${CMD_BASE[@]}" attach --detach-keys "ctrl-c" "${ARGS[@]}"
     ;;
   build)
-    "${cmd_base[@]}" build "${rest[@]}"
+    "${CMD_BASE[@]}" build "${ARGS[@]}"
     ;;
   compose)
-    "${cmd_base[@]}" "${rest[@]}"
+    "${CMD_BASE[@]}" "${ARGS[@]}"
+    ;;
+  mobile)
+    $COMPOSE_DIR/frontends/mobile-start.sh
+    ;;
+  mprocs)
+    export COMPOSE_CMD_BASE="${CMD_BASE[*]}"
+
+    mprocs -c "$COMPOSE_DIR/mprocs.yaml"
     ;;
   *)
-    echo "Unknown or missing command. Use one of: start, stop, status, logs, exec, migrate, services, attach, build, compose."
+    echo "Unknown or missing command. Use one of: start, stop, status, logs, exec, migrate, services, attach, build, compose, mobile, mprocs."
     exit 1
     ;;
 esac
