@@ -21,3 +21,4 @@ app.gitlab-pages.holi.team/
 /compose/*/.env
 /compose/pg/migration.sql
 /compose/.compose-*
+mprocs.log
