@@ -578,7 +578,7 @@ services:
 
   redis:
     container_name: redis
-    image: europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/redis:7.2
+    image: europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/redis:7.4
     command: redis-server /usr/local/etc/redis/redis.conf --requirepass $REDIS_PASSWORD --port $REDIS_PORT
     privileged: false
     environment:
