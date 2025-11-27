@@ -95,10 +95,9 @@ services:
       - ./holi-moderation/apps/frontend/src:/app/apps/frontend/src:delegated
     environment:
       VITE_OKUNA_ADMIN_BASE_URL: "http://okuna:${OKUNA_PORT}/local/admin"
-      VITE_GRAPHQL_URL: "http://moderation-backend:${MODERATION_BACKEND_PORT}/v1/graphql"
-      # the admin secret should NEVER be added to the deployed container, only locally to facilitate schema introspection for codegen
+      VITE_GRAPHQL_URL: "http://localhost:${MODERATION_FEDERATOR_PORT}/v1/graphql"
       HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
-      INTERNAL_GRAPHQL_URL: "http://hasura:8080/v1/graphql"
+      INTERNAL_GRAPHQL_URL: "http://localhost:8080/v1/graphql"
     ports:
       - ${MODERATION_FRONTEND_PORT}:${MODERATION_FRONTEND_PORT}
     develop:
@@ -149,9 +148,10 @@ services:
       # runtime secrets
       HASURA_GRAPHQL_JWT_SECRET: "{\"type\": \"HS256\", \"key\": \"${MODERATION_JWT_SECRET}\"}"
       HASURA_GRAPHQL_METADATA_DATABASE_URL: "postgres://${MODERATION_DB_USER}:${MODERATION_DB_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${MODERATION_DB_NAME}"
-      OKUNA_DATABASE_URL: "postgres://${OKUNA_DB_USER}:${OKUNA_DB_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${OKUNA_DB_NAME}"
       ## Federated data sources
       BACKEND_GRAPHQL_URL: "http://moderation-backend:${MODERATION_BACKEND_PORT}/graphql"
+      OKUNA_DATABASE_URL: "postgres://${OKUNA_DB_USER}:${OKUNA_DB_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${OKUNA_DB_NAME}"
+      REWARDS_DATABASE_URL: "postgres://${REWARDS_DB_USER}:${REWARDS_DB_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${REWARDS_DB_NAME}"
     develop:
       watch:
         - action: sync+restart
