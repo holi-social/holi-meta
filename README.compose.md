@@ -116,7 +116,7 @@ out project subfolders in several IDEs .
 - Set `APNS_KEY_ID`, `APNS_TEAM_ID`, and `APNS_TOPIC` in `./holi-chat-server/.envrc-push-gateway.local`.
 - Fill `./holi-chat-server/data-push-gateway/apns_keyfile_staging.p8` with `APNS_KEYFILE_STAGING` and manually format it so that it looks like a ssh key.
 - Fill `./holi-chat-server/data-push-gateway/fcm_keyfile.json` with `FCM Keyfile`
-- Set `TYPESENSE_API_KEY` in `./compose/unified-api/.env`.
+- Set `TYPESENSE_API_KEY` in `./compose/unified-api/.env.local`.
 
 ## Running dev environments via docker compose
 
@@ -168,7 +168,6 @@ Or, if you want to run a specific profile (a group of services), you can set the
   - `rewards`
   - `frontend-web`
   - `frontend-mobile`
-- `moderation`: Only starts the moderation services. This includes:
   - `moderation-backend`
   - `moderation-frontend`
   - `moderation-federator`
@@ -258,7 +257,7 @@ export COMPOSE_PROFILES=all
 ./holi-dev.sh --profile all
 ```
 
-**Example 3:** This runs the services in `minimal` and `moderation` profiles.
+**Example 3:** This runs all the services. 
 
 ```sh
 export COMPOSE_PROFILES=minimal,moderation

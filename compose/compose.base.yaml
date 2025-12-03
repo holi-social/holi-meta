@@ -36,7 +36,6 @@ services:
     networks:
       - holi-local
 
-
   app-goodnews:
     container_name: app-goodnews
     build:
@@ -222,9 +221,9 @@ services:
     container_name: unified-api
     build:
       context: ./holi-unified-api
-      dockerfile: ../compose/unified-api/Dockerfile
+      dockerfile: ../compose/unified-api/Dockerfile.local
     env_file:
-      - ./compose/unified-api/.env
+      - ./compose/unified-api/.env.local
     environment:
       PORT: ${UNIFIED_API_PORT}
       OKUNA_DOMAIN: http://okuna:${OKUNA_PORT}
@@ -252,7 +251,7 @@ services:
         - action: rebuild
           path: ./holi-unified-api/.meshrc.yml
         - action: sync+restart
-          path: ./holi-unified-api/.env
+          path: ./holi-unified-api/.env.local
           target: /app
         - action: sync+restart
           path: ./holi-unified-api/server.ts
@@ -354,9 +353,9 @@ services:
       REDIS_PORT: ${REDIS_PORT}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       PUBSUB_EMULATOR_HOST: pubsub-emulators:${PUBSUB_EMULATOR_PORT}
-      IMAGEKIT_PUBLIC_KEY: ${IMAGEKIT_PUBLIC_KEY}
-      IMAGEKIT_PRIVATE_KEY: ${IMAGEKIT_PRIVATE_KEY}
-      IMAGEKIT_URL: ${IMAGEKIT_URL}
+      # IMAGEKIT_PUBLIC_KEY: ${IMAGEKIT_PUBLIC_KEY}
+      # IMAGEKIT_PRIVATE_KEY: ${IMAGEKIT_PRIVATE_KEY}
+      # IMAGEKIT_URL: ${IMAGEKIT_URL}
       # these being set in holi-dev.sh based on the system architecture
       GDAL_LIBRARY_PATH: ${GDAL_LIBRARY_PATH}
       GEOS_LIBRARY_PATH: ${GEOS_LIBRARY_PATH}
@@ -399,7 +398,7 @@ services:
     container_name: pubsub-emulators
     build:
       context: ./compose
-      dockerfile: pubsub-emulators/Dockerfile
+      dockerfile: pubsub-emulators/Dockerfile.local
     environment:
       PUBSUB_PROJECT_ID: holi-shared
     volumes:
@@ -499,7 +498,7 @@ services:
     container_name: chat-integration
     build:
       context: ./holi-chat-integration
-      dockerfile: ../compose/chat-integration/Dockerfile
+      dockerfile: ../compose/chat-integration/Dockerfile.local
     restart: always
     env_file:
       - ./holi-chat-integration/.envrc.local
@@ -538,7 +537,7 @@ services:
     container_name: rewards
     build:
       context: ./holi-rewards
-      dockerfile: ../compose/rewards/Dockerfile
+      dockerfile: ../compose/rewards/Dockerfile.local
     env_file:
       - ./holi-rewards/.env
     environment:
@@ -603,7 +602,7 @@ services:
     container_name: pg
     build:
       context: ./compose
-      dockerfile: pg/Dockerfile
+      dockerfile: pg/Dockerfile.local
     privileged: false
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}

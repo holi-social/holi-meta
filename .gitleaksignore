@@ -1,4 +1,3 @@
-compose/frontends/.env.template:posthog-api-key:34
-compose/frontends/.env.template:facebook-secret:57
-compose/frontends/.env.template:facebook-secret:57
-compose/unified-api/.env.template:generic-api-key:4
+compose/frontends/.env.local.template:posthog-api-key:21
+compose/frontends/.env.local.template:facebook-secret:44
+compose/unified-api/.env.local:generic-api-key:4

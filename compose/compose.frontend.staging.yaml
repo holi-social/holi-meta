@@ -3,7 +3,7 @@
 services:
   frontend-web:
     env_file:
-      - ./compose/frontends/.env
+      - ./compose/frontends/.env.local
     environment:
       PORT: ${FRONTEND_WEB_PORT}
       UNIFIED_API_SCHEMA_ENDPOINT: https://staging.unified.apis.holi.social/graphql
@@ -21,7 +21,7 @@ services:
 
   frontend-mobile:
     env_file:
-      - ./compose/frontends/.env
+      - ./compose/frontends/.env.local
     environment:
       UNIFIED_API_SCHEMA_ENDPOINT: https://staging.unified.apis.holi.social/graphql
       HOLI_API_URL: https://staging.unified.apis.holi.social/graphql

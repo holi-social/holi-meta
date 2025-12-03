@@ -4,7 +4,7 @@
 # On first run (no existing checksums), initializes and exits 0 without rebuilding.
 set -euo pipefail
 
-# ---- config (paths relative to repo root) ----
+###### config (paths relative to repo root) ######
 declare -A SERVICE_WATCH=(
   [app-donations]="holi-app-donations/deno.json holi-app-donations/deno.lock"
   [app-goodnews]="holi-app-goodnews/deno.json holi-app-goodnews/deno.lock"
@@ -21,9 +21,8 @@ declare -A SERVICE_WATCH=(
 )
 
 declare -A PROFILE_SERVICES=(
-  [minimal]="app-donations app-goodnews geo-api app-events translation-api notifications unified-api okuna chat-integration rewards frontend-web"
+  [minimal]="app-donations app-goodnews geo-api app-events translation-api notifications unified-api okuna chat-integration rewards frontend-web moderation-backend"
   [all]="app-donations app-goodnews geo-api app-events translation-api notifications unified-api okuna chat-integration rewards frontend-web moderation-backend"
-  [moderation]="moderation-backend"
   [frontend-staging]="frontend-web"
 )
 
@@ -32,7 +31,7 @@ ROOT_DIR=$(cd "$(dirname "${COMPOSE_DIR}")" && pwd)
 STATE_FILE="${COMPOSE_DIR}/.compose-rebuild-state.tsv"   # single file with lines: <key>\t<sha256>
 COMPOSE_CMD=("${ROOT_DIR}/holi-dev.sh")                  # override if needed
 
-# ---- helpers ----
+###### helpers ######
 hash_cmd() {
   if command -v sha256sum >/dev/null 2>&1; then
     sha256sum "$1" | awk '{print $1}'
@@ -60,7 +59,7 @@ write_state_file() {
   mv "${STATE_FILE}.tmp" "${STATE_FILE}"
 }
 
-# ---- resolve active services from COMPOSE_PROFILES ----
+###### resolve active services from COMPOSE_PROFILES ######
 # Accept comma/space separated profiles. Default to "all" (union of everything) if unset.
 resolve_active_services() {
   local profiles_raw="${COMPOSE_PROFILES:-minimal}"
@@ -102,7 +101,7 @@ fi
 echo "👀  Active profiles: ${COMPOSE_PROFILES:-all}"
 echo "🎯  Services in scope: ${ACTIVE_SERVICES[*]}"
 
-# ---- load or initialize state ----
+###### load or initialize state ######
 declare -A PREV
 if [[ -f "${STATE_FILE}" && -s "${STATE_FILE}" ]]; then
   while IFS=$'\t' read -r k v; do
@@ -117,7 +116,7 @@ fi
 declare -A SERVICES_CHANGED=()
 declare -A NEW_HASHES=()
 
-# ---- compute current hashes (only for ACTIVE_SERVICES) ----
+###### compute current hashes (only for ACTIVE_SERVICES) ######
 for svc in "${ACTIVE_SERVICES[@]}"; do
   # guard against typos: skip services not defined in SERVICE_WATCH
   if [[ -z "${SERVICE_WATCH[$svc]:-}" ]]; then
@@ -147,7 +146,7 @@ for svc in "${ACTIVE_SERVICES[@]}"; do
   done
 done
 
-# ---- handle first run or rebuild ----
+###### handle first run or rebuild ######
 if [[ -n "${first_run:-}" ]]; then
   write_state_file
   echo "✅  Initial checksums recorded for scoped services. No rebuild needed."
@@ -165,7 +164,7 @@ echo "🛠️  Rebuilding (scoped): ${services_to_build[*]}"
 "${COMPOSE_CMD[@]}" build "${services_to_build[@]}"
 echo "✅  Rebuild done."
 
-# ---- write state file ----
+###### write state file ######
 echo "💾  Updating checksums..."
 write_state_file
 echo "✅  Done."
