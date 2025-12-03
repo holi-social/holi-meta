@@ -37,6 +37,16 @@ The meta repository which helps you check out the other repositories and run a d
     - [Troubleshooting](#troubleshooting)
       - [Frontend Image Build Error: Cannot Allocate Memory](#frontend-image-build-error-cannot-allocate-memory)
       - [Deno lockfile version mismatch](#deno-lockfile-version-mismatch)
+  - [Contribution Guide](#contribution-guide)
+    - [Core Concepts](#core-concepts)
+    - [holi-meta Structure](#holi-meta-structure)
+    - [Services](#services-1)
+      - [Service Dependencies](#service-dependencies)
+      - [Add a service](#add-a-service)
+    - [Docker Compose features used](#docker-compose-features-used)
+    - [`holi-dev.sh` script](#holi-devsh-script)
+      - [Rebuild Check Script](#rebuild-check-script)
+    - [Troubleshooting](#troubleshooting-1)
 
 ## Preface
 
@@ -447,3 +457,89 @@ While we always should make sure these two versions are compatible, sometimes is
 - Pull the latest changes from the `holi-meta` repository and the service repository to ensure you have the most up-to-date configurations and Deno.lock.
 - Re-build the current image using `./holi-dev.sh compose build <service-name>` command and try to start the services again.
 - If the issue persists, the Deno.lock file needs to be recreated to match the docker image Deno version. Note that this may lead to differences in dependencies and should be done cautiously.
+
+## Contribution Guide
+
+*This section is only relevant for contributors who want to maintain or extend the local environment setup.*
+
+This setup consists of +20 services managed through a meta repo. Everything runs locally via Docker Compose, with profiles to choose how much of the system to start. A helper script, `holi-dev.sh`, wraps Docker Compose and ensures consistent configuration. To make this manageable, we use holi-meta repository that:
+
+- Orchestrates the local environment,
+- Manages and syncs all service repositories,
+- Provides a single entry point for starting and stopping the entire stack.
+
+### Core Concepts
+
+- **holi-meta repo**: Central place to run, sync, and configure all services.
+- **+20 services**: Checked out into the holi-meta repo.
+- **Docker Compose**: Builds the images form local Dockerfiles and runs them locally.
+- **`holi-dev.sh`**: Wrapper script for consistent `docker compose` usage that prepares and pre-sets env vars, compose files, and options.
+- **mprocs**: A terminal UI to display the logs from all services in one place instead of separate terminal windows.
+
+### holi-meta Structure
+
+```
+holi-meta/
+├─ compose/               # Docker Compose local configs & envs
+│  ├─ compose.*.yml       # Compose files separated by purpose
+│  └─ .env.local          # Global envs used in compose files
+│  └─ [repo-name]/        # Contains service-specific config files
+│    ├─ Dockerfile.local  # Dockerfile for local development
+│    └─ .env.local        # Service-specific env overrides
+├─ [repo-name]/           # Service source code
+└─ holi-dev.sh
+```
+
+### Services
+
+#### Service Dependencies
+
+This diagram shows the dependencies between the services in the local development environment.
+
+![Service Dependencies Diagram](./compose/compose-diagram.excalidraw.svg)
+
+#### Add a service
+
+To add a new service to the local development environment, follow these steps:
+
+- Clone the service repository into the holi-meta folder.
+- If the service needs a local specific configuration add `compose/[repo]/` with local Dockerfile + env
+- Add service to one of the compose files and assign profiles
+- Add the service's watch files and assigning to right profile in`./compose/compose-rebuild-check.sh`
+- Test with `./holi-dev.sh up` using relevant profiles
+
+### Docker Compose features used
+
+These are some of the advanced Docker Compose features used in this setup:
+
+- [Docker Compose Profiles](https://docs.docker.com/compose/how-tos/profiles/): Group services for different use cases.
+- [Docker Compose Watch](https://docs.docker.com/compose/how-tos/file-watch/): Auto-rebuild/restart services on local file changes.
+- [Docker Compose Startup Order](https://docs.docker.com/compose/how-tos/startup-order/): Ensure dependent services start in the correct order (respcting the dependencies)), this is done via `depends_on` and healthchecks.
+
+### `holi-dev.sh` script
+
+This script consists of several parts:
+
+- **Parses CLI arguments:** Extracts profile (`--profile`) and command (init/start/stop/logs/etc)
+- **Init command:** Generates Django secret key, creates env files from templates
+- **Sets environment variables:** Library paths for geodjango, Android SDK, auto-detects local IP for DEV_HOST
+- **Builds Docker Compose command:** Constructs an array with compose files based on profile (minimal/all/frontend-staging)
+- **Executes commands:** Wraps docker compose operations:
+  - `start`: rebuild check, then up `--detach` + `watch`
+  - `stop`: runs down
+  - `mprocs`: exports COMPOSE_CMD_BASE and launches mprocs
+  - `mobile`: starts the frontend mobile script
+  - Other Commands: proxy to docker compose
+
+#### Rebuild Check Script
+
+The `./compose/compose-rebuild-check.sh` is a helper script used by `holi-dev.sh` before starting the services.
+
+It checks if any watched files have changed since the last run and rebuilds the docker image of the affected services accordingly. It does this by comparing the last checksum stored in `./compose/.compose-rebuild-state.tsv` with the current checksum of the watched files.
+
+### Troubleshooting
+
+- **Network subnet conflicts:** Adjust the `DOCKER_NETWORK_SUBNET` in `./compose/.env.local`
+- **Port conflicts:** Adjust the service ports in `./compose/.env.local`
+- **Service version mismatches:** Verify that `SERVICE_WATCH` and `PROFILE_SERVICES` are correctly configured in the rebuild check script. If issues persist, rerun `./holi-dev.sh start` to rebuild and restart the affected services.
+- **Storage space issues:** Prune unused Docker resources using `docker system prune`
