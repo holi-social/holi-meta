@@ -53,7 +53,7 @@ debug_log() {
 
 OKUNA_COMPOSE_ENV_FILE="./holi-okuna/.docker-compose.env.local"
 
-## Initialization
+###### Initialization (`./holi-dev.sh init`) ######
 if [ "$COMMAND" = "init" ]; then
   # Create Okuna env file
   if [ ! -f $OKUNA_COMPOSE_ENV_FILE ]; then
@@ -82,10 +82,10 @@ if [ "$COMMAND" = "init" ]; then
   fi
 
   # Create frontends env file
-  create_env_file "./compose/frontends" ".env.template" ".env"
+  create_env_file "./compose/frontends" ".env.local.template" ".env"
 
   # Create unified api env file
-  create_env_file "./compose/unified-api" ".env.template" ".env"
+  create_env_file "./compose/unified-api" ".env.local.template" ".env"
 
   echo "Initialization completed."
   exit 0
@@ -102,7 +102,7 @@ export GDAL_LIBRARY_PATH="$LIB_BASE_PATH/libgdal.so"
 export GEOS_LIBRARY_PATH="$LIB_BASE_PATH/libgeos_c.so"
 export PROJ_LIBRARY_PATH="$LIB_BASE_PATH/libproj.so"
 
-## Frontend Mobile
+###### Frontend Mobile ######
 # set the path for the Android SDK
 export ANDROID_HOME=$([ "$(uname)" = "Darwin" ] && echo "$HOME/Library/Android/sdk" || echo "$HOME/Android/Sdk")
 
@@ -160,9 +160,6 @@ case "$PROFILE" in
       --file $COMPOSE_DIR/compose.moderation.yaml \
       --file $COMPOSE_DIR/compose.misc.yaml
     )
-    ;;
-  moderation)
-    CMD_BASE+=(--file $COMPOSE_DIR/compose.moderation.yaml)
     ;;
   frontend-staging)
     CMD_BASE+=(

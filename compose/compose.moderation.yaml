@@ -3,7 +3,7 @@ services:
     container_name: moderation-backend
     build:
       context: ./holi-moderation
-      dockerfile: ../compose/moderation/Dockerfile
+      dockerfile: ../compose/moderation/Dockerfile.local
     image: holi-dev-moderation-backend:latest
     command: ["yarn", "workspace", "@holi/moderation-backend", "nest", "start", "--watch"]
     restart: always

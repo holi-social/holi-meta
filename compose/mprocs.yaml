@@ -86,7 +86,7 @@ procs:
     autorestart: true
     shell: >
       ./holi-dev.sh logs -f frontend-web
-  "└─ frontend-mobile":
+  "└─ holi-dev.sh mobile":
     cwd: <CONFIG_DIR>/frontends
     shell: |
       ./mobile-start.sh
