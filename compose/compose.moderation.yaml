@@ -126,7 +126,7 @@ services:
 
   moderation-federator:
     container_name: moderation-federator
-    image: europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/hasura/graphql-engine:v2.45.2.cli-migrations-v3.ubi
+    image: europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/hasura/graphql-engine:v2.48.7.cli-migrations-v3.ubi
     ports:
       - ${MODERATION_FEDERATOR_PORT}:${MODERATION_FEDERATOR_PORT}
     restart: no
