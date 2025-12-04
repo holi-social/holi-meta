@@ -526,10 +526,6 @@ services:
           path: ./holi-chat-integration/package.json
         - action: rebuild
           path: ./holi-chat-integration/yarn.lock
-    depends_on:
-      pg:
-        condition: service_healthy
-        restart: true
     networks:
       - holi-local
 
