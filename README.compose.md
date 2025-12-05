@@ -35,6 +35,7 @@ The meta repository which helps you check out the other repositories and run a d
       - [Build](#build)
       - [Compose](#compose)
     - [Troubleshooting](#troubleshooting)
+      - [Service fails to start or unhealthy status](#service-fails-to-start-or-unhealthy-status)
       - [Frontend Image Build Error: Cannot Allocate Memory](#frontend-image-build-error-cannot-allocate-memory)
       - [Deno lockfile version mismatch](#deno-lockfile-version-mismatch)
   - [Contribution Guide](#contribution-guide)
@@ -46,7 +47,7 @@ The meta repository which helps you check out the other repositories and run a d
     - [Docker Compose features used](#docker-compose-features-used)
     - [`holi-dev.sh` script](#holi-devsh-script)
       - [Rebuild Check Script](#rebuild-check-script)
-    - [Troubleshooting](#troubleshooting-1)
+    - [Internal Troubleshooting](#internal-troubleshooting)
 
 ## Preface
 
@@ -420,6 +421,15 @@ You can use `docker compose` command as follows:
 
 These are some of the known issues and their workarounds.
 
+#### Service fails to start or unhealthy status
+
+If any of services have unhealthy status or they failed to start for an unknown reason you can first try to run the `./holi-dev.sh start` command again to restart them.
+Alternatively, you can also try to restart the affected services manually by running:
+
+```sh
+./holi-dev.sh compose restart <service-name>
+```
+
 #### Frontend Image Build Error: Cannot Allocate Memory
 
 You may see the following error message while building the docker images:
@@ -537,7 +547,7 @@ The `./compose/compose-rebuild-check.sh` is a helper script used by `holi-dev.sh
 
 It checks if any watched files have changed since the last run and rebuilds the docker image of the affected services accordingly. It does this by comparing the last checksum stored in `./compose/.compose-rebuild-state.tsv` with the current checksum of the watched files.
 
-### Troubleshooting
+### Internal Troubleshooting
 
 - **Network subnet conflicts:** Adjust the `DOCKER_NETWORK_SUBNET` in `./compose/.env.local`
 - **Port conflicts:** Adjust the service ports in `./compose/.env.local`

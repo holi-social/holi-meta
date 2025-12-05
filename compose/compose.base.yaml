@@ -251,7 +251,7 @@ services:
         - action: rebuild
           path: ./holi-unified-api/.meshrc.yml
         - action: sync+restart
-          path: ./holi-unified-api/.env.local
+          path: ./compose/unified-api/.env.local
           target: /app
         - action: sync+restart
           path: ./holi-unified-api/server.ts
