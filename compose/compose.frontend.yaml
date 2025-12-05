@@ -30,6 +30,9 @@ services:
       - ./compose/healthcheck-via:/usr/local/bin/healthcheck-via:ro
       - ./compose/frontends/entrypoint.sh:/entrypoint.sh:ro
       - ./holi-frontends/apps/web:/app/apps/web:delegated
+      - ./holi-frontends/core:/app/core:delegated
+      - ./holi-frontends/holi-apps:/app/holi-apps:delegated
+      - ./holi-frontends/holi-bricks:/app/holi-bricks:delegated
     ports:
       - ${FRONTEND_WEB_PORT}:${FRONTEND_WEB_PORT}
     develop:
@@ -37,6 +40,15 @@ services:
         - action: sync
           path: ./holi-frontends/apps/web
           target: /app/apps/web
+        - action: sync
+          path: ./holi-frontends/core
+          target: /app/core
+        - action: sync
+          path: ./holi-frontends/holi-apps
+          target: /app/holi-apps
+        - action: sync
+          path: ./holi-frontends/holi-bricks
+          target: /app/holi-bricks
         - action: sync+restart
           path: ./holi-frontends/apps/web/next.config.js
           target: /app/apps/web
