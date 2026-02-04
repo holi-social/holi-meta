@@ -1,4 +1,4 @@
-FROM europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/postgres:17
+FROM europe-north1-docker.pkg.dev/holi-shared/docker-hub-remote/postgres:18
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
